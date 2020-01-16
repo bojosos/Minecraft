@@ -1,0 +1,9 @@
+[submodule "Minecraft/vendor/GLFW"]
+	path = Minecraft/vendor/GLFW
+	url = https://github.com/glfw/glfw
+[submodule "Minecraft/vendor/glm"]
+	path = Minecraft/vendor/glm
+	url = https://github.com/g-truc/glm
+[submodule "Minecraft/vendor/spdlog"]
+	path = Minecraft/vendor/spdlog
+	url = https://github.com/gabime/spdlog
