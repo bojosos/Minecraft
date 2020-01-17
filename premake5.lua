@@ -1,4 +1,4 @@
-workspace "Hazel"
+workspace "Minecraft"
 	architecture "x86_64"
 	startproject "Minecraft"
 
@@ -30,7 +30,7 @@ group ""
 
 project "Minecraft"
 	location "Minecraft"
-	kind "StaticLib"
+	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
