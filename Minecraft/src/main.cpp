@@ -2,7 +2,10 @@
 
 #include "mcpch.h"
 #include "common/layer/testlayer.h"
-#include "engine/application.h"
+#include "engine.h"
+
+// Not for here
+#include <glad/glad.h>
 
 class Test : public Minecraft::Application
 {
@@ -10,6 +13,10 @@ public:
 	Test()
 	{
 		PushLayer(new Minecraft::TestLayer("Test"));
+	}
+
+	void OnUpdate(Minecraft::Timestep ts)
+	{
 	}
 
 	~Test()

@@ -7,10 +7,10 @@ namespace Minecraft
 {
 	Ref<VertexBuffer> VertexBuffer::Create(float* verts, uint32_t size)
 	{
-		return CreateRef<VertexBuffer>(VertexBuffer(verts, size));
+		return CreateRef<VertexBuffer>(verts, size);
 	}
 
-	VertexBuffer::VertexBuffer(float* verts, uint32_t size)
+	VertexBuffer::VertexBuffer(float* verts, uint32_t size) : m_Count(size)
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);

@@ -8,17 +8,20 @@ namespace Minecraft
 	class VertexArray
 	{
 	public:
+		VertexArray();
 		~VertexArray();
-		void Bind();
-		void Unbind();
+		void Bind() const;
+		void Unbind() const;
 		
 		void AddVertexBuffer(const Ref<VertexBuffer>& vbo);
 		void SetIndexBuffer(const Ref< IndexBuffer>& ibo);
-		const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const;
-		const Ref<IndexBuffer>& GetIndexBuffer() const;
+		inline const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; };
+		inline const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; };
 
 		static Ref<VertexArray> Create();
 	private:
-		VertexArray();
+		uint32_t m_RendererID, m_VertexBufferIndex;
+		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
+		Ref<IndexBuffer> m_IndexBuffer;
 	};
 }

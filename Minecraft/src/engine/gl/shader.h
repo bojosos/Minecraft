@@ -9,6 +9,8 @@ namespace Minecraft
 	class Shader
 	{
 	public:
+		Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
+		Shader(const std::string& filepath);
 		~Shader();
 
 		void Bind() const;
@@ -41,10 +43,6 @@ namespace Minecraft
 		std::string m_Name;
 		uint32_t m_RendererID;
 
-	private:
-		Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
-		Shader(const std::string& filepath);
-
 	};
 
 	class ShaderLibrary
@@ -58,9 +56,6 @@ namespace Minecraft
 		Ref<Shader> Get(const std::string& name);
 
 		bool Exists(const std::string& name) const;
-
-	private:
-		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 	private:
 		std::string m_Name;

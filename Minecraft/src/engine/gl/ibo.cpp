@@ -7,7 +7,7 @@ namespace Minecraft
 {
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
-		return CreateRef<IndexBuffer>(IndexBuffer(indices, size));
+		return CreateRef<IndexBuffer>(indices, size);
 	}
 
 	IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count) : m_Count(count)

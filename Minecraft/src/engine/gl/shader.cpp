@@ -10,7 +10,7 @@ namespace Minecraft
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
-		return CreateRef<Shader>(Shader(filepath));
+		return CreateRef<Shader>(filepath);
 	}
 
 	Shader::Shader(const std::string& filepath)
@@ -29,7 +29,7 @@ namespace Minecraft
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertSrc, const std::string& fragSrc)
 	{
-		return CreateRef<Shader>(Shader(name, vertSrc, fragSrc));
+		return CreateRef<Shader>(name, vertSrc, fragSrc);
 	}
 
 	Shader::Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc)
@@ -42,6 +42,7 @@ namespace Minecraft
 
 	Shader::~Shader()
 	{
+		MC_ERROR("Deleting");
 		glDeleteProgram(m_RendererID);
 	}
 
@@ -78,19 +79,18 @@ namespace Minecraft
 				MC_ASSERT(false, "Shader compilation failure!");
 				break;
 			}
-
 			glAttachShader(program, shader);
 			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		m_RendererID = program;
-
 		glLinkProgram(program);
-
 		GLint isLinked = 0;
 		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+
 		if (isLinked == GL_FALSE)
 		{
+			MC_ERROR("Not here!");
 			GLint maxLength = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 

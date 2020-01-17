@@ -7,6 +7,7 @@ namespace Minecraft
 	class VertexBuffer
 	{
 	public:
+		VertexBuffer(float* verts, uint32_t size);
 		~VertexBuffer();
 
 		void Bind();
@@ -20,6 +21,5 @@ namespace Minecraft
 		uint32_t m_RendererID, m_Count;
 		BufferLayout m_Layout;
 	private:
-		VertexBuffer(float* verts, uint32_t size);
 	};
 }

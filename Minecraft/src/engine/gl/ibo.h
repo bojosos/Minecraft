@@ -7,6 +7,7 @@ namespace Minecraft
 	class IndexBuffer
 	{
 	public:
+		IndexBuffer(uint32_t* indices, uint32_t size);
 		~IndexBuffer();
 
 		void Bind();
@@ -18,6 +19,5 @@ namespace Minecraft
 	private:
 		uint32_t m_RendererID, m_Count;
 
-		IndexBuffer(uint32_t* indices, uint32_t size);
 	};
 }
