@@ -34,9 +34,7 @@ namespace Minecraft
 		static Ref<Shader> Create(const std::string& filepath);
 		static Ref<Shader> Create(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
 
-	private: // For compilation
-		std::string ReadFile(const std::string& filepath);
-		std::unordered_map<uint32_t, std::string> PreProcess(const std::string& source);
+	private:
 		void Compile(const std::unordered_map<uint32_t, std::string>& shaderSources);
 
 	private:
@@ -62,8 +60,6 @@ namespace Minecraft
 		bool Exists(const std::string& name) const;
 
 	private:
-		std::string ReadFile(const std::string& filepath);
-		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 	private:

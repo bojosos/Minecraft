@@ -16,7 +16,7 @@ namespace Minecraft
 	Shader::Shader(const std::string& filepath)
 	{
 		std::string source = ReadFile(filepath);
-		auto shaderSources = PreProcess(source);
+		auto shaderSources = ShaderPreProcess(source);
 		Compile(shaderSources);
 
 		// Extract name from filepath
