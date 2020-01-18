@@ -8,44 +8,40 @@ namespace Minecraft
 {
 	void OpenGLMessageCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam);
 
-	TestLayer::TestLayer(const std::string& name) : Layer(name) 
-	{ 
+	TestLayer::TestLayer(const std::string& name) : Layer(name)
+	{
 		m_VertexArray = Minecraft::VertexArray::Create();
-		float vertices[8 * 7] = {
-			-1.0f, -1.0f,  1.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			1.0f, -1.0f,  1.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			1.0, 1.0,  1.0,0.2f, 0.3f, 0.8f, 1.0f,
-			-1.0f,  1.0f, 1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
-
-			-1.0f,  -1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
-			1.0f,  -1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
-			1.0f,  1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
-			-1.0f,  1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		
+		float frontFace[4 * 9] = {
+			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f         , 1.0f / 16.0f,
+			1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f / 16.0f , 1.0f / 16.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f / 16.0f , 0.0f,
+			0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f         , 0.0f
 		};
-
-		Minecraft::Ref<Minecraft::VertexBuffer> vbo = Minecraft::VertexBuffer::Create(vertices, sizeof(vertices));
+	
+		Minecraft::Ref<Minecraft::VertexBuffer> vbo = Minecraft::VertexBuffer::Create(frontFace, sizeof(frontFace));
+		/*
+		float vertices[] = {
+			// positions          // colors           // texture coords
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 0.0f,   0.0f, 1.0f    // top left 
+		};
+		Minecraft::Ref<Minecraft::VertexBuffer> vbo = Minecraft::VertexBuffer::Create(vertices, sizeof(vertices));*/
 		Minecraft::BufferLayout layout =
 		{
 			{ Minecraft::ShaderDataType::Float3, "a_Position" },
-			{ Minecraft::ShaderDataType::Float4, "a_Color" }
+			{ Minecraft::ShaderDataType::Float4, "a_Color" },
+			{ Minecraft::ShaderDataType::Float2, "a_TextureCoordinates"}
 		};
 		vbo->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vbo);
 
 		//uint32_t indices[3] = { 0, 1, 2 };
-		uint32_t indices[] = {
-			0, 1, 2,
-			2, 3, 0,
-			1, 5, 6,
-			6, 2, 1,
-			7, 6, 5,
-			5, 4, 7,
-			4, 0, 3,
-			3, 7, 4,
-			4, 5, 1,
-			1, 0, 4,
-			3, 2, 6,
-			6, 7, 3
+		uint32_t indices[6] = {
+			0,1,3,
+			1,2,3
 		};
 
 		Minecraft::Ref<Minecraft::IndexBuffer> ibo = Minecraft::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
@@ -66,6 +62,7 @@ namespace Minecraft
 
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 		m_Camera = CreateRef<Minecraft::Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
+		m_Texture = Texture::Create("res/textures/blocks.jpg");
 		//m_Camera = CreateRef<Minecraft::Camera>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
 	}
 
@@ -109,10 +106,13 @@ namespace Minecraft
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_FlatColorShader->Bind();
-		m_VertexArray->Bind();
 		m_FlatColorShader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_FlatColorShader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
+
+		m_FlatColorShader->Bind();
+		m_Texture->Bind(1);
+		m_VertexArray->Bind();
+
 
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));

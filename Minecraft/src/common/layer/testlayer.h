@@ -22,6 +22,7 @@ namespace Minecraft
 		Minecraft::Ref<Minecraft::VertexArray> m_VertexArray;
 		Minecraft::Ref<Minecraft::Shader> m_FlatColorShader;
 		Minecraft::Ref<Minecraft::VertexArray> m_SquareVA;
+		Minecraft::Ref<Minecraft::Texture> m_Texture;
 
 		glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 	};
