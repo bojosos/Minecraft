@@ -65,8 +65,8 @@ namespace Minecraft
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
-		//m_Camera = CreateRef<Minecraft::Camera>(glm::perspective(glm::radians(60.0f), 9.0f / 16.0f, -0.1f, 100.0f));
-		m_Camera = CreateRef<Minecraft::Camera>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
+		m_Camera = CreateRef<Minecraft::Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
+		//m_Camera = CreateRef<Minecraft::Camera>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
 	}
 
 	void OpenGLMessageCallback(
@@ -118,7 +118,7 @@ namespace Minecraft
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		m_FlatColorShader->SetFloat4("u_Color", glm::vec4({ 1.0f,1.0f,1.0f, 1.0f }));
 
-		m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));
+		m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));// *glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
 		glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 		/*

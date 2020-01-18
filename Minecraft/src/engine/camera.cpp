@@ -12,8 +12,8 @@ namespace Minecraft
 		m_Position = { 0.0f, 0.0f,-0.0f };
 		m_Rotation = { 90.0f,0.0f,0.0f };
 
-		m_Yaw = 2.4f;
-		m_Pitch = 0.7f;
+		m_Yaw = 0.0f;
+		m_Pitch = 0.0f;
 	}
 
 	Camera::~Camera()
@@ -61,7 +61,7 @@ namespace Minecraft
 			glm::vec3 forward = GetForwardDirection(orientation);
 			glm::vec3 right = GetRightDirection(orientation);
 
-			glm::vec3 up = glm::vec3(0, 1, 0);
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 			if (Input::IsKeyPressed(KeyCode::W))
 				m_Position += forward * speed;
@@ -92,9 +92,10 @@ namespace Minecraft
 
 	glm::quat Camera::GetOrientation() const
 	{
-		float yangle = -m_Yaw * 0.5f;
-		float xangle = -m_Pitch * 0.5f;
+		float yangle = m_Yaw * 0.5f;
+		float xangle = m_Pitch * 0.5f;
 		//TODO: Test glm::rotate(glm::quat(), angle, vec)
+		//return glm::rotate(glm::quat(), -m_Yaw * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate(glm::quat(), -m_Pitch * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 		return glm::quat(glm::sin(xangle), 0.0f, 0.0f, glm::cos(xangle)) * glm::quat(0.0f, glm::sin(yangle), 0.0f, glm::cos(yangle));
 	}
 
