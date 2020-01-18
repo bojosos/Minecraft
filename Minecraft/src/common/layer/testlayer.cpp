@@ -6,22 +6,21 @@
 
 namespace Minecraft
 {
-	void OpenGLMessageCallback(
-		unsigned source,
-		unsigned type,
-		unsigned id,
-		unsigned severity,
-		int length,
-		const char* message,
-		const void* userParam);
+	void OpenGLMessageCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam);
 
 	TestLayer::TestLayer(const std::string& name) : Layer(name) 
 	{ 
 		m_VertexArray = Minecraft::VertexArray::Create();
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		float vertices[8 * 7] = {
+			-1.0f, -1.0f,  1.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			1.0f, -1.0f,  1.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			1.0, 1.0,  1.0,0.2f, 0.3f, 0.8f, 1.0f,
+			-1.0f,  1.0f, 1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
+
+			-1.0f,  -1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
+			1.0f,  -1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
+			1.0f,  1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f,
+			-1.0f,  1.0f, -1.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
 		Minecraft::Ref<Minecraft::VertexBuffer> vbo = Minecraft::VertexBuffer::Create(vertices, sizeof(vertices));
@@ -33,7 +32,21 @@ namespace Minecraft
 		vbo->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vbo);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		//uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[] = {
+			0, 1, 2,
+			2, 3, 0,
+			1, 5, 6,
+			6, 2, 1,
+			7, 6, 5,
+			5, 4, 7,
+			4, 0, 3,
+			3, 7, 4,
+			4, 5, 1,
+			1, 0, 4,
+			3, 2, 6,
+			6, 7, 3
+		};
 
 		Minecraft::Ref<Minecraft::IndexBuffer> ibo = Minecraft::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
@@ -44,6 +57,7 @@ namespace Minecraft
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 		glViewport(0, 0, 1280, 720);
 
 		glEnable(GL_DEBUG_OUTPUT);
@@ -51,6 +65,8 @@ namespace Minecraft
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		//m_Camera = CreateRef<Minecraft::Camera>(glm::perspective(glm::radians(60.0f), 9.0f / 16.0f, -0.1f, 100.0f));
+		m_Camera = CreateRef<Minecraft::Camera>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
 	}
 
 	void OpenGLMessageCallback(
@@ -89,28 +105,37 @@ namespace Minecraft
 
 	void TestLayer::OnUpdate(Timestep ts)
 	{
+		m_Camera->Update();
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		m_FlatColorShader->Bind();
 		m_VertexArray->Bind();
+		m_FlatColorShader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
+		m_FlatColorShader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		m_FlatColorShader->SetFloat4("u_Color", glm::vec4({ 1.0f,1.0f,1.0f, 1.0f }));
 
+		m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));
+		glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+		/*
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				m_FlatColorShader->SetMat4("u_Transform", transform);
+				for (int z = 0; z < 20; z++) {
+					glm::vec3 pos(x, y, z);
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+					m_FlatColorShader->SetMat4("u_Transform", transform);
 
-				glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-				//Minecraft::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+					glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+					//Minecraft::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+				}
 			}
-		}
+		}*/
 		
 	}
 }

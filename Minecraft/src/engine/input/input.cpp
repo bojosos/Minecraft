@@ -22,7 +22,7 @@ namespace Minecraft
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> Input::GetMousePositionImpl()
+	glm::vec2 Input::GetMousePositionImpl()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetGLFWwindow());
 		double xpos, ypos;
@@ -33,13 +33,33 @@ namespace Minecraft
 
 	float Input::GetMouseXImpl()
 	{
-		auto [x, y] = GetMousePositionImpl();
-		return x;
+		glm::vec2& pos = GetMousePositionImpl();
+		return pos.x;
 	}
 
 	float Input::GetMouseYImpl()
 	{
-		auto [x, y] = GetMousePositionImpl();
-		return y;
+		glm::vec2 pos = GetMousePositionImpl();
+		return pos.y;
+	}
+
+	void Input::SetMousePositionImpl(const glm::vec2& pos)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetGLFWwindow());
+		glfwSetCursorPos(window, pos.x, pos.y);
+	}
+
+	void Input::SetMouseCursorImpl(CursorType cursor)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetGLFWwindow());
+		switch (cursor)
+		{
+		case(CursorType::POINTER):
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			break;
+		case(CursorType::NO_CURSOR):
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			break;
+		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Minecraft
 		virtual void OnEvent(Event& e) override;
 	private:
 		Minecraft::ShaderLibrary m_ShaderLibrary;
+		Minecraft::Ref<Minecraft::Camera> m_Camera;
 		Minecraft::Ref<Minecraft::Shader> m_Shader;
 		Minecraft::Ref<Minecraft::VertexArray> m_VertexArray;
 		Minecraft::Ref<Minecraft::Shader> m_FlatColorShader;

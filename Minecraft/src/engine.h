@@ -11,3 +11,4 @@
 #include "engine/input/input.h"
 #include "common/log.h"
 #include "common/timestep.h"
+#include "engine/camera.h"
