@@ -8,6 +8,8 @@ namespace Minecraft
 {
 	Camera::Camera(const glm::mat4& projectionMatrix) : m_ProjectionMatrix(projectionMatrix), m_MouseSensitivity(0.002f), m_Speed(0.04f), m_SprintSpeed(m_Speed * 4.0f), m_MouseWasGrabbed(false)
 	{
+		Input::SetMouseGrabbed(true);
+		Input::SetMouseCursor(CursorType::NO_CURSOR);
 		m_ViewMatrix = glm::mat4(1.0f);
 		m_Position = { 0.0f, 0.0f,-0.0f };
 		m_Rotation = { 90.0f,0.0f,0.0f };
@@ -64,13 +66,13 @@ namespace Minecraft
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 			if (Input::IsKeyPressed(KeyCode::W))
-				m_Position += forward * speed;
+				m_Position += glm::vec3(forward.x, m_Position.y, forward.z) * speed;
 			if (Input::IsKeyPressed(KeyCode::S))
-				m_Position -= forward * speed;
+				m_Position -= glm::vec3(forward.x, m_Position.y, forward.z) * speed;
 			if (Input::IsKeyPressed(KeyCode::D))
-				m_Position += right * speed;
+				m_Position += glm::vec3(right.x, m_Position.y, right.z) * speed;
 			if (Input::IsKeyPressed(KeyCode::A))
-				m_Position -= right * speed;
+				m_Position -= glm::vec3(right.x, m_Position.y, right.z) * speed;
 
 			if (Input::IsKeyPressed(KeyCode::Space))
 				m_Position += up * speed;

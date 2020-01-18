@@ -59,12 +59,12 @@ namespace Minecraft
 			}
 			else
 			{
-				MC_ERROR("Could not read from file '{0}'", filepath);
+				MC_ERROR("Could not read from file: '{0}'", filepath);
 			}
 		}
 		else
 		{
-			MC_ERROR("Could not open file '{0}'", filepath);
+			MC_ERROR("Could not open file: '{0}'", filepath);
 		}
 
 		return result;

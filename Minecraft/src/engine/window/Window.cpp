@@ -1,9 +1,10 @@
 #include "mcpch.h"
 #include "window.h"
-#include <glad/glad.h>
 #include "common/event/keyevent.h"
 #include "common/event/mouseevent.h"
 #include "common/event/applicationevent.h"
+
+#include <glad/glad.h>
 
 namespace Minecraft
 {
@@ -12,7 +13,7 @@ namespace Minecraft
 
 	static void GLFWErrorCallback(int error, const char* desc)
 	{
-		std::cout << "GLFW Error (" << error << ")" << desc << std::endl;
+		MC_ERROR("GLFW Error ({0})", desc);
 	}
 
 	Scope<Window> Window::Create(const WindowProps& props)
@@ -30,10 +31,14 @@ namespace Minecraft
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		MC_ASSERT(status, "Faield to initalize Glad");
-		std::cout << "OpenGL Info:" << std::endl;
-		std::cout << "\tVendor: " << glGetString(GL_VENDOR) << std::endl;
-		std::cout << "\tRenderer: " << glGetString(GL_RENDERER) << std::endl;
-		std::cout << "\tVersion: " << glGetString(GL_VERSION) << std::endl;
+
+#ifdef MC_DEBUG
+		MC_WARN("OpenGL Info:");
+		MC_WARN("\tVendor: {0}", glGetString(GL_VENDOR));
+		MC_WARN("\tRenderer: {0}",glGetString(GL_RENDERER));
+		MC_WARN("\tVersion: {0}", glGetString(GL_VERSION));
+#endif
+
 	}
 
 	void Window::SwapBuffers()
@@ -52,7 +57,9 @@ namespace Minecraft
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		std::cout << "Creating Window" << std::endl;
+#ifdef MC_DEBUG
+		MC_WARN("Creating Window: {0}, {1}", m_Data.Title, s_GLFWWindowCount);
+#endif
 
 		if (s_GLFWWindowCount == 0)
 		{
@@ -62,7 +69,7 @@ namespace Minecraft
 		}
 
 		{
-#if defined(MC_DEBUG)
+#ifdef MC_DEBUG
 			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 #endif
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);

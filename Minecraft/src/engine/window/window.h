@@ -1,9 +1,9 @@
 #pragma once
-#include "mcpch.h"
-
 #include "common/common.h"
-#include <GLFW/glfw3.h>
 #include "common/event/event.h"
+
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 namespace Minecraft
 {
@@ -27,8 +27,10 @@ namespace Minecraft
 		Window(const WindowProps& props);
 		~Window();
 		void OnUpdate();
-		uint32_t GetWidth() { return m_Data.Width; };
-		uint32_t GetHeight() { return m_Data.Height; }
+
+		inline uint32_t GetWidth() const { return m_Data.Width; };
+		inline uint32_t GetHeight() const { return m_Data.Height; }
+		inline glm::vec2 GetSize() const { return glm::vec2(m_Data.Width, m_Data.Height); }
 
 		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; };
 		inline GLFWwindow* GetGLFWwindow() const { return m_Window; }

@@ -21,8 +21,8 @@ namespace Minecraft
 
 		void Run();
 
-		inline glm::vec2 GetWindowSize() { return { m_Window->GetWidth(), m_Window->GetHeight() }; }
-		inline Window& GetWindow() { return *m_Window; }
+		inline glm::vec2 GetWindowSize() const { return m_Window->GetSize(); }
+		inline Window& GetWindow() const { return *m_Window; }
 
 		inline static Application& Get() { return *s_Instance; }
 

@@ -30,7 +30,6 @@ namespace Minecraft
 		inline void Translate(float x, float y, float z) { m_Position += glm::vec3(x, y, z); }
 		inline void Rotate(float x, float y, float z) { m_Rotation += glm::vec3(x, y, z); }
 
-		inline const glm::vec3& GetFocalPoint() const { return m_FocalPoint; }
 		inline const glm::mat4& GetViewMatrix() { return m_ViewMatrix; }
 
 	private:
@@ -38,11 +37,9 @@ namespace Minecraft
 
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
-		glm::mat4 m_ViewProjectionMatrix;
 
-		glm::vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_Rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_Position;
+		glm::vec3 m_Rotation;
 
 		float m_MouseSensitivity;
 		float m_Speed, m_SprintSpeed;

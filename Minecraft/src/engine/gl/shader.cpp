@@ -1,6 +1,5 @@
 #include "mcpch.h"
 #include "shader.h"
-
 #include "common/file.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -19,7 +18,6 @@ namespace Minecraft
 		auto shaderSources = ShaderPreProcess(source);
 		Compile(shaderSources);
 
-		// Extract name from filepath
 		auto lastSlash = filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 		auto lastDot = filepath.rfind('.');
@@ -42,7 +40,6 @@ namespace Minecraft
 
 	Shader::~Shader()
 	{
-		MC_ERROR("Deleting");
 		glDeleteProgram(m_RendererID);
 	}
 
@@ -90,7 +87,6 @@ namespace Minecraft
 
 		if (isLinked == GL_FALSE)
 		{
-			MC_ERROR("Not here!");
 			GLint maxLength = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 
@@ -211,7 +207,7 @@ namespace Minecraft
 		Add(name, shader);
 		return shader;
 	}
-	
+
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
 		MC_ASSERT(Exists(name), "Shader not found!");
@@ -222,4 +218,4 @@ namespace Minecraft
 	{
 		return m_Shaders.find(name) != m_Shaders.end();
 	}
-};
+}

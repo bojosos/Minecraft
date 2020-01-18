@@ -10,7 +10,7 @@ namespace Minecraft
 		return CreateRef<Texture>(width, height);
 	}
 
-	Texture::Texture(uint32_t width,uint32_t height) : m_Width(width), m_Height(height)
+	Texture::Texture(uint32_t width, uint32_t height) : m_Width(width), m_Height(height)
 	{
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
@@ -57,9 +57,6 @@ namespace Minecraft
 
 		MC_ASSERT(internalFormat & dataFormat, "Format not supported!");
 
-		MC_INFO(m_Width);
-		MC_INFO(m_Height);
-
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
@@ -70,6 +67,8 @@ namespace Minecraft
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
+
+		MC_INFO("Loaded texture {0}, {1}x{2}x{3}.", m_FilePath, m_Width, m_Height, channels);
 		stbi_image_free(data);
 	}
 
@@ -78,7 +77,7 @@ namespace Minecraft
 		glDeleteTextures(1, &m_RendererID);
 	}
 
-	void Texture::SetData(void* data, uint32_t size) 
+	void Texture::SetData(void* data, uint32_t size)
 	{
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		MC_ASSERT(size == m_Width * m_Height * bpp, "Data must be an entire texture!");
@@ -87,7 +86,7 @@ namespace Minecraft
 
 	void Texture::Bind(uint32_t slot) const
 	{
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
-		//glBindTextureUnit(slot, m_RendererID);
+		//glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glBindTextureUnit(slot, m_RendererID);
 	}
 }
