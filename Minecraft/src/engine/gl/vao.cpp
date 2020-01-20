@@ -9,6 +9,7 @@ namespace Minecraft
 	{
 		switch (type)
 		{
+		case ShaderDataType::Byte4:	   return GL_BYTE;
 		case ShaderDataType::Float:    return GL_FLOAT;
 		case ShaderDataType::Float2:   return GL_FLOAT;
 		case ShaderDataType::Float3:   return GL_FLOAT;

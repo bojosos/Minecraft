@@ -8,6 +8,8 @@ namespace Minecraft
 	{
 	public:
 		VertexBuffer(float* verts, uint32_t size);
+		VertexBuffer(byte4* verts, uint32_t size);
+
 		~VertexBuffer();
 
 		void Bind();
@@ -17,6 +19,7 @@ namespace Minecraft
 		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
 
 		static Ref<VertexBuffer> Create(float* verts, uint32_t size);
+		static Ref<VertexBuffer> Create(byte4* verts, uint32_t size);
 	private:
 		uint32_t m_RendererID, m_Count;
 		BufferLayout m_Layout;
