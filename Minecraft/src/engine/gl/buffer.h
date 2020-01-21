@@ -7,13 +7,16 @@ namespace Minecraft
 {
 	enum class ShaderDataType
 	{
-		None = 0, Byte4, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
+		None = 0, Byte, Byte2, Byte3, Byte4, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
 	};
 
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
 		{
+		case ShaderDataType::Byte:     return 1 * 1;
+		case ShaderDataType::Byte2:    return 2 * 1;
+		case ShaderDataType::Byte3:    return 3 * 1;
 		case ShaderDataType::Byte4:    return 4 * 1;
 		case ShaderDataType::Float:    return 4;
 		case ShaderDataType::Float2:   return 4 * 2;
@@ -51,6 +54,9 @@ namespace Minecraft
 		{
 			switch (Type)
 			{
+			case ShaderDataType::Byte:   return 1;
+			case ShaderDataType::Byte2:   return 2;
+			case ShaderDataType::Byte3:   return 3;
 			case ShaderDataType::Byte4:   return 4;
 			case ShaderDataType::Float:   return 1;
 			case ShaderDataType::Float2:  return 2;

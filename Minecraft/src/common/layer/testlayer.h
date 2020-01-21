@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine.h"
+#include "game/world.h"
 
 namespace Minecraft
 {
@@ -17,6 +18,8 @@ namespace Minecraft
 		virtual void OnEvent(Event& e) override;
 	private:
 		ShaderLibrary m_ShaderLibrary;
+
+		Ref<World> m_World;
 		Ref<Camera> m_Camera;
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_VertexArray;

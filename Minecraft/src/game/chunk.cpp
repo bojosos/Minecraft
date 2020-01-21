@@ -7,6 +7,7 @@ namespace Minecraft
 	Chunk::Chunk()
 	{
 
+		memset(m_Blocks, 3, sizeof(m_Blocks) / sizeof(uint8_t));
 	}
 
 	Chunk::Chunk(const glm::vec3& position) : m_Position(position)

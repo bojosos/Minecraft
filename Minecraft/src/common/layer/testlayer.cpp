@@ -5,8 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "game/world.h"
-
 namespace Minecraft
 {
 	void OpenGLMessageCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam)
@@ -51,9 +49,9 @@ namespace Minecraft
 		m_VertexArray->SetIndexBuffer(ibo);
 		*/
 
-		Ref<World> world = CreateRef<World>(1, 1, 1);
+		m_World = CreateRef<World>(1, 1, 1);
 
-		byte4* data = world->GetChunkData();
+		byte4* data = m_World->GetChunkData();
 
 		Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
 		BufferLayout layout =
@@ -68,7 +66,7 @@ namespace Minecraft
 		m_Texture = Texture::Create("res/textures/blocks.jpg");
 
 		glEnable(GL_BLEND);
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 #ifdef MC_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
@@ -103,8 +101,23 @@ namespace Minecraft
 
 		m_Camera->Update();
 
-		m_FlatColorShader->Bind();
 
+		if (Input::IsKeyPressed(KeyCode::R))
+		{
+			m_FlatColorShader = Shader::Create("res/shaders/chunkshader.glsl");
+			byte4* data = m_World->GetChunkData();
+
+			Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
+			BufferLayout layout =
+			{
+				{ ShaderDataType::Byte4, "a_Coordinates" },
+			};
+
+			vbo->SetLayout(layout);
+			m_VertexArray->SetVertexBuffer(0, vbo);
+		}
+
+		m_FlatColorShader->Bind();
 		m_FlatColorShader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_FlatColorShader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 		m_FlatColorShader->SetFloat4("u_Color", glm::vec4({ 1.0f,1.0f,1.0f, 1.0f }));

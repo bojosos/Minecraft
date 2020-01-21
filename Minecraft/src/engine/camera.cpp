@@ -11,8 +11,8 @@ namespace Minecraft
 		Input::SetMouseGrabbed(true);
 		Input::SetMouseCursor(CursorType::NO_CURSOR);
 		m_ViewMatrix = glm::mat4(1.0f);
-		m_Position = { 0.0f, 0.0f,-0.0f };
-		m_Rotation = { 90.0f,0.0f,0.0f };
+		m_Position = { 0.0f, 0.0f, -0.0f };
+		m_Rotation = { 0.0f, 0.0f, 0.0f };
 
 		m_Yaw = 0.0f;
 		m_Pitch = 0.0f;
@@ -66,13 +66,13 @@ namespace Minecraft
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 			if (Input::IsKeyPressed(KeyCode::W))
-				m_Position += glm::vec3(forward.x, m_Position.y, forward.z) * speed;
-			if (Input::IsKeyPressed(KeyCode::S))
-				m_Position -= glm::vec3(forward.x, m_Position.y, forward.z) * speed;
+				m_Position += glm::vec3(forward.x, forward.y, forward.z) * speed;
+			if (Input::IsKeyPressed(KeyCode::S))   
+				m_Position -= glm::vec3(forward.x, forward.y, forward.z) * speed;
 			if (Input::IsKeyPressed(KeyCode::D))
-				m_Position += glm::vec3(right.x, m_Position.y, right.z) * speed;
-			if (Input::IsKeyPressed(KeyCode::A))
-				m_Position -= glm::vec3(right.x, m_Position.y, right.z) * speed;
+				m_Position += glm::vec3(right.x,   right.y, right.z) * speed;
+			if (Input::IsKeyPressed(KeyCode::A))   
+				m_Position -= glm::vec3(right.x,   right.y, right.z) * speed;
 
 			if (Input::IsKeyPressed(KeyCode::Space))
 				m_Position += up * speed;

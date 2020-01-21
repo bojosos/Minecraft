@@ -9,6 +9,9 @@ namespace Minecraft
 	{
 		switch (type)
 		{
+		case ShaderDataType::Byte:     return GL_BYTE;
+		case ShaderDataType::Byte2:    return GL_BYTE;
+		case ShaderDataType::Byte3:    return GL_BYTE;
 		case ShaderDataType::Byte4:	   return GL_BYTE;
 		case ShaderDataType::Float:    return GL_FLOAT;
 		case ShaderDataType::Float2:   return GL_FLOAT;
@@ -50,6 +53,26 @@ namespace Minecraft
 	void VertexArray::Unbind() const
 	{
 		glBindVertexArray(0);
+	}
+
+	void VertexArray::SetVertexBuffer(uint32_t index, const Ref<VertexBuffer>& vertexBuffer)
+	{
+		vertexBuffer->Bind();
+
+		const auto& layout = vertexBuffer->GetLayout();
+		m_VertexBufferIndex--;
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(m_VertexBufferIndex);
+			glVertexAttribPointer(m_VertexBufferIndex,
+				element.GetComponentCount(),
+				ShaderDataTypeToOpenGLBaseType(element.Type),
+				element.Normalized ? GL_TRUE : GL_FALSE,
+				layout.GetStride(),
+				(const void*)element.Offset);
+			m_VertexBufferIndex++;
+		}
+		m_VertexBuffers[index] = vertexBuffer;
 	}
 
 	void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)

@@ -14,6 +14,8 @@ namespace Minecraft
 		void Unbind() const;
 		
 		void AddVertexBuffer(const Ref<VertexBuffer>& vbo);
+		void SetVertexBuffer(uint32_t index, const Ref<VertexBuffer> & vbo);
+
 		void SetIndexBuffer(const Ref<IndexBuffer>& ibo);
 		inline const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; };
 		inline const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; };

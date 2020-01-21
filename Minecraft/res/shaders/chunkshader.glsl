@@ -17,10 +17,10 @@ void main()
 
 #type fragment
 #version 330 core
-out vec4 color;
 
-in vec4 v_TextureCoordinates;
-uniform sampler2D texture;
+out vec4 color;
+in  vec4 v_TextureCoordinates;
+uniform sampler2D u_Texture;
 
 const vec4 fogcolor = vec4(0.6, 0.8, 1.0, 1.0);
 const float fogdensity = .00003;
@@ -28,23 +28,10 @@ const float fogdensity = .00003;
 void main(void) {
 	vec2 coord2d;
 	float intensity;
+	float x = mod(v_TextureCoordinates.w, 16);
+	float y = 16 - (int(v_TextureCoordinates.w) / 16);
 
-	if(v_TextureCoordinates.w < 0.0) {
-		coord2d = vec2(v_TextureCoordinates.w / 16.0, 1.0/16.0);
-		intensity = 1.0;
-	} else {
-		coord2d = vec2(v_TextureCoordinates.w / 16.0, 1.0/16.0);
-		intensity = 0.85;
-	}
-	
-	vec4 color = texture2D(texture, coord2d);
+	color = texture(u_Texture, vec2((fract(v_TextureCoordinates.x) + x) / 16.0, (-fract(v_TextureCoordinates.y) + y) / 16.0));
 
-	if(color.a < 0.4)
-		discard;
-	color.xyz *= intensity;
-
-	float z = gl_FragCoord.z / gl_FragCoord.w;
-	float fog = clamp(exp(-fogdensity * z * z), 0.2, 1.0);
-
-	gl_FragColor = mix(fogcolor, color, fog);
+	intensity = 0.85;
 }
