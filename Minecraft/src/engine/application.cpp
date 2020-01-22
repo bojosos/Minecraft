@@ -4,6 +4,7 @@
 #include "common/log.h"
 #include "common/common.h"
 #include "common/timestep.h"
+#include "engine/gl/renderer.h"
 
 namespace Minecraft
 {
@@ -14,6 +15,8 @@ namespace Minecraft
 		MC_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 		m_Window = Window::Create();
+
+		Renderer::SetViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 
 		m_Window->SetEventCallback(MC_BIND_EVENT_FN(Application::OnEvent));
 	}
@@ -82,7 +85,7 @@ namespace Minecraft
 		}
 
 		m_Minimized = false;
-		//Renderer::OnWindowResize(e.GetWidth(), e.GetHeight();
+		Renderer::SetViewport(0, 0, e.GetWidth(), e.GetHeight());
 		return false;
 	}
 }
