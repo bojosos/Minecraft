@@ -12,7 +12,7 @@ namespace Minecraft
 		Input::SetMouseCursor(CursorType::NO_CURSOR);
 		m_ViewMatrix = glm::mat4(1.0f);
 		m_Position = { 0.0f, 0.0f, -0.0f };
-		m_Rotation = { 0.0f, 0.0f, 0.0f };
+		m_Rotation = { 0.0f, 0.0f, 180.0f };
 
 		m_Yaw = 0.0f;
 		m_Pitch = 0.0f;
@@ -65,6 +65,7 @@ namespace Minecraft
 
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
+
 			if (Input::IsKeyPressed(KeyCode::W))
 				m_Position += forward * speed;
 			if (Input::IsKeyPressed(KeyCode::S))   
@@ -73,11 +74,10 @@ namespace Minecraft
 				m_Position += right * speed;
 			if (Input::IsKeyPressed(KeyCode::A))   
 				m_Position -= right * speed;
-
 			if (Input::IsKeyPressed(KeyCode::Space))
-				m_Position += up * speed;
-			if (Input::IsKeyPressed(KeyCode::LeftShift))
 				m_Position -= up * speed;
+			if (Input::IsKeyPressed(KeyCode::LeftShift))
+				m_Position += up * speed;
 
 			glm::mat4 rotation = glm::toMat4(glm::conjugate(orientation));
 			glm::mat4 translation = glm::translate(glm::mat4(1.0f), -m_Position);
@@ -95,7 +95,8 @@ namespace Minecraft
 	glm::quat Camera::GetOrientation() const
 	{
 		float yangle = m_Yaw * 0.5f;
-		float xangle = m_Pitch * 0.5f; // Might have to be negative
+		float xangle = m_Pitch * 0.5f;
+
 		return glm::quat(glm::sin(xangle), 0.0f, 0.0f, glm::cos(xangle)) * glm::quat(0.0f, glm::sin(yangle), 0.0f, glm::cos(yangle));
 	}
 
