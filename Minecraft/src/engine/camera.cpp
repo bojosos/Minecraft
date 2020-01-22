@@ -12,7 +12,7 @@ namespace Minecraft
 		Input::SetMouseCursor(CursorType::NO_CURSOR);
 		m_ViewMatrix = glm::mat4(1.0f);
 		m_Position = { 0.0f, 0.0f, -0.0f };
-		m_Rotation = { 0.0f, 0.0f, 180.0f };
+		m_Rotation = { 0.0f, 0.0f, 0.0f };
 
 		m_Yaw = 0.0f;
 		m_Pitch = 0.0f;
@@ -53,17 +53,19 @@ namespace Minecraft
 				m_Yaw += mousePos.x * m_MouseSensitivity;
 				m_Pitch += mousePos.y * m_MouseSensitivity;
 			}
+
 			m_MouseWasGrabbed = true;
 
 			Input::SetMousePosition(windowCenter);
 
 			glm::quat orientation = GetOrientation();
-			m_Rotation = glm::eulerAngles(orientation) * (180.0f / glm::pi<float>());
 
+			m_Rotation = glm::eulerAngles(orientation) * (180.0f / glm::pi<float>());
+			
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			glm::vec3 forward = GetForwardDirection(orientation);
 			glm::vec3 right = GetRightDirection(orientation);
-
-			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+			
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 
 			if (Input::IsKeyPressed(KeyCode::W))
@@ -75,13 +77,15 @@ namespace Minecraft
 			if (Input::IsKeyPressed(KeyCode::A))   
 				m_Position -= right * speed;
 			if (Input::IsKeyPressed(KeyCode::Space))
-				m_Position -= up * speed;
-			if (Input::IsKeyPressed(KeyCode::LeftShift))
 				m_Position += up * speed;
+			if (Input::IsKeyPressed(KeyCode::LeftShift))
+				m_Position -= up * speed;
 
 			glm::mat4 rotation = glm::toMat4(glm::conjugate(orientation));
 			glm::mat4 translation = glm::translate(glm::mat4(1.0f), -m_Position);
+
 			m_ViewMatrix = rotation * translation;
+			m_ViewMatrix = glm::lookAt(m_Position, m_Position + forward, up);
 		}
 		if (Input::IsKeyPressed(KeyCode::Escape))
 		{
@@ -114,4 +118,4 @@ namespace Minecraft
 	{
 		return glm::rotate(orientation, glm::vec3(1.0f, 0.0f, 0.0f));
 	}
-}
+};

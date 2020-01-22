@@ -128,7 +128,7 @@ namespace Minecraft
 		}
 
 		m_FlatColorShader->Bind();
-		m_FlatColorShader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
+		m_FlatColorShader->SetMat4("u_ViewMatrix", (m_Camera->GetViewMatrix()));
 		m_FlatColorShader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 		m_FlatColorShader->SetFloat4("u_Color", glm::vec4({ 1.0f,1.0f,1.0f, 1.0f }));
 		m_FlatColorShader->SetMat4("u_Transform", glm::mat4(1.0f));
