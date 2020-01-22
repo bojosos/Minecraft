@@ -66,13 +66,13 @@ namespace Minecraft
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 			if (Input::IsKeyPressed(KeyCode::W))
-				m_Position += glm::vec3(forward.x, forward.y, forward.z) * speed;
+				m_Position += forward * speed;
 			if (Input::IsKeyPressed(KeyCode::S))   
-				m_Position -= glm::vec3(forward.x, forward.y, forward.z) * speed;
+				m_Position -= forward * speed;
 			if (Input::IsKeyPressed(KeyCode::D))
-				m_Position += glm::vec3(right.x,   right.y, right.z) * speed;
+				m_Position += right * speed;
 			if (Input::IsKeyPressed(KeyCode::A))   
-				m_Position -= glm::vec3(right.x,   right.y, right.z) * speed;
+				m_Position -= right * speed;
 
 			if (Input::IsKeyPressed(KeyCode::Space))
 				m_Position += up * speed;

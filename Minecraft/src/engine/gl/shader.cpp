@@ -12,7 +12,20 @@ namespace Minecraft
 		return CreateRef<Shader>(filepath);
 	}
 
-	Shader::Shader(const std::string& filepath)
+	void Shader::Reload()
+	{
+		if (m_Filepath == "")
+
+			return;
+		Load(m_Filepath);
+	}
+
+	Shader::Shader(const std::string& filepath) : m_Filepath(filepath)
+	{
+		Load(filepath);
+	}
+
+	void Shader::Load(const std::string& filepath)
 	{
 		std::string source = ReadFile(filepath);
 		auto shaderSources = ShaderPreProcess(source);
@@ -30,7 +43,7 @@ namespace Minecraft
 		return CreateRef<Shader>(name, vertSrc, fragSrc);
 	}
 
-	Shader::Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc)
+	Shader::Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc) : m_Filepath("")
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertSrc;
@@ -73,7 +86,7 @@ namespace Minecraft
 
 				glDeleteShader(shader);
 				MC_ERROR("{0}", infoLog.data());
-				MC_ASSERT(false, "Shader compilation failure!");
+				//MC_ASSERT(false, "Shader compilation failure!");
 				break;
 			}
 			glAttachShader(program, shader);
@@ -99,7 +112,7 @@ namespace Minecraft
 				glDeleteShader(id);
 
 			MC_ERROR("{0}", infoLog.data());
-			MC_ASSERT(false, "Shader link failure!");
+			//MC_ASSERT(false, "Shader link failure!");
 			return;
 		}
 

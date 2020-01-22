@@ -7,6 +7,8 @@
 
 namespace Minecraft
 {
+	std::vector<Block> TestLayer::s_Blocks = std::vector<Block>();
+
 	void OpenGLMessageCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam)
 	{
 		switch (severity)
@@ -35,7 +37,7 @@ namespace Minecraft
 			0,1,3,
 			1,2,3
 		};
-		
+
 		Ref<VertexBuffer> vbo = VertexBuffer::Create(frontFace, sizeof(frontFace));
 		BufferLayout layout =
 		{
@@ -48,26 +50,23 @@ namespace Minecraft
 		Ref<IndexBuffer> ibo = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(ibo);
 		*/
-
+		s_Blocks.push_back(GrassBlock());
 		m_World = CreateRef<World>(1, 1, 1);
 
-		byte4* data = m_World->GetChunkData();
-
-		Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
-		BufferLayout layout =
+		m_Layout =
 		{
-			{ ShaderDataType::Byte4, "a_Coordinates" },
+			{ ShaderDataType::Byte3, "a_Coordinates" },
+			{ ShaderDataType::Byte2, "a_TexCoords" }
 		};
 
-		vbo->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vbo);
+		BufferData();
 
 		m_FlatColorShader = m_ShaderLibrary.Load("res/shaders/chunkshader.glsl");
 		m_Texture = Texture::Create("res/textures/blocks.jpg");
-
 		glEnable(GL_BLEND);
 		//glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
+
 #ifdef MC_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -94,27 +93,38 @@ namespace Minecraft
 
 	}
 
+	void TestLayer::GetData(vertex* data, uint8_t x, uint8_t y, uint8_t z, uint32_t& i)
+	{
+		s_Blocks[0].GetBackVertexData(data, x, y, z, i);
+		s_Blocks[0].GetFrontVertexData(data, x, y, z, i);
+		s_Blocks[0].GetTopVertexData(data, x, y, z, i);
+		s_Blocks[0].GetBottomVertexData(data, x, y, z, i);
+		s_Blocks[0].GetLeftVertexData(data, x, y, z, i);
+		s_Blocks[0].GetRightVertexData(data, x, y, z, i);
+	}
+
+	void TestLayer::BufferData()
+	{
+		vertex* data = m_World->GetChunkData();
+		Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
+		vbo->SetLayout(m_Layout);
+		m_VertexArray->SetVertexBuffer(0, vbo);
+		delete data;
+	}
+
 	void TestLayer::OnUpdate(Timestep ts)
 	{
+
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		m_Camera->Update();
 
 
-		if (Input::IsKeyPressed(KeyCode::R))
+		if (Input::IsKeyPressed(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::R))
 		{
-			m_FlatColorShader = Shader::Create("res/shaders/chunkshader.glsl");
-			byte4* data = m_World->GetChunkData();
-
-			Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
-			BufferLayout layout =
-			{
-				{ ShaderDataType::Byte4, "a_Coordinates" },
-			};
-
-			vbo->SetLayout(layout);
-			m_VertexArray->SetVertexBuffer(0, vbo);
+			m_FlatColorShader->Reload();
+			BufferData();
 		}
 
 		m_FlatColorShader->Bind();

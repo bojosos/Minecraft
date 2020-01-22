@@ -1,9 +1,9 @@
 #pragma once
 
-struct byte4 {
-	uint8_t x, y, z, w;
-	byte4() { }
-	byte4(uint8_t x, uint8_t y, uint8_t z, uint8_t w) : x(x), y(y), z(z), w(w) { }
+struct vertex {
+	uint8_t x, y, z, u, v;
+	vertex() : x(0), y(0), z(0), u(0), v(0) { }
+	vertex(uint8_t x, uint8_t y, uint8_t z, uint8_t u, uint8_t v) : x(x), y(y), z(z), u(u), v(v) { }
 };
 
 #include <memory>

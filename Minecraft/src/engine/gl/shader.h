@@ -11,6 +11,8 @@ namespace Minecraft
 	public:
 		Shader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
 		Shader(const std::string& filepath);
+		void Reload();
+
 		~Shader();
 
 		void Bind() const;
@@ -37,9 +39,11 @@ namespace Minecraft
 		static Ref<Shader> Create(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
 
 	private:
+		void Load(const std::string& path);
 		void Compile(const std::unordered_map<uint32_t, std::string>& shaderSources);
 
 	private:
+		std::string m_Filepath;
 		std::string m_Name;
 		uint32_t m_RendererID;
 

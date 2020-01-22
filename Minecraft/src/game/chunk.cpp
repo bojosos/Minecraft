@@ -1,6 +1,8 @@
 #include "mcpch.h"
 #include "chunk.h"
 
+#include "common/layer/testlayer.h"
+
 namespace Minecraft
 {
 
@@ -21,9 +23,10 @@ namespace Minecraft
 			return;
 	}
 
-	byte4* Chunk::GetRenderData() const
+	vertex* Chunk::GetRenderData() const
 	{
-		byte4* res = new byte4[TOTAL_VERTICES];
+		vertex* res = new vertex[TOTAL_VERTICES];
+
 		uint32_t i = 0;
 
 		for (int z = 0; z < CHUNK_SIZE; z++)
@@ -34,51 +37,7 @@ namespace Minecraft
 				{
 					uint8_t type = m_Blocks[x][y][z];
 
-					//neg x
-					res[i++] = byte4(x, y, z, type);
-					res[i++] = byte4(x, y, z + 1, type);
-					res[i++] = byte4(x, y + 1, z, type);
-					res[i++] = byte4(x, y + 1, z, type);
-					res[i++] = byte4(x, y, z + 1, type);
-					res[i++] = byte4(x, y + 1, z + 1, type);
-
-					//pos x
-					res[i++] = byte4(x + 1, y, z, type);
-					res[i++] = byte4(x + 1, y + 1, z, type);
-					res[i++] = byte4(x + 1, y, z + 1, type);
-					res[i++] = byte4(x + 1, y + 1, z, type);
-					res[i++] = byte4(x + 1, y + 1, z + 1, type);
-					res[i++] = byte4(x + 1, y, z + 1, type);
-					//neg y
-					res[i++] = byte4(x, y, z, type);
-					res[i++] = byte4(x + 1, y, z, type);
-					res[i++] = byte4(x, y, z + 1, type);
-					res[i++] = byte4(x + 1, y, z, type);
-					res[i++] = byte4(x + 1, y, z + 1, type);
-					res[i++] = byte4(x, y, z + 1, type);
-					//pos y
-					res[i++] = byte4(x, y + 1, z, type);
-					res[i++] = byte4(x, y + 1, z + 1, type);
-					res[i++] = byte4(x + 1, y + 1, z, type);
-					res[i++] = byte4(x + 1, y + 1, z, type);
-					res[i++] = byte4(x, y + 1, z + 1, type);
-					res[i++] = byte4(x + 1, y + 1, z + 1, type);
-					//neg z
-					res[i++] = byte4(x, y, z, type);
-					res[i++] = byte4(x, y + 1, z, type);
-					res[i++] = byte4(x + 1, y, z, type);
-					res[i++] = byte4(x, y + 1, z, type);
-					res[i++] = byte4(x + 1, y + 1, z, type);
-					res[i++] = byte4(x + 1, y, z, type);
-					//pos z
-					res[i++] = byte4(x, y, z + 1, type);
-					res[i++] = byte4(x + 1, y, z + 1, type);
-					res[i++] = byte4(x, y + 1, z + 1, type);
-					res[i++] = byte4(x, y + 1, z + 1, type);
-					res[i++] = byte4(x + 1, y, z + 1, type);
-					res[i++] = byte4(x + 1, y + 1, z + 1, type);
-
-
+					TestLayer::GetData(res, x, y, z, i);
 				}
 			}
 		}

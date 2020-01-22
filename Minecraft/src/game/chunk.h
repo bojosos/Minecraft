@@ -39,7 +39,7 @@ namespace Minecraft
 		inline glm::vec3 GetPosition() const { return m_Position; }
 		
 		void Update();
-		byte4* GetRenderData() const;
+		vertex* GetRenderData() const;
 	private:
 		bool m_Changed = true;
 		glm::vec3 m_Position;

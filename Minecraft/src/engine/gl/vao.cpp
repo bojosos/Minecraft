@@ -57,6 +57,13 @@ namespace Minecraft
 
 	void VertexArray::SetVertexBuffer(uint32_t index, const Ref<VertexBuffer>& vertexBuffer)
 	{
+		// nononono
+		if (index <= m_VertexBufferIndex) 
+		{
+			AddVertexBuffer(vertexBuffer);
+			return;
+		}
+
 		vertexBuffer->Bind();
 
 		const auto& layout = vertexBuffer->GetLayout();
