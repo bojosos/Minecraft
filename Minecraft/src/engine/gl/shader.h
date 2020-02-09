@@ -1,6 +1,5 @@
 #pragma once
 
-#include "mcpch.h"
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 
@@ -33,6 +32,8 @@ namespace Minecraft
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
+		void RetrieveLocations(const std::vector<std::string>& uniforms);
+		
 		const std::string& GetName() { return m_Name; };
 
 		static Ref<Shader> Create(const std::string& filepath);
@@ -46,7 +47,7 @@ namespace Minecraft
 		std::string m_Filepath;
 		std::string m_Name;
 		uint32_t m_RendererID;
-
+		std::unordered_map<std::string, GLint> m_UniformLocations;
 	};
 
 	class ShaderLibrary
@@ -63,7 +64,6 @@ namespace Minecraft
 
 	private:
 		std::string m_Name;
-		uint32_t m_RendererID;
 		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 	};
 }

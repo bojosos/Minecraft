@@ -54,7 +54,7 @@ namespace Minecraft
 		{
 			switch (Type)
 			{
-			case ShaderDataType::Byte:   return 1;
+			case ShaderDataType::Byte:    return 1;
 			case ShaderDataType::Byte2:   return 2;
 			case ShaderDataType::Byte3:   return 3;
 			case ShaderDataType::Byte4:   return 4;

@@ -18,6 +18,8 @@ namespace Minecraft
 		const BufferLayout& GetLayout() const { return m_Layout; };
 		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
 
+		inline int GetCount() { return m_Count; }
+
 		static Ref<VertexBuffer> Create(float* verts, uint32_t size);
 		static Ref<VertexBuffer> Create(vertex* verts, uint32_t size);
 	private:

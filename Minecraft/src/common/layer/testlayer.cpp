@@ -16,18 +16,15 @@ namespace Minecraft
 		m_VertexArray = VertexArray::Create();
 		
 		s_Blocks.push_back(GrassBlock());
-		m_World = CreateRef<World>(1, 1, 1);
+		m_World = CreateRef<World>(10, 10, 10);
 
-		m_Layout =
-		{
-			{ ShaderDataType::Byte3, "a_Coordinates" },
-			{ ShaderDataType::Byte2, "a_TexCoords" }
-		};
-
-		BufferData();
+		//BufferData();
 
 		m_Shader = m_ShaderLibrary.Load("res/shaders/chunkshader.glsl");
+		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_Transform" };
+		m_Shader->RetrieveLocations(locations);
 		m_Texture = Texture::Create("res/textures/blocks.jpg");
+		m_Frustum = CreateRef<ViewFrustum>();
 
 		Renderer::Init();
 	}
@@ -46,7 +43,7 @@ namespace Minecraft
 
 	}
 
-	void TestLayer::GetData(vertex* data, uint8_t x, uint8_t y, uint8_t z, uint32_t& i)
+	void TestLayer::GetData(vertex* data , uint8_t x, uint8_t y, uint8_t z, uint32_t& i)
 	{
 		s_Blocks[0].GetBackVertexData(data, x, y, z, i);
 		s_Blocks[0].GetFrontVertexData(data, x, y, z, i);
@@ -55,37 +52,37 @@ namespace Minecraft
 		s_Blocks[0].GetLeftVertexData(data, x, y, z, i);
 		s_Blocks[0].GetRightVertexData(data, x, y, z, i);
 	}
-
-	void TestLayer::BufferData()
-	{
-		vertex* data = m_World->GetChunkData();
-		Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
-		vbo->SetLayout(m_Layout);
-		m_VertexArray->SetVertexBuffer(0, vbo);
-		delete data;
-	}
-
+	
 	void TestLayer::OnUpdate(Timestep ts)
 	{
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
 
 		m_Camera->Update();
+		m_Frustum->Update(glm::inverse(m_Camera->GetViewMatrix())* m_Camera->GetProjectionMatrix());
 
 		if (Input::IsKeyPressed(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::R))
 		{
 			m_Shader->Reload();
-			BufferData();
+			//BufferData();
 		}
 
 		m_Shader->Bind();
-		m_Shader->SetMat4("u_ViewMatrix", (m_Camera->GetViewMatrix()));
+		
+		m_Shader->SetMat4("u_ViewMatrix", (glm::inverse(m_Camera->GetViewMatrix())));
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
-		m_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
+		
+		//m_Shader->SetMat4("u_ViewMatrix", glm::mat4(1.0f));
+		//m_Shader->SetMat4("u_ProjectionMatrix", glm::mat4(1.0f));
+
+		//m_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
 
 		m_Texture->Bind(0);
-		m_VertexArray->Bind();
+		//m_VertexArray->Bind();
 
-		m_World->Update();
+		//if (once) {
+			m_World->Update(m_Shader, m_Frustum);
+			once = false;
+		//}
 	}
 }

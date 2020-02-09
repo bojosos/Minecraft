@@ -82,6 +82,16 @@ namespace Minecraft
 		m_VertexBuffers[index] = vertexBuffer;
 	}
 
+	int VertexArray::GetSize()
+	{
+		int size = 0;
+		for (int i = 0; i < m_VertexBuffers.size(); i++)
+		{
+			size += m_VertexBuffers[i]->GetCount();
+		}
+		return size;
+	}
+
 	void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
 		MC_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
@@ -101,7 +111,7 @@ namespace Minecraft
 				(const void*)element.Offset);
 			m_VertexBufferIndex++;
 		}
-
+		m_VertexBufferIndex = 0;
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 

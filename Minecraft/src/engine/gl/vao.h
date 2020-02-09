@@ -19,6 +19,7 @@ namespace Minecraft
 		void SetIndexBuffer(const Ref<IndexBuffer>& ibo);
 		inline const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; };
 		inline const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; };
+		int GetSize();
 
 		static Ref<VertexArray> Create();
 	private:

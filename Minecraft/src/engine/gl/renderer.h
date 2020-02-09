@@ -17,5 +17,7 @@ namespace Minecraft
 
 		static void Submit(const Ref<Chunk>& chunk);
 
+	private:
+		static BufferLayout m_Layout;
 	};
 }

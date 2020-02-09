@@ -93,13 +93,13 @@ namespace Minecraft
 			Input::SetMouseCursor(CursorType::POINTER);
 			m_MouseWasGrabbed = false;
 		}
-
+		//MC_INFO("{0}, {1}, {2}", m_Rotation.x, m_Rotation.y, m_Rotation.z);
 	}
 
 	glm::quat Camera::GetOrientation() const
 	{
-		float yangle = m_Yaw * 0.5f;
-		float xangle = m_Pitch * 0.5f;
+		float yangle = -m_Yaw * 0.5f;
+		float xangle = -m_Pitch * 0.5f;
 
 		return glm::quat(glm::sin(xangle), 0.0f, 0.0f, glm::cos(xangle)) * glm::quat(0.0f, glm::sin(yangle), 0.0f, glm::cos(yangle));
 	}

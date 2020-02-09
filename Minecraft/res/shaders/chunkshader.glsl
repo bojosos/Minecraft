@@ -6,7 +6,6 @@ layout(location = 1) in vec2 a_TexCoords;
 
 uniform mat4 u_Transform;
 uniform mat4 u_ProjectionMatrix;
-uniform mat4 u_ModelMatrix;
 uniform mat4 u_ViewMatrix;
 
 out vec2 v_TexCoords;
@@ -14,7 +13,7 @@ out vec2 v_TexCoords;
 void main()
 {
 	v_TexCoords = vec2(a_TexCoords.x, 16 - a_TexCoords.y) / 16.0;
-	gl_Position =  u_ModelMatrix * u_ProjectionMatrix * u_ViewMatrix * u_Transform * vec4(a_Coordinates.xyz, 1.0);
+	gl_Position =  u_ProjectionMatrix * u_ViewMatrix * u_Transform * vec4(a_Coordinates.xyz, 1.0);
 }
 
 #type fragment
@@ -32,5 +31,6 @@ void main(void) {
 	float intensity = 1.0;
 	
 	color = texture(u_Texture, v_TexCoords);
+	//color = vec4(0.2,0.8,0.6,1.0);
 
 }

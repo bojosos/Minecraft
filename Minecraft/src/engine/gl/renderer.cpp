@@ -34,6 +34,12 @@ namespace Minecraft
 #endif
 	}
 
+	BufferLayout Renderer::m_Layout =
+	{
+		{ ShaderDataType::Byte3, "a_Coordinates" },
+		{ ShaderDataType::Byte2, "a_TexCoords" }
+	};
+
 	void Renderer::SetViewport(int x, int y, int width, int height)
 	{
 		glViewport(x, y, width, height);
@@ -56,6 +62,13 @@ namespace Minecraft
 
 	void Renderer::Submit(const Ref<Chunk>& chunk)
 	{
-
+		/*chunk->SetModelMatrix();
+		vertex* data;
+		//Get first free vbo here!
+		Ref<VertexBuffer> vbo = VertexBuffer::Create(data, sizeof(*data) * TOTAL_VERTICES);
+		vbo->SetLayout(m_Layout);
+		m_VertexArray->SetVertexBuffer(0, vbo);
+		delete data;
+		glDrawArrays(GL_TRIANGLES, 0, TOTAL_VERTICES * 10 * 10 * 10);*/
 	}
 }
