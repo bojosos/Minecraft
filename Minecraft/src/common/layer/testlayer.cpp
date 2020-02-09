@@ -12,6 +12,7 @@ namespace Minecraft
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
 		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
+		m_Camera->Focus();
 
 		m_VertexArray = VertexArray::Create();
 		
@@ -59,7 +60,7 @@ namespace Minecraft
 		Renderer::Clear();
 
 		m_Camera->Update();
-		m_Frustum->Update(glm::inverse(m_Camera->GetViewMatrix())* m_Camera->GetProjectionMatrix());
+		m_Frustum->Update(m_Camera->GetViewMatrix() * m_Camera->GetProjectionMatrix());
 
 		if (Input::IsKeyPressed(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::R))
 		{
@@ -69,7 +70,7 @@ namespace Minecraft
 
 		m_Shader->Bind();
 		
-		m_Shader->SetMat4("u_ViewMatrix", (glm::inverse(m_Camera->GetViewMatrix())));
+		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 		
 		//m_Shader->SetMat4("u_ViewMatrix", glm::mat4(1.0f));

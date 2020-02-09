@@ -48,9 +48,9 @@ namespace Minecraft
 
 	private:
 		glm::quat GetOrientation() const;
-		glm::vec3 GetForwardDirection(const glm::quat& orientation) const;
-		glm::vec3 Camera::GetUpDirection(const glm::quat& orientation) const;
-		glm::vec3 Camera::GetRightDirection(const glm::quat& orientation) const;
+		glm::vec3 GetForwardDirection(const glm::vec3& rotation) const;
+		//glm::vec3 Camera::GetUpDirection(const glm::quat& orientation) const;
+		glm::vec3 Camera::GetRightDirection(const glm::vec3& rotation) const;
 	};
 
 }

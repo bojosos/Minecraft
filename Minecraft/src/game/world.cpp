@@ -45,7 +45,7 @@ namespace Minecraft
 			for (auto cc : ccc)
 			{
 				for (auto c : cc) {
-					if (frustum->ChunkIsInFrustum(c->GetPosition()))
+					//if (frustum->ChunkIsInFrustum(c->GetPosition()))
 					{
 						shader->SetMat4("u_Transform", c->GetTransformationMatrix());
 						//shader->SetMat4("u_Transform", glm::mat4(1.0f));

@@ -4,8 +4,7 @@
 #include <glm/glm.hpp>
 
 #define CHUNK_SIZE 16
-#define CHUNK_HEIGHT 256
-#define TOTAL_VERTICES CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT * 36
+#define TOTAL_VERTICES CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 36
 
 namespace Minecraft
 {
@@ -56,6 +55,6 @@ namespace Minecraft
 
 		bool m_Changed = true;
 		glm::vec3 m_Position;
-		uint8_t m_Blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
+		uint8_t m_Blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 	};
 }

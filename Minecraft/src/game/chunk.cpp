@@ -10,15 +10,15 @@ namespace Minecraft
 	Chunk::Chunk()
 	{
 		m_Position = glm::vec3(1.0f);
-		memset(m_Blocks, 3, sizeof(m_Blocks) / sizeof(uint8_t));
-		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_HEIGHT, m_Position.z * CHUNK_SIZE
+		memset(m_Blocks, 3, 4096);
+		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE
 		));
 	}
 
 	Chunk::Chunk(const glm::vec3& position) : m_Position(position)
 	{
-		memset(m_Blocks, 3, sizeof(m_Blocks) / sizeof(uint8_t));
-		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_HEIGHT, m_Position.z * CHUNK_SIZE
+		memset(m_Blocks, 3, 4096);
+		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE
 		));
 		m_Vao = CreateRef<VertexArray>();
 	}
@@ -51,7 +51,7 @@ namespace Minecraft
 
 		for (int z = 0; z < CHUNK_SIZE; z++)
 		{
-			for (int y = 0; y < CHUNK_HEIGHT; y++)
+			for (int y = 0; y < CHUNK_SIZE; y++)
 			{
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
@@ -64,7 +64,7 @@ namespace Minecraft
 		m_Elements = i;
 		if (!m_Vbo)
 		{
-			m_Vbo = CreateRef<VertexBuffer>(res, TOTAL_VERTICES);
+			m_Vbo = CreateRef<VertexBuffer>(res, TOTAL_VERTICES * 5);
 			m_Vbo->SetLayout({
 							 {ShaderDataType::Byte3, "a_Coordinates"},
 							 {ShaderDataType::Byte2, "a_TexCoords"}

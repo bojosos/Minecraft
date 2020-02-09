@@ -8,8 +8,6 @@ namespace Minecraft
 {
 	Camera::Camera(const glm::mat4& projectionMatrix) : m_ProjectionMatrix(projectionMatrix), m_MouseSensitivity(0.002f), m_Speed(0.04f), m_SprintSpeed(m_Speed * 4.0f), m_MouseWasGrabbed(false)
 	{
-		Input::SetMouseGrabbed(true);
-		Input::SetMouseCursor(CursorType::NO_CURSOR);
 		m_ViewMatrix = glm::mat4(1.0f);
 		m_Position = { 0.0f, 0.0f, -0.0f };
 		m_Rotation = { 0.0f, 0.0f, 0.0f };
@@ -25,6 +23,7 @@ namespace Minecraft
 
 	void Camera::Focus()
 	{
+		Input::SetMouseGrabbed(true);
 		Input::SetMouseCursor(CursorType::NO_CURSOR);
 	}
 
@@ -50,21 +49,22 @@ namespace Minecraft
 
 			if (m_MouseWasGrabbed)
 			{
-				m_Yaw += mousePos.x * m_MouseSensitivity;
-				m_Pitch += mousePos.y * m_MouseSensitivity;
+				m_Rotation.y += mousePos.x * m_MouseSensitivity * 60.0f;
+				m_Rotation.x += mousePos.y * m_MouseSensitivity * 60.0f;
 			}
-
+			if (m_Rotation.x < -80.0f) {
+				m_Rotation.x = -79.9f;
+			}
+			else if (m_Rotation.x > 85.0f) {
+				m_Rotation.x = 84.9f;
+			}
 			m_MouseWasGrabbed = true;
 
 			Input::SetMousePosition(windowCenter);
-
-			glm::quat orientation = GetOrientation();
-
-			m_Rotation = glm::eulerAngles(orientation) * (180.0f / glm::pi<float>());
 			
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-			glm::vec3 forward = GetForwardDirection(orientation);
-			glm::vec3 right = GetRightDirection(orientation);
+			glm::vec3 forward = GetForwardDirection(m_Rotation);
+			glm::vec3 right = GetRightDirection(m_Rotation);
 			
 			float speed = Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed;
 
@@ -81,11 +81,12 @@ namespace Minecraft
 			if (Input::IsKeyPressed(KeyCode::LeftShift))
 				m_Position -= up * speed;
 
-			glm::mat4 rotation = glm::toMat4(glm::conjugate(orientation));
-			glm::mat4 translation = glm::translate(glm::mat4(1.0f), -m_Position);
+			m_ViewMatrix = glm::mat4(1.0f);
+			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.x), { 1, 0, 0 });
+			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.y), { 0, 1, 0 });
+			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.z), { 0, 0, 1 });
 
-			m_ViewMatrix = rotation * translation;
-			m_ViewMatrix = glm::lookAt(m_Position, m_Position + forward, up);
+			m_ViewMatrix = glm::translate(m_ViewMatrix, -m_Position);
 		}
 		if (Input::IsKeyPressed(KeyCode::Escape))
 		{
@@ -98,24 +99,30 @@ namespace Minecraft
 
 	glm::quat Camera::GetOrientation() const
 	{
-		float yangle = -m_Yaw * 0.5f;
-		float xangle = -m_Pitch * 0.5f;
+		float yangle = m_Yaw * 0.5f;
+		float xangle = m_Pitch * 0.5f;
 
 		return glm::quat(glm::sin(xangle), 0.0f, 0.0f, glm::cos(xangle)) * glm::quat(0.0f, glm::sin(yangle), 0.0f, glm::cos(yangle));
 	}
 
-	glm::vec3 Camera::GetForwardDirection(const glm::quat& orientation) const
+	glm::vec3 Camera::GetForwardDirection(const glm::vec3& rotation) const
 	{
-		return glm::rotate(orientation, glm::vec3(0.0f, 0.0f, -1.0f));
+		float yaw = glm::radians(rotation.y + 90);
+		float pitch = glm::radians(rotation.x);
+		float x = glm::cos(yaw) * glm::cos(pitch);
+		float y = glm::sin(pitch);
+		float z = glm::cos(pitch) * glm::sin(yaw);
+
+		return { -x,-y,-z };
 	}
 
-	glm::vec3 Camera::GetUpDirection(const glm::quat& orientation) const
+	glm::vec3 Camera::GetRightDirection(const glm::vec3& rotation) const
 	{
-		return glm::rotate(orientation, glm::vec3(0.0f, 1.0f, 0.0f));
-	}
+		float yaw = glm::radians(rotation.y);
+		float x = glm::cos(yaw);
+		float y = 0;
+		float z = glm::sin(yaw);
 
-	glm::vec3 Camera::GetRightDirection(const glm::quat& orientation) const
-	{
-		return glm::rotate(orientation, glm::vec3(1.0f, 0.0f, 0.0f));
+		return { x, y, z };
 	}
 };
