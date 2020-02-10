@@ -60,7 +60,7 @@ namespace Minecraft
 		Renderer::Clear();
 
 		m_Camera->Update();
-		m_Frustum->Update(m_Camera->GetViewMatrix() * m_Camera->GetProjectionMatrix());
+		m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());
 
 		if (Input::IsKeyPressed(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::R))
 		{

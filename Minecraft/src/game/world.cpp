@@ -12,7 +12,7 @@ namespace Minecraft
 		for (int x = 0; x < sizeX; x++)
 		{
 			m_Chunks[x].resize(sizeY);
-			for (int y = 0; y < 1; y++)
+			for (int y = 0; y < sizeY; y++)
 			{
 				m_Chunks[x][y].resize(sizeZ);
 				for (int z = 0; z < sizeZ; z++)
@@ -37,15 +37,15 @@ namespace Minecraft
 		}
 		delete[] res;
 
-		Ref<VertexArray> vao = CreateRef<VertexArray>();
-		
+		//Ref<VertexArray> vao = CreateRef<VertexArray>();
+
 		shader->Bind();
 		for (auto ccc : m_Chunks)
 		{
 			for (auto cc : ccc)
 			{
 				for (auto c : cc) {
-					//if (frustum->ChunkIsInFrustum(c->GetPosition()))
+					if (frustum->ChunkIsInFrustum(c->GetPosition()))
 					{
 						shader->SetMat4("u_Transform", c->GetTransformationMatrix());
 						//shader->SetMat4("u_Transform", glm::mat4(1.0f));
