@@ -94,7 +94,6 @@ namespace Minecraft
 			Input::SetMouseCursor(CursorType::POINTER);
 			m_MouseWasGrabbed = false;
 		}
-		//MC_INFO("{0}, {1}, {2}", m_Rotation.x, m_Rotation.y, m_Rotation.z);
 	}
 
 	glm::quat Camera::GetOrientation() const

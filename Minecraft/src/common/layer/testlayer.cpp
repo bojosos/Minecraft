@@ -62,28 +62,13 @@ namespace Minecraft
 		m_Camera->Update();
 		m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());
 
-		if (Input::IsKeyPressed(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::R))
-		{
-			m_Shader->Reload();
-			//BufferData();
-		}
-
 		m_Shader->Bind();
 		
 		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 		
-		//m_Shader->SetMat4("u_ViewMatrix", glm::mat4(1.0f));
-		//m_Shader->SetMat4("u_ProjectionMatrix", glm::mat4(1.0f));
-
-		//m_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
-
 		m_Texture->Bind(0);
-		//m_VertexArray->Bind();
-
-		//if (once) {
-			m_World->Update(m_Shader, m_Frustum);
-			once = false;
-		//}
+		m_World->Update(m_Shader, m_Frustum);
+		once = false;
 	}
 }

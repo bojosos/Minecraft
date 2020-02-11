@@ -33,20 +33,11 @@ namespace Minecraft
 
 	void Chunk::BufferData(vertex* res)
 	{
-		/*
-		m_Vbo = CreateRef<VertexBuffer>(GetRenderData(), TOTAL_VERTICES);
-		m_Vbo->SetLayout({
-		{ ShaderDataType::Byte3, "a_Coordinates" },
-		{ ShaderDataType::Byte2, "a_TexCoords" }
-			});
-		vao->AddVertexBuffer(m_Vbo);*/
 		GetRenderData(res);
 	}
 
 	vertex* Chunk::GetRenderData(vertex* res) 
 	{
-		//vertex* res = new vertex[TOTAL_VERTICES];
-
 		uint32_t i = 0;
 
 		for (int z = 0; z < CHUNK_SIZE; z++)
@@ -78,6 +69,5 @@ namespace Minecraft
 	{
 		m_Vao->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, TOTAL_VERTICES);
-		//MC_INFO(m_Elements);
 	}
 }

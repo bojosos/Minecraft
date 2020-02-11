@@ -86,7 +86,7 @@ namespace Minecraft
 
 				glDeleteShader(shader);
 				MC_ERROR("{0}", infoLog.data());
-				//MC_ASSERT(false, "Shader compilation failure!");
+				MC_ASSERT(false, "Shader compilation failure!");
 				break;
 			}
 			glAttachShader(program, shader);
@@ -112,7 +112,7 @@ namespace Minecraft
 				glDeleteShader(id);
 
 			MC_ERROR("{0}", infoLog.data());
-			//MC_ASSERT(false, "Shader link failure!");
+			MC_ASSERT(false, "Shader link failure!");
 			return;
 		}
 

@@ -79,7 +79,6 @@ namespace Minecraft
 		GrassBlock() : Block() 
 		{
 			m_Data = { 3,0,3,0,2,0,0,0,3,0,3,0 }; 
-			//m_Data = { 0,3,0,3,0,2,0,0,0,3,0,3 };
 		}
 	};
 }

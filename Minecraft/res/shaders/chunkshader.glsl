@@ -31,6 +31,4 @@ void main(void) {
 	float intensity = 1.0;
 	
 	color = texture(u_Texture, v_TexCoords);
-	//color = vec4(0.2,0.8,0.6,1.0);
-
 }

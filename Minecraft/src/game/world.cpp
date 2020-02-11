@@ -37,8 +37,6 @@ namespace Minecraft
 		}
 		delete[] res;
 
-		//Ref<VertexArray> vao = CreateRef<VertexArray>();
-
 		shader->Bind();
 		for (auto ccc : m_Chunks)
 		{
@@ -48,12 +46,7 @@ namespace Minecraft
 					if (frustum->ChunkIsInFrustum(c->GetPosition()))
 					{
 						shader->SetMat4("u_Transform", c->GetTransformationMatrix());
-						//shader->SetMat4("u_Transform", glm::mat4(1.0f));
-						//c->BufferData(vao);
 						c->Render();
-						//vao->Bind();
-						//glDrawArrays(GL_TRIANGLES, 0, vao->GetSize());
-						//Renderer::Submit(c);
 					}
 				}
 			}
