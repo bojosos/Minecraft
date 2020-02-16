@@ -18,6 +18,9 @@ namespace Minecraft
 
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnEvent(Event& e) override;
+		
+		void AddBlock(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent);
+		void AddTexture(const std::string& filepath);
 
 		static void GetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint32_t& i);
 
@@ -35,6 +38,6 @@ namespace Minecraft
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_VertexArray;
 		Ref<VertexArray> m_SquareVA;
-		Ref<Texture> m_Texture;
+		std::vector<Ref<Texture>> m_Textures;
 	};
 }

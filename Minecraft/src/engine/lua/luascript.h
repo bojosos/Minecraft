@@ -16,6 +16,12 @@ namespace Lua
 		~LuaScript();
 		void PrintError(const std::string& variableName, const std::string& message);
 
+		void Clean()
+		{
+			int n = lua_gettop(L);
+			lua_pop(L, n);
+		}
+
 		template<typename T>
 		T Get(const std::string& name)
 		{

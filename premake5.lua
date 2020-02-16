@@ -21,10 +21,12 @@ IncludeDir["GLFW"] = "Minecraft/vendor/GLFW/include"
 IncludeDir["Glad"] = "Minecraft/vendor/Glad/include"
 IncludeDir["glm"] = "Minecraft/vendor/glm"
 IncludeDir["stb_image"] = "Minecraft/vendor/stb_image"
+IncludeDir["lua"] = "Minecraft/vendor/lua/include"
 
 group "Dependencies"
 	include "Minecraft/vendor/GLFW"
 	include "Minecraft/vendor/Glad"
+	include "Minecraft/vendor/lua"
 
 group ""
 
@@ -48,7 +50,7 @@ project "Minecraft"
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	defines
@@ -63,14 +65,16 @@ project "Minecraft"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.lua}"
 	}
 
 	links 
 	{ 
 		"GLFW",
 		"Glad",
-		"opengl32.lib"
+		"opengl32.lib",
+		"lua"
 	}
 
 	filter "system:windows"

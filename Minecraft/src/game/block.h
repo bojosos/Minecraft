@@ -7,7 +7,10 @@ namespace Minecraft
 	class Block
 	{
 	public:
-		Block() { }
+		Block(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent) : m_Shortname(shortname), m_Longname(longname), m_Solid(solid), m_Transparent(transparent), m_Data(sides)
+		{
+		
+		}
 
 		virtual inline void GetLeftVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint32_t& i) const
 		{
@@ -70,15 +73,9 @@ namespace Minecraft
 		}
 
 	public:
-		TextureData m_Data = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-	};
-	
-	class GrassBlock : public Block
-	{
-	public:
-		GrassBlock() : Block() 
-		{
-			m_Data = { 3,0,3,0,2,0,0,0,3,0,3,0 }; 
-		}
+		TextureData m_Data;
+		bool m_Transparent;
+		bool m_Solid;
+		std::string m_Shortname, m_Longname;
 	};
 }
