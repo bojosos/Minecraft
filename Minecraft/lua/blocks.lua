@@ -1,4 +1,4 @@
---Texture(path) selects the texture to use for this Block--
+--Texture(path) selects the texture to use for this section of blocks--
 --Block(string short name(commands, singleword), string long name(inventory), bool solid, array {sides}(texture coords for each of the sides), bool transparent)
 Texture("res/textures/blocks.jpg")
 Block("air", "Air", false, { 3, 0, 3, 0, 2, 0, 0, 0, 3, 0, 3, 0 }, true)

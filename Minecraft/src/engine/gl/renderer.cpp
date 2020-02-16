@@ -37,7 +37,8 @@ namespace Minecraft
 	BufferLayout Renderer::m_Layout =
 	{
 		{ ShaderDataType::Byte3, "a_Coordinates" },
-		{ ShaderDataType::Byte2, "a_TexCoords" }
+		{ ShaderDataType::Byte2, "a_TexCoords" },
+		{ ShaderDataType::Byte, "a_Tid"}
 	};
 
 	void Renderer::SetViewport(int x, int y, int width, int height)

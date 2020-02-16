@@ -146,6 +146,11 @@ namespace Minecraft
 		UploadUniformInt(name, value);
 	}
 
+	void Shader::SetIntV(const std::string& name, int count, int* ptr)
+	{
+		UploadUniformIntV(name, count, ptr);
+	}
+
 	void Shader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
 		UploadUniformFloat3(name, value);
@@ -159,6 +164,11 @@ namespace Minecraft
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
 		UploadUniformMat4(name, value);
+	}
+
+	void Shader::UploadUniformIntV(const std::string& name, int count, int* ptr)
+	{
+		glUniform1iv(m_UniformLocations[name], count, ptr);
 	}
 
 	void Shader::UploadUniformInt(const std::string& name, int value)

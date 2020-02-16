@@ -3,7 +3,6 @@
 #include "engine.h"
 #include "game/world.h"
 #include "game/block.h"
-#include "engine/gl/frustum.h"
 
 namespace Minecraft
 {
@@ -18,18 +17,8 @@ namespace Minecraft
 
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnEvent(Event& e) override;
-		
-		void AddBlock(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent);
-		void AddTexture(const std::string& filepath);
-
-		static void GetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint32_t& i);
 
 	private:
-		static std::vector<Block> s_Blocks;
-
-	private:
-
-		bool once = true;
 		ShaderLibrary m_ShaderLibrary;
 
 		Ref<ViewFrustum> m_Frustum;

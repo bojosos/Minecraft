@@ -2131,8 +2131,8 @@ namespace sol {
 		}
 	#else
 		#if defined(__has_include)
-			#if __has_include("lua/lua.hpp")
-				#include "lua/lua.hpp"
+			#if __has_include(<lua.hpp>)
+				#include <lua.hpp>
 			#else
 				extern "C" {
 					#if defined(LUAJIT_VERSION) && LUAJIT_VERSION

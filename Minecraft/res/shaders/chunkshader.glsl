@@ -27,14 +27,11 @@ out vec4 color;
 in vec2 v_TexCoords;
 in float v_Tid;
 
-uniform sampler2D[] u_Textures;
-
-const vec4 fogcolor = vec4(0.6, 0.8, 1.0, 1.0);
-const float fogdensity = .00003;
+uniform sampler2D[8] u_Textures;
 
 void main(void) {
 	vec2 coord2d;
 	float intensity = 1.0;
-	
-	color = texture(u_Textures[v_Tid], v_TexCoords);
+	int tid = int(v_Tid);
+	color = texture(u_Textures[tid], v_TexCoords);
 }

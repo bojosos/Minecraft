@@ -16,12 +16,12 @@ namespace Minecraft
 
 		inline void SetPoisition(const glm::vec3& position) { m_Position = position; }
 
-		inline uint8_t GetBlock(const glm::vec3& position)  const
+		inline uint16_t GetBlock(const glm::vec3& position)  const
 		{
 			return GetBlock((int)position.x, (int)position.y, (int)position.z);
 		}
 
-		inline uint8_t GetBlock(int x, int y, int z) const
+		inline uint16_t GetBlock(int x, int y, int z) const
 		{
 			return m_Blocks[x][y][z];
 		}
@@ -55,6 +55,6 @@ namespace Minecraft
 
 		bool m_Changed = true;
 		glm::vec3 m_Position;
-		uint8_t m_Blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+		uint16_t m_Blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "engine/lua/sol.hpp"
+#include <sol.hpp>
 
 namespace Minecraft
 {
@@ -11,18 +11,18 @@ namespace Minecraft
 
 		TextureData(const sol::table& sides)
 		{
-			negxU = sides[0];
-			negxV = sides[1];
-			posxU = sides[2];
-			posxV = sides[3];
-			negyU = sides[4];
-			negyV = sides[5];
-			posyU = sides[6];
-			posyV = sides[7];
-			negzU = sides[8];
-			negzV = sides[9];
-			poszU = sides[10];
-			poszV = sides[11];
+			negxU = sides[1];
+			negxV = sides[2];
+			posxU = sides[3];
+			posxV = sides[4];
+			negyU = sides[5];
+			negyV = sides[6];
+			posyU = sides[7];
+			posyV = sides[8];
+			negzU = sides[9];
+			negzV = sides[10];
+			poszU = sides[11];
+			poszV = sides[12];
 		}
 	};
 }
