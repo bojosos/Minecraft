@@ -1,18 +1,26 @@
 #pragma once
 
+#include "engine.h"
 #include "chunk.h"
-#include "engine/gl/shader.h"
-#include "engine/gl/frustum.h"
-#include <vector>
+#include "block.h"
 
 namespace Minecraft
 {
 	class World
 	{
 	public:
-		World(int sizeX, int sizeY, int sizeZ);
+		World();
+
 		void Update(const Ref<Shader>& shader, const Ref<ViewFrustum>& frustm);
+
+		Block& GetBlock(int8_t x, int8_t y, int8_t z, Chunk* chunk);
+
+		static World& GetOverworld()
+		{
+			static World instance;
+			return instance;
+		}
 	private:
-		std::vector<std::vector<std::vector<Ref<Chunk>>>> m_Chunks;
+		std::vector<std::vector<std::vector<Chunk*>>> m_Chunks;
 	};
 }

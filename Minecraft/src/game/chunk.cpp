@@ -2,12 +2,15 @@
 #include "engine.h"
 
 #include "chunk.h"
+#include "world.h"
 #include "game/blockloader.h"
 #include <glad/glad.h>
 
+class World;
+
 namespace Minecraft
 {
-
+	class World;
 	Chunk::Chunk()
 	{
 		for (int z = 0; z < CHUNK_SIZE; z++)
@@ -64,15 +67,42 @@ namespace Minecraft
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
 					uint16_t type = m_Blocks[x][y][z];
+					if (World::GetOverworld().GetBlock(x - 1, y, z, this).IsTransparent())
+					{
+						BlockLoader::GetLeftVertexData(res, x, y, z, type, i);
+					}
 
-					BlockLoader::GetData(res, x, y, z, type, i);
+					if (World::GetOverworld().GetBlock(x + 1, y, z, this).IsTransparent())
+					{
+						BlockLoader::GetRightVertexData(res, x, y, z, type, i);
+					}
+
+					if (World::GetOverworld().GetBlock(x, y - 1, z, this).IsTransparent())
+					{
+						BlockLoader::GetDownVertexData(res, x, y, z, type, i);
+					}
+
+					if (World::GetOverworld().GetBlock(x, y + 1, z, this).IsTransparent())
+					{
+						BlockLoader::GetUpVertexData(res, x, y, z, type, i);
+					}
+
+					if (World::GetOverworld().GetBlock(x, y, z - 1, this).IsTransparent())
+					{
+						BlockLoader::GetBackVertexData(res, x, y, z, type, i);
+					}
+
+					if (World::GetOverworld().GetBlock(x, y, z + 1, this).IsTransparent())
+					{
+						BlockLoader::GetFrontVertexData(res, x, y, z, type, i);
+					}
 				}
 			}
 		}
 		m_Elements = i;
 		if (!m_Vbo)
 		{
-			m_Vbo = CreateRef<VertexBuffer>(res, TOTAL_VERTICES * 6);
+			m_Vbo = CreateRef<VertexBuffer>(res, m_Elements * 6);
 			m_Vbo->SetLayout({
 							 {ShaderDataType::Byte3, "a_Coordinates"},
 							 {ShaderDataType::Byte2, "a_TexCoords"},
@@ -86,6 +116,6 @@ namespace Minecraft
 	void Chunk::Render()
 	{
 		m_Vao->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, TOTAL_VERTICES);
+		glDrawArrays(GL_TRIANGLES, 0, m_Elements);
 	}
 }

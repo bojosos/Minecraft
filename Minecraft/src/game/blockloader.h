@@ -14,9 +14,39 @@ namespace Minecraft
 			Get().IInitTextures(shader);
 		}
 
-		inline static void GetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static Block& GetBlock(uint16_t type)
 		{
-			Get().IGetData(res, x, y ,z, type, i);
+			return Get().m_Blocks[type];
+		}
+
+		inline static void GetLeftVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetLeftVertexData(res, x, y, z, i);
+		}
+
+		inline static void GetRightVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetRightVertexData(res, x, y, z, i);
+		}
+
+		inline static void GetFrontVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetFrontVertexData(res, x, y, z, i);
+		}
+
+		inline static void GetBackVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetBackVertexData(res, x, y, z, i);
+		}
+
+		inline static void GetUpVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetUpVertexData(res, x, y, z, i);
+		}
+
+		inline static void GetDownVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		{
+			Get().m_Blocks[type].GetDownVertexData(res, x, y, z, i);
 		}
 
 	private:
