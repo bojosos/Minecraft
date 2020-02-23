@@ -17,5 +17,6 @@
 #include "engine/gl/vao.h"
 #include "engine/gl/texture.h"
 #include "engine/gl/renderer.h"
+#include "engine/gl/frustum.h"
 
 #include "engine/input/input.h"

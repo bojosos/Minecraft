@@ -2,6 +2,8 @@
 
 #include "engine/gl/vao.h"
 #include <glm/glm.hpp>
+#include "block.h"
+
 
 #define CHUNK_SIZE 16
 #define TOTAL_VERTICES CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 36
@@ -45,6 +47,7 @@ namespace Minecraft
 
 		void BufferData(vertex* res);
 		void Render();
+
 	private:
 		glm::mat4 m_Transform;
 		vertex* GetRenderData(vertex* res);

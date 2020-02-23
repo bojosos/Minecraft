@@ -14,7 +14,7 @@ namespace Minecraft
 		m_Camera->Focus();
 
 		m_VertexArray = VertexArray::Create();
-		m_World = CreateRef<World>(10, 10, 10);
+		m_World = CreateRef<World>();
 		m_Shader = m_ShaderLibrary.Load("res/shaders/chunkshader.glsl");
 		
 		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_Transform", "u_Textures" };
