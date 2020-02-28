@@ -19,7 +19,7 @@ namespace Minecraft
 			{
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
-					m_Blocks[x][y][z] = 1;
+					m_Blocks[x][y][z] = (int)Random::Float() * BlockLoader::GetBlockCount();
 				}
 			}
 		}
@@ -35,7 +35,7 @@ namespace Minecraft
 			{
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
-					m_Blocks[x][y][z] = 1;
+					m_Blocks[x][y][z] = 1;//(int)Random::Float() * BlockLoader::GetBlockCount();
 				}
 			}
 		}

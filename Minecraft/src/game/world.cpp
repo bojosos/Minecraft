@@ -69,11 +69,11 @@ namespace Minecraft
 	Block& World::GetBlock(int32_t x, int32_t y, int32_t z)
 	{
 		int32_t cX = x / CHUNK_SIZE;
-		int32_t cXx = x % CHUNK_SIZE;
+		int32_t cXx = abs(x % CHUNK_SIZE);
 		int32_t cY = y / CHUNK_SIZE;
-		int32_t cYy = y % CHUNK_SIZE;
+		int32_t cYy = abs(y % CHUNK_SIZE);
 		int32_t cZ = z / CHUNK_SIZE;
-		int32_t cZz = z % CHUNK_SIZE;
+		int32_t cZz = abs(z % CHUNK_SIZE);
 
 		return BlockLoader::GetBlock(m_Chunks[cX][cY][cZ]->GetBlock(cXx, cYy, cZz));
 	}

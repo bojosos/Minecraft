@@ -30,14 +30,15 @@ namespace Minecraft
 		glm::vec3 face;
 		MC_ASSERT(dx != 0 || dy != 0 || dz != 0, "Raycast has no direction!");
 
-		while (/*(stepX > 0 ? x < wx : x >= 0) &&*/ (stepY > 0 ? y < 256 : y >= 0) /*&& (stepZ > 0 ? z < wz : z >= 0)*/) {
+		while ((stepX > 0 ? x < 160 : x >= 0) && (stepY > 0 ? y < 160 : y >= 0) && (stepZ > 0 ? z < 160 : z >= 0)) {
 			
-			//if (!(x < 0 || y < 0 || z < 0 || x >= wx || y >= wy || z >= wz))
+			if (!(x < 0 || y < 0 || z < 0 || x >= 160 || y >= 160 || z >= 160))
 				//if (callback(x, y, z, blocks[x * wy * wz + y * wz + z], face)
 				//	)
-				if (!World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
+				//if (!World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
 				{
 					MC_TRACE(World::GetOverworld().GetBlock(x, y, z).m_Longname);
+					MC_INFO("{0}, {1}, {2}", x, y, z);
 					break;
 				}
 

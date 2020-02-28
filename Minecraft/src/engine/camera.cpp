@@ -96,14 +96,6 @@ namespace Minecraft
 		}
 	}
 
-	glm::quat Camera::GetOrientation() const
-	{
-		float yangle = m_Yaw * 0.5f;
-		float xangle = m_Pitch * 0.5f;
-
-		return glm::quat(glm::sin(xangle), 0.0f, 0.0f, glm::cos(xangle)) * glm::quat(0.0f, glm::sin(yangle), 0.0f, glm::cos(yangle));
-	}
-
 	glm::vec3 Camera::GetForwardDirection(const glm::vec3& rotation) const
 	{
 		float yaw = glm::radians(rotation.y + 90);

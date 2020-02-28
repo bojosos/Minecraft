@@ -3,6 +3,7 @@
 #include "common/common.h"
 #include "common/log.h"
 #include "common/timestep.h"
+#include "common/random.h"
 
 #include "common/event/event.h"
 #include "common/event/keyevent.h"

@@ -11,6 +11,8 @@ namespace Minecraft
 
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
+		Random::Init();
+
 		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
 		m_Camera->SetSpeed(0.08f);
 		m_Camera->Focus();
@@ -58,9 +60,10 @@ namespace Minecraft
 
 		if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
 		{
-			Physics::Raycast(m_Camera->GetPosition(), glm::normalize(m_Camera->GetRotation()), 4);
+			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4);
 		}
 
 		m_World->Update(m_Shader, m_Frustum);
 	}
+
 }

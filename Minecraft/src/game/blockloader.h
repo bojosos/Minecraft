@@ -49,6 +49,8 @@ namespace Minecraft
 			Get().m_Blocks[type].GetDownVertexData(res, x, y, z, i);
 		}
 
+		inline static int GetBlockCount() { return Get().m_Blocks.size(); }
+
 	private:
 		static BlockLoader& Get()
 		{

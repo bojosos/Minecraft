@@ -35,6 +35,9 @@ namespace Minecraft
 
 		inline const glm::mat4& GetViewMatrix() { return m_ViewMatrix; }
 
+		glm::vec3 GetForwardDirection(const glm::vec3& rotation) const;
+		glm::vec3 GetRightDirection(const glm::vec3& rotation) const;
+
 	private:
 		glm::vec3 up = { 0.0f,1.0f,0.0f };
 
@@ -48,12 +51,7 @@ namespace Minecraft
 		float m_Speed, m_SprintSpeed;
 		float m_Pitch, m_Yaw;
 		bool m_MouseWasGrabbed;
-
-	private:
-		glm::quat GetOrientation() const;
-		glm::vec3 GetForwardDirection(const glm::vec3& rotation) const;
-		//glm::vec3 Camera::GetUpDirection(const glm::quat& orientation) const;
-		glm::vec3 Camera::GetRightDirection(const glm::vec3& rotation) const;
+		
 	};
 
 }
