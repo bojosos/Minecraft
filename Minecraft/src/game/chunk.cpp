@@ -59,6 +59,7 @@ namespace Minecraft
 	vertex* Chunk::GetRenderData(vertex* res) 
 	{
 		uint32_t i = 0;
+		m_Elements = 0;
 
 		for (int z = 0; z < CHUNK_SIZE; z++)
 		{
@@ -100,6 +101,7 @@ namespace Minecraft
 			}
 		}
 		m_Elements = i;
+
 		if (!m_Vbo)
 		{
 			m_Vbo = CreateRef<VertexBuffer>(res, m_Elements * 6);

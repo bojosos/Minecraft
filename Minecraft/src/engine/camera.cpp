@@ -6,7 +6,7 @@
 
 namespace Minecraft
 {
-	Camera::Camera(const glm::mat4& projectionMatrix) : m_ProjectionMatrix(projectionMatrix), m_MouseSensitivity(0.002f), m_Speed(0.04f), m_SprintSpeed(m_Speed * 4.0f), m_MouseWasGrabbed(false)
+	Camera::Camera(const glm::mat4& projectionMatrix) : m_ProjectionMatrix(projectionMatrix), m_MouseSensitivity(0.002f), m_Speed(0.04f), m_SprintSpeed(m_Speed * 6.0f), m_MouseWasGrabbed(false)
 	{
 		m_ViewMatrix = glm::mat4(1.0f);
 		m_Position = { 0.0f, 0.0f, -0.0f };

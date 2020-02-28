@@ -24,6 +24,9 @@ namespace Minecraft
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		inline void SetProjectionMatrix(const glm::mat4& matrix) { m_ProjectionMatrix = matrix; }
 
+		inline float GetSpeed() const { return m_Speed; }
+		inline void SetSpeed(float speed) { m_Speed = speed; }
+
 		inline void Translate(const glm::vec3& translation) { m_Position += translation; }
 		inline void Rotate(const glm::vec3& rotation) { m_Rotation += rotation; }
 

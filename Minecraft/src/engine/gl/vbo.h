@@ -1,6 +1,7 @@
 #pragma once
 
 #include "buffer.h"
+#include "common/types.h"
 
 namespace Minecraft
 {

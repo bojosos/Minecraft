@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common/common.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+#include "common.h"
 
 namespace Minecraft
 {

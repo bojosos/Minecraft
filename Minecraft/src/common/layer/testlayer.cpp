@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "game/blockloader.h"
+#include "engine/physics.h"
 
 namespace Minecraft
 {
@@ -11,6 +12,7 @@ namespace Minecraft
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
 		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
+		m_Camera->SetSpeed(0.08f);
 		m_Camera->Focus();
 
 		m_VertexArray = VertexArray::Create();
@@ -53,6 +55,11 @@ namespace Minecraft
 		
 		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
+
+		if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
+		{
+			Physics::Raycast(m_Camera->GetPosition(), glm::normalize(m_Camera->GetRotation()), 4);
+		}
 
 		m_World->Update(m_Shader, m_Frustum);
 	}

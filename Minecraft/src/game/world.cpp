@@ -64,42 +64,17 @@ namespace Minecraft
 
 		glm::vec3 pos = chunk->GetPosition();
 		return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y][pos.z]->GetBlock(x, y, z));
-		/*
-		if (x == -1)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x - 1][pos.y][pos.z]->GetBlock(CHUNK_SIZE - 1, y, z));
-		}
+	}
 
-		if (y == -1)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y - 1][pos.z]->GetBlock(x, CHUNK_SIZE - 1, z));
-		}
+	Block& World::GetBlock(int32_t x, int32_t y, int32_t z)
+	{
+		int32_t cX = x / CHUNK_SIZE;
+		int32_t cXx = x % CHUNK_SIZE;
+		int32_t cY = y / CHUNK_SIZE;
+		int32_t cYy = y % CHUNK_SIZE;
+		int32_t cZ = z / CHUNK_SIZE;
+		int32_t cZz = z % CHUNK_SIZE;
 
-		if (z == -1)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y][pos.z - 1]->GetBlock(x, y, CHUNK_SIZE - 1));
-		}
-
-		if (x == CHUNK_SIZE)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x + 1][pos.y][pos.z]->GetBlock(0, y, z));
-		}
-
-		if (y == CHUNK_SIZE)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y + 1][pos.z]->GetBlock(x, 0, z));
-		}
-
-		if (z == CHUNK_SIZE)
-		{
-			glm::vec3 pos = chunk->GetPosition();
-			return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y][pos.z + 1]->GetBlock(x, y, 0));
-		}
-		*/
+		return BlockLoader::GetBlock(m_Chunks[cX][cY][cZ]->GetBlock(cXx, cYy, cZz));
 	}
 }
