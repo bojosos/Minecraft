@@ -13,8 +13,9 @@ namespace Minecraft
 	class Chunk
 	{
 	public:
-		Chunk();
 		Chunk(const glm::vec3& position);
+		Chunk() = delete;
+		Chunk(Chunk& other) = delete;
 
 		inline void SetPoisition(const glm::vec3& position) { m_Position = position; }
 
@@ -23,18 +24,20 @@ namespace Minecraft
 			return GetBlock((int)position.x, (int)position.y, (int)position.z);
 		}
 
-		inline uint16_t GetBlock(int x, int y, int z) const
+		inline uint16_t GetBlock
+		(int x, int y, int z) const
 		{
 			return m_Blocks[x][y][z];
 		}
 		inline void SetBlock(const glm::vec3& position, uint8_t type)
 		{
 			SetBlock((int)position.x, (int)position.y, (int)position.z, type);
-			m_Changed = true;
 		}
 		inline void SetBlock(int x, int y, int z, uint8_t type)
 		{
 			m_Blocks[x][y][z] = type;
+			//if(type == 0)
+			//MC_INFO("Wut");
 			m_Changed = true;
 		}
 		inline glm::vec3 GetPosition() const { return m_Position; }
@@ -48,15 +51,15 @@ namespace Minecraft
 		void BufferData(vertex* res);
 		void Render();
 
+		vertex* GetRenderData(vertex* res);
 	private:
 		glm::mat4 m_Transform;
-		vertex* GetRenderData(vertex* res);
 		Ref<VertexBuffer> m_Vbo;
 		Ref<VertexArray> m_Vao;
 
-		uint32_t m_Elements;
-
+		uint32_t m_Elements = 0;
 		bool m_Changed = true;
+
 		glm::vec3 m_Position;
 		uint16_t m_Blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 	};

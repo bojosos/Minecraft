@@ -1,16 +1,9 @@
---Texture(path) selects the texture to use for this section of blocks--
---Block(string short name(commands, singleword), string long name(inventory), bool solid, array {sides}(texture coords for each of the sides), bool transparent)
+-- game.blocks
+--			  .AddTexutre(filepath) - Loads a texture file and returns the id of the loaded texture, to be used when adding new blocks
+--			  .AddBlock({shortname(mostly not seen in gameplay), longname(in inventory), solid(can walk through), transparent(does it have trasparency? e.g. leaves, glass), tid(it has to be the id of the loaded texture)} - Adds a new block with the given parameters, all params are required
 
----Texture("res/textures/blocks.jpg")
----Block("air", "Air", false, { 3, 0, 3, 0, 2, 0, 0, 0, 3, 0, 3, 0 }, true)
----Block("grass", "Grass Block", true, { 3, 0, 3, 0, 2, 0, 0, 0, 3, 0, 3, 0 }, false)
----Block("stone", "Stone Block", true, { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}, false)
----Block("cobblestone", "Cobblestone Block", true, { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 }, false)
----Block("oaklog", "Oak Log", true, { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 }, false)
-
+local btex1 = game.blocks.AddTexture("res/textures/blocks.jpg")
 local btex = game.blocks.AddTexture("res/textures/blocks.jpg")
-local test1 = game.blocks.AddTexture("res/textures/blocks.jpg")
-local test2 = game.blocks.AddTexture("res/textures/blocks.jpg")
 
 game.blocks.AddBlock({
 	shortname = "air",
@@ -18,7 +11,7 @@ game.blocks.AddBlock({
 	solid = false,
 	transparent = true,
 	sides = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	tid = test1,
+	tid = btex,
 })
 
 game.blocks.AddBlock({
@@ -36,7 +29,7 @@ game.blocks.AddBlock({
 	solid = true,
 	transparent = false,
 	sides = { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 },
-	tid = test2,
+	tid = btex,
 })
 
 game.blocks.AddBlock({
@@ -45,5 +38,5 @@ game.blocks.AddBlock({
 	solid = true,
 	transparent = false,
 	sides = { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 },
-	tid = test1,
+	tid = btex,
 })

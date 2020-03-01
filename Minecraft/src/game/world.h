@@ -16,6 +16,8 @@ namespace Minecraft
 		Block& GetBlock(int8_t x, int8_t y, int8_t z, Chunk* chunk);
 		Block& GetBlock(int32_t x, int32_t y, int32_t z);
 
+		void SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id);
+
 		static World& GetOverworld()
 		{
 			static World instance;

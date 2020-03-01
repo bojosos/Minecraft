@@ -40,8 +40,7 @@ namespace Minecraft
 				{
 					MC_TRACE(World::GetOverworld().GetBlock(x, y, z).m_Longname);
 					MC_INFO("{0}, {1}, {2}", x, y, z);
-
-					//glDrawArrays();
+					World::GetOverworld().SetBlock(x, y, z, 0);
 					break;
 				}
 

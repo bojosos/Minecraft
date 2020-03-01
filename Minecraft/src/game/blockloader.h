@@ -8,11 +8,6 @@ namespace Minecraft
 	class BlockLoader
 	{
 	public:
-		inline static void LoadDefaultBlocks(const std::string& filepath, const Ref<Shader>& shader)
-		{
-			Get().ILoadDefaultBlocks(filepath);
-			Get().IInitTextures(shader);
-		}
 
 		inline static Block& GetBlock(uint16_t type)
 		{
@@ -28,6 +23,7 @@ namespace Minecraft
 					return i;
 				}
 			}
+			return 0;
 		}
 
 		inline static void GetLeftVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
@@ -61,7 +57,11 @@ namespace Minecraft
 		}
 
 		inline static int GetBlockCount() { return Get().m_Blocks.size(); }
-		static inline void AddBlock(Block& block) { Get().m_Blocks.push_back(block); }
+		static inline void AddBlock(Block& block)
+		{
+			Get().m_Blocks.push_back(block); 
+			MC_INFO("Adding Block: {0}", block.m_Longname);
+		}
 		static inline uint8_t AddTexture(const std::string& filepath)
 		{
 			return Get().IAddTexture(filepath);
@@ -84,7 +84,6 @@ namespace Minecraft
 
 		void IGetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i);
 
-		void AddBlock(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent);
 		uint8_t IAddTexture(const std::string& filepath);
 
 	private:

@@ -22,6 +22,14 @@ namespace Minecraft
 		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
 	}
 
+	void VertexBuffer::SetData(vertex* verts, uint32_t size)
+	{
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, size, verts);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glUnmapNamedBuffer(m_RendererID);
+		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
+	}
+
 	VertexBuffer::VertexBuffer(vertex* verts, uint32_t size) : m_Count(size)
 	{
 		glCreateBuffers(1, &m_RendererID);

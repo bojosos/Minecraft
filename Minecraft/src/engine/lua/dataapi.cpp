@@ -39,12 +39,9 @@ namespace Minecraft
 	{
 		auto data = ScriptingEngine::AddTable("blocks");
 		AddBlockApi(data);
-		// Add other things
-		AddEnums();
-
-		data["GetBlock"] = [&](const std::string& name)
+		data["SetNoise"] = [&](const sol::table& table)
 		{
-			return BlockLoader::GetBlockId(name);
+
 		};
 	}
 
