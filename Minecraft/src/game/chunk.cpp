@@ -6,11 +6,8 @@
 #include "game/blockloader.h"
 #include <glad/glad.h>
 
-class World;
-
 namespace Minecraft
 {
-	class World;
 	Chunk::Chunk()
 	{
 		for (int z = 0; z < CHUNK_SIZE; z++)
@@ -19,7 +16,7 @@ namespace Minecraft
 			{
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
-					m_Blocks[x][y][z] = (int)Random::Float() * BlockLoader::GetBlockCount();
+					m_Blocks[x][y][z] = (int)(Random::Float() * BlockLoader::GetBlockCount());
 				}
 			}
 		}
@@ -29,13 +26,14 @@ namespace Minecraft
 
 	Chunk::Chunk(const glm::vec3& position) : m_Position(position)
 	{
+		//MC_INFO(BlockLoader::GetBlockCount());
 		for (int z = 0; z < CHUNK_SIZE; z++)
 		{
 			for (int y = 0; y < CHUNK_SIZE; y++)
 			{
 				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
-					m_Blocks[x][y][z] = 1;//(int)Random::Float() * BlockLoader::GetBlockCount();
+					m_Blocks[x][y][z] = (int)(Random::Float() * (BlockLoader::GetBlockCount() - 1)) + 1;
 				}
 			}
 		}

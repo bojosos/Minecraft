@@ -7,7 +7,7 @@ namespace Minecraft
 	class Block
 	{
 	public:
-		Block(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent, uint8_t tid);
+		Block(const std::string& shortname, const std::string& longname, const sol::table& sides, bool solid, bool transparent, uint8_t tid);
 
 		void GetFrontVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint32_t& i) const;
 		void GetBackVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint32_t& i) const;

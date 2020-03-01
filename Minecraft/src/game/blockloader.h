@@ -19,6 +19,17 @@ namespace Minecraft
 			return Get().m_Blocks[type];
 		}
 
+		inline static uint32_t GetBlockId(const std::string& name)
+		{
+			for (uint16_t i = 0; i < Get().m_Blocks.size(); i++)
+			{
+				if (name == Get().m_Blocks[i].m_Shortname)
+				{
+					return i;
+				}
+			}
+		}
+
 		inline static void GetLeftVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetLeftVertexData(res, x, y, z, i);
@@ -50,6 +61,16 @@ namespace Minecraft
 		}
 
 		inline static int GetBlockCount() { return Get().m_Blocks.size(); }
+		static inline void AddBlock(Block& block) { Get().m_Blocks.push_back(block); }
+		static inline uint8_t AddTexture(const std::string& filepath)
+		{
+			return Get().IAddTexture(filepath);
+		}
+
+		static inline void InitTextures(const Ref<Shader>& shader)
+		{
+			Get().IInitTextures(shader);
+		}
 
 	private:
 		static BlockLoader& Get()
@@ -62,8 +83,9 @@ namespace Minecraft
 		void IInitTextures(const Ref<Shader>& shader);
 
 		void IGetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i);
+
 		void AddBlock(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent);
-		void AddTexture(const std::string& filepath);
+		uint8_t IAddTexture(const std::string& filepath);
 
 	private:
 		std::vector<Block> m_Blocks;

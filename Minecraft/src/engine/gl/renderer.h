@@ -5,6 +5,7 @@
 
 namespace Minecraft
 {
+
 	class Renderer
 	{
 	public:

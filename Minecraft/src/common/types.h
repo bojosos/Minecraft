@@ -7,7 +7,7 @@ namespace Minecraft
 {
 	struct vertex {
 		uint8_t x, y, z, u, v, tid;
-		vertex() : x(0), y(0), z(0), u(0), v(0) { }
+		vertex() : x(0), y(0), z(0), u(0), v(0), tid(0) { }
 		vertex(uint8_t x, uint8_t y, uint8_t z, uint8_t u, uint8_t v, uint8_t tid) : x(x), y(y), z(z), u(u), v(v), tid(tid) { }
 	};
 

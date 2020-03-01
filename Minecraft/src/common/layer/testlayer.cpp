@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "game/blockloader.h"
 #include "engine/physics.h"
+#include "common/scripting.h"
+#include "engine/lua/luaapi.h"
 
 namespace Minecraft
 {
@@ -12,6 +14,9 @@ namespace Minecraft
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
 		Random::Init();
+		ScriptingEngine::Init();
+		LuaApi::LuaDataApiInit();
+		ScriptingEngine::ExecuteFile("lua/blocks.lua");
 
 		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
 		m_Camera->SetSpeed(0.08f);
@@ -24,7 +29,8 @@ namespace Minecraft
 		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_Transform", "u_Textures" };
 		m_Shader->RetrieveLocations(locations);
 
-		BlockLoader::LoadDefaultBlocks("lua/blocks.lua", m_Shader);
+		BlockLoader::InitTextures(m_Shader);
+		//BlockLoader::LoadDefaultBlocks("lua/blocks.lua", m_Shader);
 		
 		m_Frustum = CreateRef<ViewFrustum>();
 

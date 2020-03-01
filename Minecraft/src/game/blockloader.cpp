@@ -1,7 +1,7 @@
 #include "mcpch.h"
 #include "blockloader.h"
-#define SOL_ALL_SAFETIES_ON 1
-#define SOL_PRINT_ERRORS 1
+//#define SOL_ALL_SAFETIES_ON 1
+//#define SOL_PRINT_ERRORS 1
 #include <sol.hpp>
 
 namespace Minecraft
@@ -9,15 +9,24 @@ namespace Minecraft
 
 	BlockLoader::BlockLoader() { }
 
+	/*
 	void BlockLoader::ILoadDefaultBlocks(const std::string& filepath)
 	{
 		sol::state lua;
-		lua.open_libraries(sol::lib::base, sol::lib::coroutine, sol::lib::string, sol::lib::io);
+		sol::environment envir = sol::environment(lua, sol::create, lua.globals());
+
+		lua.open_libraries(sol::lib::base);
 		lua.set_function("Block", &BlockLoader::AddBlock, this);
 		lua.set_function("Texture", &BlockLoader::AddTexture, this);
 
-		auto a = lua.script_file(filepath);
-	}
+		auto a = lua.load_file(filepath);
+		if (a.valid())
+		{
+			auto f = a();
+			if (f.valid())
+				MC_INFO("OK");
+		}
+	}*/
 
 	void BlockLoader::IInitTextures(const Ref<Shader>& shader)
 	{
@@ -35,13 +44,13 @@ namespace Minecraft
 	{
 		MC_ASSERT(sides.size() == 12, "Each block must have 12 sides!");
 		MC_INFO("Adding Block: {0}", longname);
-		m_Blocks.push_back(Block(shortname, longname, solid, sides, transparent, m_CurrentTexture));
+		m_Blocks.push_back(Block(shortname, longname, sides, solid, transparent, m_CurrentTexture));
 	}
 
-	void BlockLoader::AddTexture(const std::string& filepath)
+	uint8_t BlockLoader::IAddTexture(const std::string& filepath)
 	{
 		m_Textures.push_back(Texture::Create(filepath));
-		m_CurrentTexture++;
+		return m_CurrentTexture++;
 	}
 
 	void BlockLoader::IGetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)

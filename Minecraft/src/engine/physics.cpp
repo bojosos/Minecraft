@@ -2,6 +2,7 @@
 #include "physics.h"
 #include "common/math.h"
 #include "game/world.h"
+#include <glad/glad.h>
 
 namespace Minecraft
 {
@@ -39,6 +40,8 @@ namespace Minecraft
 				{
 					MC_TRACE(World::GetOverworld().GetBlock(x, y, z).m_Longname);
 					MC_INFO("{0}, {1}, {2}", x, y, z);
+
+					//glDrawArrays();
 					break;
 				}
 

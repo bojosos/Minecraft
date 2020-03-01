@@ -5,7 +5,7 @@
 namespace Minecraft
 {
 
-	Block::Block(const std::string& shortname, const std::string& longname, bool solid, const sol::table& sides, bool transparent, uint8_t tid) : m_Shortname(shortname), m_Longname(longname), m_Solid(solid), m_Transparent(transparent), m_Data(sides), m_Tid(tid)
+	Block::Block(const std::string& shortname, const std::string& longname, const sol::table& sides, bool solid, bool transparent, uint8_t tid) : m_Shortname(shortname), m_Longname(longname), m_Solid(solid), m_Transparent(transparent), m_Data(sides), m_Tid(tid)
 	{
 
 	}
