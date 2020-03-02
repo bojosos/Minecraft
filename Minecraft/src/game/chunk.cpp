@@ -13,7 +13,7 @@ namespace Minecraft
 	Chunk::Chunk(const glm::vec3& position) : m_Position(position)
 	{
 		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE));
-		m_Vao = CreateRef<VertexArray>();
+		m_Vao = VertexArray::Create();
 	}
 
 	void Chunk::Update(vertex* res)
@@ -46,32 +46,39 @@ namespace Minecraft
 					if (type == 0)
 						continue;
 
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x - 1, y, z, this).IsTransparent())
+#endif
 					{
 						BlockLoader::GetLeftVertexData(res, x, y, z, type, i);
 					}
-
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x + 1, y, z, this).IsTransparent())
 					{
 						BlockLoader::GetRightVertexData(res, x, y, z, type, i);
 					}
-
+#endif
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x, y - 1, z, this).IsTransparent())
 					{
 						BlockLoader::GetDownVertexData(res, x, y, z, type, i);
 					}
-
+#endif
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x, y + 1, z, this).IsTransparent())
+#endif
 					{
 						BlockLoader::GetUpVertexData(res, x, y, z, type, i);
 					}
-
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x, y, z + 1, this).IsTransparent())
+#endif
 					{
 						BlockLoader::GetBackVertexData(res, x, y, z, type, i);
 					}
-
+#ifndef MC_DRAW_ALL
 					if (World::GetOverworld().GetBlock(x, y, z - 1, this).IsTransparent())
+#endif
 					{
 						BlockLoader::GetFrontVertexData(res, x, y, z, type, i);
 					}
@@ -82,7 +89,7 @@ namespace Minecraft
 
 		if (!m_Vbo)
 		{
-			m_Vbo = CreateRef<VertexBuffer>(res, m_Elements * 6);
+			m_Vbo = VertexBuffer::Create(res, m_Elements * 6);
 			m_Vbo->SetLayout({
 							 {ShaderDataType::Byte3, "a_Coordinates"},
 							 {ShaderDataType::Byte2, "a_TexCoords"},
@@ -92,7 +99,15 @@ namespace Minecraft
 		}
 		else
 		{
-			m_Vbo->SetData(res, m_Elements * 6);
+			//m_Vbo->SetData(res, m_Elements * 6);
+			m_Vao = VertexArray::Create();
+			m_Vbo = VertexBuffer::Create(res, m_Elements * 6);
+			m_Vbo->SetLayout({
+							 {ShaderDataType::Byte3, "a_Coordinates"},
+							 {ShaderDataType::Byte2, "a_TexCoords"},
+							 {ShaderDataType::Byte, "a_Tid"}
+				});
+			m_Vao->AddVertexBuffer(m_Vbo);
 		}
 		MC_INFO(m_Elements);
 		return nullptr;

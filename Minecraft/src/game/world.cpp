@@ -98,6 +98,17 @@ namespace Minecraft
 				}
 			}
 		}
+		m_Shader = Shader::Create("res/shaders/outline.glsl");
+		m_Shader->RetrieveLocations({ "u_ViewMatrix", "u_ProjectionMatrix", "u_Position" });
+		m_Vao = VertexArray::Create();
+		float verts[18] = {
+			0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		};
+
+		m_Vbo = VertexBuffer::Create(verts, 24 * sizeof(float));
+		m_Vbo->SetLayout({ {ShaderDataType::Float3, "a_Coords"} });
+		m_Vao->AddVertexBuffer(m_Vbo);
 	}
 
 	void World::Update(const Ref<Shader>& shader, const Ref<ViewFrustum>& frustum)
@@ -153,6 +164,21 @@ namespace Minecraft
 		return BlockLoader::GetBlock(m_Chunks[cX][cY][cZ]->GetBlock(cXx, cYy, cZz));
 	}
 
+	void World::DrawOutline(int32_t x, int32_t y, int32_t z, const Ref<Camera>& cam)
+	{
+		MC_INFO("{0}, {1}, {2}", x, y, z);
+		m_Shader->Bind();
+		glm::mat4 mat(1.0f);
+		mat = glm::translate(mat, glm::vec3(x, y, z));
+		//mat = glm::scale(mat, glm::vec3(5000, 5000, 5000));
+		m_Vao->Bind();
+		m_Vbo->Bind();
+		m_Shader->SetMat4("u_Position", mat);
+		m_Shader->SetMat4("u_ViewMatrix", cam->GetViewMatrix());
+		m_Shader->SetMat4("u_ProjectionMatrix", cam->GetProjectionMatrix());
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
 	void World::SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id)
 	{
 		MC_INFO("Wut2");
@@ -163,7 +189,7 @@ namespace Minecraft
 		int32_t cZ = z / CHUNK_SIZE;
 		int32_t cZz = abs(z % CHUNK_SIZE);
 		m_Chunks[cX][cY][cZ]->SetBlock(cXx, cYy, cZz, id);
-		vertex* test = new vertex[50000];
+		vertex* test = new vertex[TOTAL_VERTICES];
 		m_Chunks[cX][cY][cZ]->GetRenderData(test);
 		//m_Chunks[cX][cY][cZ]->Render();
 		delete[] test;

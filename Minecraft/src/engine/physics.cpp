@@ -6,7 +6,7 @@
 
 namespace Minecraft
 {
-	void Physics::Raycast(const glm::vec3& location, const glm::vec3& direction, uint32_t length)
+	void Physics::Raycast(const glm::vec3& location, const glm::vec3& direction, uint32_t length, bool button, const Ref<Camera>& cam)
 	{
 		int x = floor(location.x);
 		int y = floor(location.y);
@@ -36,11 +36,21 @@ namespace Minecraft
 			if (!(x < 0 || y < 0 || z < 0 || x >= 160 || y >= 160 || z >= 160))
 				//if (callback(x, y, z, blocks[x * wy * wz + y * wz + z], face)
 				//	)
-				//if (!World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
+				if (World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
 				{
-					MC_TRACE(World::GetOverworld().GetBlock(x, y, z).m_Longname);
-					MC_INFO("{0}, {1}, {2}", x, y, z);
-					World::GetOverworld().SetBlock(x, y, z, 0);
+					/*
+					if (button) {
+						MC_INFO("Breaking {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
+						World::GetOverworld().SetBlock(x, y, z, 0);
+						break;
+					}
+					else
+					{
+						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
+						World::GetOverworld().SetBlock(x, y + 1, z, 2);
+					}
+					*/
+					World::GetOverworld().DrawOutline(x, y, z, cam);
 					break;
 				}
 

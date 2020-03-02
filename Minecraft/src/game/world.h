@@ -17,6 +17,7 @@ namespace Minecraft
 		Block& GetBlock(int32_t x, int32_t y, int32_t z);
 
 		void SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id);
+		void DrawOutline(int32_t x, int32_t y, int32_t z, const Ref<Camera>& cam);
 
 		static World& GetOverworld()
 		{
@@ -25,5 +26,8 @@ namespace Minecraft
 		}
 	private:
 		std::vector<std::vector<std::vector<Chunk*>>> m_Chunks;
+		Ref<VertexArray> m_Vao;
+		Ref<VertexBuffer> m_Vbo;
+		Ref<Shader> m_Shader;
 	};
 }

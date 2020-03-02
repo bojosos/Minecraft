@@ -64,9 +64,14 @@ namespace Minecraft
 		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 
-		if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
+		//if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
 		{
-			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4);
+			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, true, m_Camera);
+		}
+
+		//if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
+		{
+		//	Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, false, m_Camera);
 		}
 
 		m_World->Update(m_Shader, m_Frustum);
