@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "mcpch.h"
 #include "common/layer/testlayer.h"
 #include "common/layer/uilayer.h"
@@ -12,6 +10,7 @@ public:
 	{
 		PushLayer(new Minecraft::TestLayer("Test"));
 		PushOverlay(new Minecraft::UILayer("UI"));
+		Minecraft::CommandLineArgs::Create(argc, argv);
 	}
 
 	void OnUpdate(Minecraft::Timestep ts)

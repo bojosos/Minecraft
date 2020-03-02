@@ -13,6 +13,7 @@
 
 #include "engine/application.h"
 #include "engine/camera.h"
+#include "engine/cmdargs.h"
 
 #include "engine/gl/shader.h"
 #include "engine/gl/vao.h"
