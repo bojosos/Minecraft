@@ -1,7 +1,7 @@
 #include "mcpch.h"
 #include "blockloader.h"
 #include "world.h"
-#include "engine/gl/renderer.h"
+#include "engine/gl/renderer/renderer.h"
 #include "common/memory.h"
 #include <glm/gtc/noise.hpp>
 #include <glad/glad.h>

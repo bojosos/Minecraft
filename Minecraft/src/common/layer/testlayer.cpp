@@ -1,10 +1,14 @@
 #include "mcpch.h"
 #include "testlayer.h"
 #include "game/blockloader.h"
-#include "engine/physics.h"
-#include "common/scripting.h"
-#include "engine/lua/luaapi.h"
 #include "game/infolog.h"
+
+#include "engine/lua/luaapi.h"
+#include "engine/physics.h"
+#include "engine/ui/font.h"
+#include "engine/gl/renderer/renderer.h"
+
+#include "common/scripting.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -33,10 +37,9 @@ namespace Minecraft
 		m_Shader->RetrieveLocations(locations);
 
 		BlockLoader::InitTextures(m_Shader);
-		//BlockLoader::LoadDefaultBlocks("lua/blocks.lua", m_Shader);
-		
+	
 		m_Frustum = CreateRef<ViewFrustum>();
-
+		FontManager::Add(CreateRef<Font>("arial", "arial.ttf", 32));
 		Renderer::Init();
 	}
 
@@ -56,10 +59,12 @@ namespace Minecraft
 	
 	void TestLayer::OnUpdate(Timestep ts)
 	{
-		//MC_INFO(ts);
 		InfoLog::Update(ts);
+		
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
+
+		Renderer::DrawString(FontManager::Get("arial"), "test", glm::vec3(10.0f,10.0f, 0.0f), glm::vec4(0.8f,0.2f,0.5f, 1.0f));
 
 		m_Camera->Update();
 		m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());

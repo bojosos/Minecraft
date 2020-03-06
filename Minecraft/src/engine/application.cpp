@@ -4,7 +4,7 @@
 #include "common/log.h"
 #include "common/common.h"
 #include "common/timestep.h"
-#include "engine/gl/renderer.h"
+#include "engine/gl/renderer/renderer.h"
 
 namespace Minecraft
 {

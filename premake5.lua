@@ -28,6 +28,7 @@ IncludeDir["sol"] = "Minecraft/vendor/sol"
 group "Dependencies"
 	include "Minecraft/vendor/GLFW"
 	include "Minecraft/vendor/Glad"
+	include "Minecraft/vendor/FreeType"
 	include "Minecraft/vendor/freetype-gl"
 	include "Minecraft/vendor/lua"
 
@@ -60,6 +61,7 @@ project "Minecraft"
 
 	defines
 	{
+		"_CRT_NONSTDC_NO_DEPRECATE",
 		"_CRT_SECURE_NO_WARNINGS"
 	}
 

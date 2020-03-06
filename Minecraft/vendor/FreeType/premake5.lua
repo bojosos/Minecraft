@@ -1,6 +1,6 @@
 project "FreeType2"
     kind "StaticLib"
-    language "C++"
+    language "C"
     
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -27,6 +27,8 @@ project "FreeType2"
         "src/base/ftstroke.c",
         "src/base/ftsystem.c",
         "src/smooth/smooth.c",
+		"src/base/fterrors.c",
+		"src/base/fterrors.h",
 
         "src/base/ftbbox.c",
         "src/base/ftgxval.c",

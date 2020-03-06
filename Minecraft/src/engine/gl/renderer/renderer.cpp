@@ -68,11 +68,13 @@ namespace Minecraft
 
 	void Renderer::DrawString(const Ref<Font>& font, const std::string& text, const glm::vec3& position, const glm::vec4& color)
 	{
+
+		/*
 		float ts = 0.0f;
 		bool found = false;
 		for (int i = 0; i < m_TextureSlots.size(); i++)
 		{
-			if (m_TextureSlots[i] == font.GetId())
+			if (m_TextureSlots[i] == font->GetId())
 			{
 				ts = (float)(i + 1);
 				break;
@@ -88,5 +90,6 @@ namespace Minecraft
 				Begin();
 			}
 		}
+		*/
 	}
 }
