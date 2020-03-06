@@ -21,8 +21,8 @@ namespace Minecraft
 		return x > 0 ? 1 : x < 0 ? -1 : 0;
 	}
 
-	float Math::Mod(int value, int modulus)
+	float Math::Mod(float value, int modulus)
 	{
-		return (value % modulus + modulus) % modulus;
+		return fmod((float)fmod(value, modulus) + modulus, modulus);
 	}
 }

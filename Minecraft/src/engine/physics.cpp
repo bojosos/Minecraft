@@ -6,12 +6,13 @@
 
 namespace Minecraft
 {
-	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, uint32_t length, bool button, const Ref<Camera>& cam)
+	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, float length, bool button, const Ref<Camera>& cam)
 	{
 		glm::vec3 direction = glm::normalize(dir);
-		int x = floor(location.x);
-		int y = floor(location.y);
-		int z = floor(location.z);
+
+		float x = floor(location.x);
+		float y = floor(location.y);
+		float z = floor(location.z);
 
 		float dx = direction.x;
 		float dy = direction.y;
@@ -28,6 +29,8 @@ namespace Minecraft
 		float tDeltaX = stepX / dx;
 		float tDeltaY = stepY / dy;
 		float tDeltaZ = stepZ / dz;
+
+		length /= sqrt(dx * dx + dy * dy + dz * dz);
 
 		glm::vec3 face(0.0f);
 		MC_ASSERT(dx != 0 || dy != 0 || dz != 0, "Raycast has no direction!");

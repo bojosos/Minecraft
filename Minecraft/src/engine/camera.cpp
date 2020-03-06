@@ -9,7 +9,7 @@ namespace Minecraft
 	Camera::Camera(const glm::mat4& projectionMatrix) : m_ProjectionMatrix(projectionMatrix), m_MouseSensitivity(0.002f), m_Speed(0.04f), m_SprintSpeed(m_Speed * 6.0f), m_MouseWasGrabbed(false)
 	{
 		m_ViewMatrix = glm::mat4(1.0f);
-		m_Position = { 0.0f, 0.0f, -0.0f };
+		m_Position = { 0.0f, 0.0f, 0.0f };
 		m_Rotation = { 0.0f, 0.0f, 0.0f };
 
 		m_Yaw = 0.0f;
@@ -82,6 +82,7 @@ namespace Minecraft
 				m_Position -= up * speed;
 
 			m_ViewMatrix = glm::mat4(1.0f);
+
 			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.x), { 1, 0, 0 });
 			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.y), { 0, 1, 0 });
 			m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians(m_Rotation.z), { 0, 0, 1 });
@@ -104,7 +105,7 @@ namespace Minecraft
 		float y = glm::sin(pitch);
 		float z = glm::cos(pitch) * glm::sin(yaw);
 
-		return { -x,-y,-z };
+		return { -x, -y, -z };
 	}
 
 	glm::vec3 Camera::GetRightDirection(const glm::vec3& rotation) const

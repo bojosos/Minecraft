@@ -7,7 +7,7 @@ namespace Minecraft
 	public:
 		static float Intbound(float s, float ds);
 		static int Signum(float x);
-		static float Mod(int value, int modulus);
+		static float Mod(float value, int modulus);
 
 	};
 }

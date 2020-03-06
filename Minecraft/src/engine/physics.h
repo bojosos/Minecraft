@@ -10,7 +10,7 @@ namespace Minecraft
 	class Physics
 	{
 	public:
-		static void Raycast(const glm::vec3& location, const glm::vec3& direction, uint32_t length, bool button, const Ref<Camera>& cam);
+		static void Raycast(const glm::vec3& location, const glm::vec3& direction, float length, bool button, const Ref<Camera>& cam);
 	private:
 
 	};
