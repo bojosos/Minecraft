@@ -17,7 +17,7 @@ namespace Minecraft
 		Block& GetBlock(int32_t x, int32_t y, int32_t z);
 
 		void SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id);
-		void DrawOutline(int32_t x, int32_t y, int32_t z, const Ref<Camera>& cam);
+		void DrawOutline(int32_t x, int32_t y, int32_t z, const glm::vec3& face, const Ref<Camera>& cam);
 
 		static inline World& GetOverworld()
 		{

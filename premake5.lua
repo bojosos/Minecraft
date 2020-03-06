@@ -19,6 +19,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Minecraft/vendor/GLFW/include"
 IncludeDir["Glad"] = "Minecraft/vendor/Glad/include"
+IncludeDir["freetypegl"] = "Minecraft/vendor/freetype-gl"
 IncludeDir["glm"] = "Minecraft/vendor/glm"
 IncludeDir["stb_image"] = "Minecraft/vendor/stb_image"
 IncludeDir["lua"] = "Minecraft/vendor/lua/include"
@@ -27,6 +28,7 @@ IncludeDir["sol"] = "Minecraft/vendor/sol"
 group "Dependencies"
 	include "Minecraft/vendor/GLFW"
 	include "Minecraft/vendor/Glad"
+	include "Minecraft/vendor/freetype-gl"
 	include "Minecraft/vendor/lua"
 
 group ""
@@ -49,6 +51,7 @@ project "Minecraft"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/freetype-gl/freetype-gl.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
@@ -65,6 +68,7 @@ project "Minecraft"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.freetypegl}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
@@ -77,6 +81,7 @@ project "Minecraft"
 		"GLFW",
 		"Glad",
 		"lua",
+		"freetype-gl",
 		"opengl32.lib"
 	}
 

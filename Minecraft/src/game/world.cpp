@@ -169,15 +169,13 @@ namespace Minecraft
 		return BlockLoader::GetBlock(m_Chunks[cX][cY][cZ]->GetBlock(cXx, cYy, cZz));
 	}
 
-	void World::DrawOutline(int32_t x, int32_t y, int32_t z, const Ref<Camera>& cam)
+	void World::DrawOutline(int32_t x, int32_t y, int32_t z, const glm::vec3& face, const Ref<Camera>& cam)
 	{
-		MC_INFO("{0}, {1}, {2}", x, y, z);
 		m_Shader->Bind();
 		glm::mat4 mat(1.0f);
 		mat = glm::translate(mat, glm::vec3(x, y, z));
-		//mat = glm::scale(mat, glm::vec3(5000, 5000, 5000));
+
 		m_Vao->Bind();
-		m_Vbo->Bind();
 		m_Shader->SetMat4("u_Position", mat);
 		m_Shader->SetMat4("u_ViewMatrix", cam->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", cam->GetProjectionMatrix());
