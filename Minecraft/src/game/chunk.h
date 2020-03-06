@@ -33,7 +33,7 @@ namespace Minecraft
 		{
 			SetBlock((int)position.x, (int)position.y, (int)position.z, type);
 		}
-		inline void SetBlock(int x, int y, int z, uint8_t type)
+		void SetBlock(int x, int y, int z, uint8_t type)
 		{
 			m_Blocks[x][y][z] = type;
 			//if(type == 0)
@@ -52,13 +52,13 @@ namespace Minecraft
 		void Render();
 
 		vertex* GetRenderData(vertex* res);
-	private:
+	public:
 		glm::mat4 m_Transform;
 		Ref<VertexBuffer> m_Vbo;
 		Ref<VertexArray> m_Vao;
 
 		uint32_t m_Elements = 0;
-		bool m_Changed = true;
+		changed m_Changed = true;
 
 		glm::vec3 m_Position;
 		uint16_t m_Blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];

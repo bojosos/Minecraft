@@ -2,7 +2,7 @@
 #include "blockloader.h"
 #include "world.h"
 #include "engine/gl/renderer.h"
-
+#include "common/memory.h"
 #include <glm/gtc/noise.hpp>
 #include <glad/glad.h>
 
@@ -19,8 +19,12 @@ namespace Minecraft
 	float dirtNoiseHeight = 3;
 	int stoneHeight = floor(stoneBaseHeight);
 
+	World* World::s_World;
+
 	World::World()
 	{
+		s_World = this;
+
 		m_Chunks.resize(10);
 		for (int x = 0; x < 10; x++)
 		{
@@ -114,27 +118,28 @@ namespace Minecraft
 	void World::Update(const Ref<Shader>& shader, const Ref<ViewFrustum>& frustum)
 	{
 		vertex* res = new vertex[TOTAL_VERTICES];
-		for (auto ccc : m_Chunks)
+		for (int i=0;i<m_Chunks.size();i++)
 		{
-			for (auto cc : ccc)
+			for (int j = 0; j < m_Chunks[i].size(); j++)
 			{
-				for (auto c : cc) {
-					c->Update(res);
+				for (int k = 0; k < m_Chunks[i][j].size(); k++) {
+					m_Chunks[i][j][k]->Update(res);
 				}
 			}
 		}
+
 		delete[] res;
 
 		shader->Bind();
-		for (auto ccc : m_Chunks)
+		for (int i = 0; i < m_Chunks.size(); i++)
 		{
-			for (auto cc : ccc)
+			for (int j = 0; j < m_Chunks[i].size(); j++)
 			{
-				for (auto c : cc) {
-					if (frustum->ChunkIsInFrustum(c->GetPosition()))
+				for (int k = 0; k < m_Chunks[i][j].size(); k++) {
+					if (frustum->ChunkIsInFrustum(m_Chunks[i][j][k]->GetPosition()))
 					{
-						shader->SetMat4("u_Transform", c->GetTransformationMatrix());
-						c->Render();
+						shader->SetMat4("u_Transform", m_Chunks[i][j][k]->GetTransformationMatrix());
+						m_Chunks[i][j][k]->Render();
 					}
 				}
 			}
@@ -189,9 +194,11 @@ namespace Minecraft
 		int32_t cZ = z / CHUNK_SIZE;
 		int32_t cZz = abs(z % CHUNK_SIZE);
 		m_Chunks[cX][cY][cZ]->SetBlock(cXx, cYy, cZz, id);
-		vertex* test = new vertex[TOTAL_VERTICES];
-		m_Chunks[cX][cY][cZ]->GetRenderData(test);
+		m_Chunks[cX][cY][cZ]->m_Changed = true;
+		m_Chunks[cX][cY][cZ]->m_Blocks[cXx][cYy][cZz] = id;
+		//vertex* test = new vertex[TOTAL_VERTICES];
+		//m_Chunks[cX][cY][cZ]->GetRenderData(test);
 		//m_Chunks[cX][cY][cZ]->Render();
-		delete[] test;
+		//delete[] test;
 	}
 }

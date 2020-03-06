@@ -11,6 +11,29 @@ namespace Minecraft
 		vertex(uint8_t x, uint8_t y, uint8_t z, uint8_t u, uint8_t v, uint8_t tid) : x(x), y(y), z(z), u(u), v(v), tid(tid) { }
 	};
 
+	class changed
+	{
+	public:
+		changed(bool val) : m_Val(val) {}
+
+		operator bool() const
+		{
+			return m_Val;
+		}
+		void operator=(bool other) 
+		{
+			m_Val = other;
+			//if(true)
+				//MC_INFO("changed");
+		}
+		void operator=(changed other)
+		{
+			//MC_INFO("changed");
+		}
+		private:
+			bool m_Val;
+	};
+
 	struct TextureData
 	{
 		uint8_t negxU, negxV, posxU, posxV, negyU, negyV, posyU, posyV, negzU, negzV, poszU, poszV;

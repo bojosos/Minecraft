@@ -9,10 +9,10 @@ namespace Minecraft
 	{
 	public:
 		virtual ~UIElement() { for (auto& el : m_Children) delete el; }
-		virtual void OnMousePressed(Event& e) = 0;
+		virtual void OnMousePressed(Event& e);
 
-	private:
-		UIElement();
+	protected:
+		UIElement(const glm::ivec2& pos);
 		glm::ivec2 m_Position;
 		int32_t m_Width, m_Height;
 

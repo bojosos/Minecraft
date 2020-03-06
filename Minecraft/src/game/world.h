@@ -19,12 +19,14 @@ namespace Minecraft
 		void SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id);
 		void DrawOutline(int32_t x, int32_t y, int32_t z, const Ref<Camera>& cam);
 
-		static World& GetOverworld()
+		static inline World& GetOverworld()
 		{
-			static World instance;
-			return instance;
+			return *s_World;
 		}
+
 	private:
+		static World* s_World;
+
 		std::vector<std::vector<std::vector<Chunk*>>> m_Chunks;
 		Ref<VertexArray> m_Vao;
 		Ref<VertexBuffer> m_Vbo;

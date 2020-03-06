@@ -1,17 +1,13 @@
 #pragma once
-#include "common/types.h"
+#include "element.h"
+#include <glm/glm.hpp>
 
 namespace Minecraft
 {
-	class Panel
+	class Panel : public UIElement
 	{
 	public:
-		Panel(Position position);
-
-
-	private:
-		Position m_Position;
-		int32_t width, height;
+		Panel(const glm::ivec2& position);
 
 	};
 }

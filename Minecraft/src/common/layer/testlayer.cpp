@@ -1,22 +1,25 @@
 #include "mcpch.h"
 #include "testlayer.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "game/blockloader.h"
 #include "engine/physics.h"
 #include "common/scripting.h"
 #include "engine/lua/luaapi.h"
+#include "game/infolog.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Minecraft
 {
 
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
+		InfoLog::Init();
 		Random::Init();
 		ScriptingEngine::Init();
 		LuaApi::LuaDataApiInit();
-		ScriptingEngine::ExecuteFile("lua/blocks.lua");
+		ScriptingEngine::ExecuteFile("lua/world/blocks.lua");
 
 		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
 		m_Camera->SetSpeed(0.08f);
@@ -53,6 +56,8 @@ namespace Minecraft
 	
 	void TestLayer::OnUpdate(Timestep ts)
 	{
+		//MC_INFO(ts);
+		InfoLog::Update(ts);
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
 
@@ -64,17 +69,17 @@ namespace Minecraft
 		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
 
-		//if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
+		if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
 		{
 			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, true, m_Camera);
 		}
 
-		//if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
+		if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
 		{
-		//	Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, false, m_Camera);
+			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, false, m_Camera);
 		}
-
 		m_World->Update(m_Shader, m_Frustum);
+
 	}
 
 }

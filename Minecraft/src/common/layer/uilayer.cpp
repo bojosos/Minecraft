@@ -21,8 +21,8 @@ namespace Minecraft
 
 	void UILayer::OnEvent(Event& e)
 	{
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseButtonPressedEvent>(MC_BIND_EVENT_FN(m_Root->OnMousePressed));
+		//EventDispatcher dispatcher(e);
+		//dispatcher.Dispatch<MouseButtonPressedEvent>(MC_BIND_EVENT_FN(m_Root->OnMousePressed));
 	}
 
 	void UILayer::OnUpdate(Timestep time)

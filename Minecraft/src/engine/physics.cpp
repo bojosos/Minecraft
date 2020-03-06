@@ -28,7 +28,7 @@ namespace Minecraft
 		float tDeltaY = stepY / dy;
 		float tDeltaZ = stepZ / dz;
 
-		glm::vec3 face;
+		glm::vec3 face(0.0f);
 		MC_ASSERT(dx != 0 || dy != 0 || dz != 0, "Raycast has no direction!");
 
 		while ((stepX > 0 ? x < 160 : x >= 0) && (stepY > 0 ? y < 160 : y >= 0) && (stepZ > 0 ? z < 160 : z >= 0)) {
@@ -38,7 +38,6 @@ namespace Minecraft
 				//	)
 				if (World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
 				{
-					/*
 					if (button) {
 						MC_INFO("Breaking {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
 						World::GetOverworld().SetBlock(x, y, z, 0);
@@ -49,8 +48,7 @@ namespace Minecraft
 						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
 						World::GetOverworld().SetBlock(x, y + 1, z, 2);
 					}
-					*/
-					World::GetOverworld().DrawOutline(x, y, z, cam);
+					//World::GetOverworld().DrawOutline((int)face.x, (int)face.y, (int)face.z, cam);
 					break;
 				}
 

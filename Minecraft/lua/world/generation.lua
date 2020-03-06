@@ -1,0 +1,10 @@
+--This defines the generation of the world
+--game.noise is used to configure the generation
+--there are a couple main variables
+--the most important is the type of noise enum(perlin, simplex)
+--then we have the layering of the noise, (game.noise.layers) layers of noise can be added with different variables, they values are juts multiplied in the code
+--stoneheigh, stonebaseheight
+--dirtheight, dirtbaseheight
+--water level
+--sand around the river
+--tree, cactus, grass

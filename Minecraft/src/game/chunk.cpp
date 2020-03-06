@@ -12,17 +12,18 @@ namespace Minecraft
 
 	Chunk::Chunk(const glm::vec3& position) : m_Position(position)
 	{
+		//MC_INFO("Constructor");
 		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE));
 		m_Vao = VertexArray::Create();
 	}
 
 	void Chunk::Update(vertex* res)
 	{
-		if (!m_Changed)
+		if (m_Changed == false)
 			return;
+		MC_INFO("Updating chunk at {0}, {1}, {2}", m_Position.x, m_Position.y, m_Position.z);
 		m_Changed = false;
 		GetRenderData(res);
-		MC_INFO("Updating chunk at {0}, {1}, {2}", m_Position.x, m_Position.y, m_Position.z);
 	}
 
 	void Chunk::BufferData(vertex* res)
@@ -32,7 +33,7 @@ namespace Minecraft
 
 	vertex* Chunk::GetRenderData(vertex* res) 
 	{
-		MC_INFO(m_Elements);
+		//MC_INFO(m_Elements);
 		uint32_t i = 0;
 		m_Elements = 0;
 
@@ -100,6 +101,7 @@ namespace Minecraft
 		else
 		{
 			//m_Vbo->SetData(res, m_Elements * 6);
+			//m_Vao->~VertexArray();
 			m_Vao = VertexArray::Create();
 			m_Vbo = VertexBuffer::Create(res, m_Elements * 6);
 			m_Vbo->SetLayout({
@@ -109,7 +111,7 @@ namespace Minecraft
 				});
 			m_Vao->AddVertexBuffer(m_Vbo);
 		}
-		MC_INFO(m_Elements);
+		//MC_INFO(m_Elements);
 		return nullptr;
 	}
 
