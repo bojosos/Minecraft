@@ -17,6 +17,7 @@ namespace Minecraft
 			return instance;
 		}
 		InfoLog();
-		int32_t m_Time = 0, m_Frames = 0, m_LogTime = 1.0f;
+		int32_t m_Frames = 0;
+		float m_LogTime = 1.0f, m_Time = 0.0f;
 	};
 }

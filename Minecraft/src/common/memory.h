@@ -19,7 +19,7 @@ namespace Minecraft
 			return instance;
 		}
 
-		size_t m_Allocated, m_Freed;
+		size_t m_Allocated = 0, m_Freed = 0;
 	};
 }
 

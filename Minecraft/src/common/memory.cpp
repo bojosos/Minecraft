@@ -1,5 +1,6 @@
 #include "mcpch.h"
 #include "memory.h"
+#include "common/common.h"
 #include <memory>
 
 void* operator new(size_t size)
@@ -7,7 +8,17 @@ void* operator new(size_t size)
 	return Minecraft::Memory::Allocate(size);
 }
 
+void* operator new[](size_t size)
+{
+	return Minecraft::Memory::Allocate(size);
+}
+
 void operator delete(void* memory, size_t size)
+{
+	Minecraft::Memory::Free(memory, size);
+}
+
+void operator delete[](void* memory, size_t size)
 {
 	Minecraft::Memory::Free(memory, size);
 }

@@ -6,8 +6,9 @@
 
 namespace Minecraft
 {
-	void Physics::Raycast(const glm::vec3& location, const glm::vec3& direction, uint32_t length, bool button, const Ref<Camera>& cam)
+	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, uint32_t length, bool button, const Ref<Camera>& cam)
 	{
+		glm::vec3 direction = glm::normalize(dir);
 		int x = floor(location.x);
 		int y = floor(location.y);
 		int z = floor(location.z);

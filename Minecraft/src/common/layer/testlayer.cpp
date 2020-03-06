@@ -15,7 +15,7 @@ namespace Minecraft
 
 	TestLayer::TestLayer(const std::string& name) : Layer(name)
 	{
-		InfoLog::Init();
+		InfoLog::Init(1.0f);
 		Random::Init();
 		ScriptingEngine::Init();
 		LuaApi::LuaDataApiInit();

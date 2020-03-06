@@ -18,7 +18,7 @@ namespace Minecraft
 	{
 		m_Frames++;
 		m_Time += ts;
-		if (m_Time >= m_LogTime) {
+		while (m_Time >= m_LogTime) {
 			m_Time -= m_LogTime;
 			MC_WARN("Allocated: {0}, FPS: {1} at {2}ms.", Memory::GetAllocated(), m_Frames, 1.0f / m_Frames * 1000.0f);
 			m_Frames = 0;
