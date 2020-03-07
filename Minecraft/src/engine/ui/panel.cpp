@@ -3,7 +3,7 @@
 
 namespace Minecraft
 {
-	Panel::Panel(const glm::ivec2& position) : UIElement(position)
+	Panel::Panel(const glm::vec3& position) : UIElement(position)
 	{
 
 	}

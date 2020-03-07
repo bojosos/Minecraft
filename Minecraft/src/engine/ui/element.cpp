@@ -4,7 +4,7 @@
 namespace Minecraft
 {
 
-	UIElement::UIElement(const glm::ivec2& pos) : m_Position(pos)
+	UIElement::UIElement(const glm::vec3& pos) : m_Position(pos)
 	{
 
 	}

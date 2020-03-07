@@ -87,7 +87,6 @@ namespace Minecraft
 
 	void Texture::Bind(uint32_t slot) const
 	{
-		//glBindTexture(GL_TEXTURE_2D, m_RendererID);
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }

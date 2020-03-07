@@ -67,4 +67,9 @@ namespace Minecraft
 	{
 		return glMapBuffer(target, type);
 	}
+
+	void VertexBuffer::Unmap()
+	{
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+	}
 }

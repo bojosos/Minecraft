@@ -3,6 +3,7 @@
 #include "common/common.h"
 #include <memory>
 
+/*
 void* operator new(size_t size)
 {
 	return Minecraft::Memory::Allocate(size);
@@ -22,6 +23,7 @@ void operator delete[](void* memory, size_t size)
 {
 	Minecraft::Memory::Free(memory, size);
 }
+*/
 
 namespace Minecraft
 {

@@ -18,6 +18,7 @@ namespace Minecraft
 		void Bind();
 		void Unbind();
 		void* MapBuffer(GLenum target, GLenum type);
+		void Unmap();
 
 		const BufferLayout& GetLayout() const { return m_Layout; };
 		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }

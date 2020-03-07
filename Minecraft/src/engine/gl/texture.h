@@ -18,6 +18,8 @@ namespace Minecraft
 		void Bind(uint32_t slot) const;
 		void SetData(void* data, uint32_t size);
 
+		inline uint32_t GetID() { return m_RendererID; }
+
 		static Ref<Texture> Create(uint32_t width, uint32_t height);
 		static Ref<Texture> Create(const std::string& filepath);
 
