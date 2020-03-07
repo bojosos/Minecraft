@@ -13,6 +13,7 @@ namespace Minecraft
 		case ShaderDataType::Byte2:    return GL_BYTE;
 		case ShaderDataType::Byte3:    return GL_BYTE;
 		case ShaderDataType::Byte4:	   return GL_BYTE;
+		case ShaderDataType::UByte4:   return GL_UNSIGNED_BYTE;
 		case ShaderDataType::Float:    return GL_FLOAT;
 		case ShaderDataType::Float2:   return GL_FLOAT;
 		case ShaderDataType::Float3:   return GL_FLOAT;
