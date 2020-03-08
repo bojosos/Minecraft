@@ -9,4 +9,4 @@
 	url = https://github.com/gabime/spdlog
 [submodule "Minecraft/vendor/freetype-gl"]
 	path = Minecraft/vendor/freetype-gl
-	url = https://github.com/rougier/freetype-gl.git
+	url = https://github.com/rougier/freetype-gl/

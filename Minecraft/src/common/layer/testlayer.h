@@ -3,6 +3,7 @@
 #include "engine.h"
 #include "game/world.h"
 #include "game/block.h"
+#include "engine/gl/renderer/test.h"
 
 namespace Minecraft
 {
@@ -28,5 +29,6 @@ namespace Minecraft
 		Ref<VertexArray> m_VertexArray;
 		Ref<VertexArray> m_SquareVA;
 		std::vector<Ref<Texture>> m_Textures;
+		BatchRenderer2D* m_Renderer;
 	};
 }

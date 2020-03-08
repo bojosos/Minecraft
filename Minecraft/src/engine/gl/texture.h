@@ -5,6 +5,12 @@
 
 namespace Minecraft
 {
+
+	struct TextureParameters 
+	{
+		TextureParameters() = default;
+	};
+
 	class Texture
 	{
 	public:
@@ -17,6 +23,7 @@ namespace Minecraft
 
 		void Bind(uint32_t slot) const;
 		void SetData(void* data, uint32_t size);
+		void SetData(void* data);
 
 		inline uint32_t GetID() { return m_RendererID; }
 

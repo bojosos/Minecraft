@@ -196,20 +196,20 @@ namespace Minecraft
 		for (int i = 0; i < text.length(); i++)
 		{
 			char c = text.at(i);
-			ftgl::texture_glyph_t* glyph = texture_font_get_glyph(ftFont, c);
+			ftgl::texture_glyph_t* glyph = texture_font_get_glyph(ftFont, &c);
 
 			if (glyph != NULL)
 			{
 				if (i > 0)
 				{
-					float kerning = texture_glyph_get_kerning(glyph, text[i - 1]);
+					float kerning = texture_glyph_get_kerning(glyph, &text[i - 1]);
 					x += kerning;
 				}
 
-				float x0 = x + glyph->offset_x;
-				float y0 = position.y + glyph->offset_y;
-				float x1 = x0 + glyph->width;
-				float y1 = y0 - glyph->height;
+				float x0 = x + glyph->offset_x / 32.0f;
+				float y0 = position.y + glyph->offset_y / 32.0f;
+				float x1 = x0 + glyph->width / 32.0f;
+				float y1 = y0 - glyph->height / 32.0f;
 
 				float u0 = glyph->s0;
 				float v0 = glyph->t0;

@@ -1,7 +1,6 @@
 #include <mcpch.h>
 
 #include "renderer.h"
-#include "batchrenderer2d.h"
 #include <glad/glad.h>
 
 namespace Minecraft
@@ -33,7 +32,7 @@ namespace Minecraft
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 #endif
-		BatchRenderer2D::Init();
+		//BatchRenderer2D::Init();
 	}
 
 	BufferLayout Renderer::m_Layout =
@@ -76,6 +75,6 @@ namespace Minecraft
 		int a = color.w * 255.0f;
 
 		uint32_t col = a << 24 | b << 16 | g << 8 | r;
-		BatchRenderer2D::DrawString(font, text, position, col);
+		//BatchRenderer2D::DrawString(font, text, position, col);
 	}
 }

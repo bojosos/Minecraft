@@ -1,5 +1,6 @@
 #pragma once
 #include <freetype-gl.h>
+#include "engine/gl/texture.h"
 
 namespace Minecraft
 {
@@ -38,11 +39,14 @@ namespace Minecraft
 			return m_Atlas;
 		}
 
+		Ref<Texture> GetTexture();
+
 	private:
 		ftgl::texture_atlas_t* m_Atlas;
 		ftgl::texture_font_t* m_Font;
 		uint32_t m_Size;
 		std::string m_Name, m_Filepath;
+		Ref<Texture> m_Texture;
 	};
 
 	class FontManager

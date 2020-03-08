@@ -20,8 +20,8 @@ out DATA
 
 void main()
 {
-	gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
-	vs_out.position = u_ModelMatrix * a_Position;
+	gl_Position = u_ProjectionMatrix * a_Position;
+	vs_out.position = a_Position;
 	vs_out.uv = a_UV;
 	vs_out.tid = a_Tid;
 	vs_out.color = a_Color;
@@ -40,7 +40,8 @@ in DATA
 	vec4 color;
 } fs_in;
 
-uniform sampler2D u_Textures[32];
+//uniform sampler2D u_Textures[32];
+uniform sampler2D u_Texture;
 
 void main(void) {
 
@@ -48,7 +49,9 @@ void main(void) {
 	if (fs_in.tid > 0.0)
 	{
 		int tid = int(fs_in.tid - 0.5);
-		texColor = vec4(1.0, 1.0, 1.0f, 1.0f);//fs_in.color * texture(u_Textures[tid], fs_in.uv);
+		//texColor = fs_in.color * texture(u_Textures[tid], fs_in.uv);
+		texColor = fs_in.color * texture(u_Texture, fs_in.uv);
+		//texColor = vec4(1.0, 1.0, 1.0, texture(u_Texture, fs_in.uv).r);
 	}
 
 	color = texColor;

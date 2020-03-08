@@ -7,7 +7,6 @@
 #include "engine/physics.h"
 #include "engine/ui/font.h"
 #include "engine/gl/renderer/renderer.h"
-#include "engine/gl/renderer/batchrenderer2d.h"
 
 #include "common/scripting.h"
 
@@ -37,16 +36,20 @@ namespace Minecraft
 		//m_Shader = m_ShaderLibrary.Load("res/shaders/chunkshader.glsl");
 		m_Shader = m_ShaderLibrary.Load("res/shaders/uishader.glsl");
 		
-		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_ModelMatrix" };
+		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_ModelMatrix", "u_Textures" };
 		m_Shader->RetrieveLocations(locations);
 
 		BlockLoader::InitTextures(m_Shader);
 	
 		m_Frustum = CreateRef<ViewFrustum>();
-		FontManager::Add(CreateRef<Font>("arial", "res/fonts/roboto-thin.ttf", 32));
+		int vals[10] = { 0,1,2,3,4,5,6,7,8,9 };
+		//m_Shader->SetIntV("u_Textures", 10, vals);
+
+		FontManager::Add(CreateRef<Font>("arial", "res/fonts/roboto-thin.ttf", 64));
 		Renderer::Init();
 		
 		m_Camera = CreateRef<Camera>(glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f));
+		m_Renderer = new BatchRenderer2D();
 	}
 
 	void TestLayer::OnAttach()
@@ -70,14 +73,16 @@ namespace Minecraft
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
 		
-		BatchRenderer2D::Begin();
+		m_Renderer->begin();
 		m_Shader->Bind();
 		m_Shader->SetMat4("u_ViewMatrix", glm::mat4(1.0f));
-		m_Shader->SetMat4("u_ModelMatrix", m_Camera->GetViewMatrix());
-		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
-		Renderer::DrawString2D(FontManager::Get("arial"), "test", glm::vec3(10.0f, 10.0f, 10.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		BatchRenderer2D::End();
-		BatchRenderer2D::Flush();
+		m_Shader->SetMat4("u_ModelMatrix", glm::mat4(1.0f));//m_Camera->GetViewMatrix());
+		m_Shader->SetMat4("u_ProjectionMatrix", glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));//m_Camera->GetProjectionMatrix());
+		
+		m_Renderer->drawString("test", glm::vec3(0.0f, 0.0f, 0.0f), FontManager::Get("arial"), 0xff000000);
+		
+		m_Renderer->end();
+		m_Renderer->flush();
 		//m_Camera->Update();
 		//m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());
 
