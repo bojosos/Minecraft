@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "game/world.h"
 #include "game/block.h"
-#include "engine/gl/renderer/test.h"
+#include "engine/gl/renderer/batchrenderer2d.h"
 
 namespace Minecraft
 {

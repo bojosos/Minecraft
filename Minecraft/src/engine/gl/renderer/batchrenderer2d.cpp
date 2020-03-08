@@ -1,63 +1,46 @@
 #include "mcpch.h"
 #include "batchrenderer2d.h"
-#include "engine/gl/texture.h"
-#include "engine/gl/shader.h"
-#include "engine/gl/vao.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace Minecraft
 {
-
-#define RENDERER_MAX_SPRITES	60000
-#define RENDERER_VERTEX_SIZE	sizeof(VertexData)
-#define RENDERER_SPRITE_SIZE	RENDERER_VERTEX_SIZE * 4
-#define RENDERER_BUFFER_SIZE	RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES
-#define RENDERER_INDICES_SIZE	RENDERER_MAX_SPRITES * 6
-
-#define SHADER_VERTEX_INDEX 0
-#define SHADER_UV_INDEX		1
-#define SHADER_TID_INDEX	2
-#define SHADER_COLOR_INDEX	3
-
-	struct Renderer2DStorage
+	BatchRenderer2D::BatchRenderer2D()
 	{
-		std::vector<glm::mat4> TransformationStack;
-		const glm::mat4* TransformationBack;
+		Init();
+	}
 
-		Ref<VertexArray> Vao;
-		Ref<VertexBuffer> Vbo;
-
-		std::vector<uint32_t> TextureSlots;
-		VertexData* Buffer;
-		uint32_t IndexCount;
-	};
-
-	static Scope<Renderer2DStorage> s_Data;
+	BatchRenderer2D::~BatchRenderer2D()
+	{
+		delete m_IBO;
+		glDeleteBuffers(1, &m_VBO);
+	}
 
 	void BatchRenderer2D::Init()
 	{
-		s_Data = CreateScope<Renderer2DStorage>();
+		glGenVertexArrays(1, &m_VAO);
+		glGenBuffers(1, &m_VBO);
 
-		s_Data->TransformationStack.push_back(glm::mat4(1.0f));
-		s_Data->TransformationBack = &(s_Data->TransformationStack.back());
+		glBindVertexArray(m_VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
 
-		s_Data->Vao = VertexArray::Create();
-		s_Data->Vbo = VertexBuffer::CreateDynamic(NULL, RENDERER_BUFFER_SIZE);
+		glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+		glEnableVertexAttribArray(SHADER_UV_INDEX);
+		glEnableVertexAttribArray(SHADER_TID_INDEX);
+		glEnableVertexAttribArray(SHADER_COLOR_INDEX);
 
-		s_Data->Vbo->SetLayout({
-			{ ShaderDataType::Float3, "a_Coords" },
-			{ ShaderDataType::Float2, "a_Uv" },
-			{ ShaderDataType::Float, "a_Tid"},
-			{ ShaderDataType::UByte4, "a_Color", true}
-		});
-		s_Data->Vbo->Unbind();
+		glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)0);
+		glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::uv)));
+		glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::tid)));
+		glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::color)));
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		GLuint* indices = new GLuint[RENDERER_INDICES_SIZE];
 
 		int offset = 0;
 		for (int i = 0; i < RENDERER_INDICES_SIZE; i += 6)
 		{
-			indices[i + 0] = offset + 0;
+			indices[i] = offset + 0;
 			indices[i + 1] = offset + 1;
 			indices[i + 2] = offset + 2;
 
@@ -68,33 +51,33 @@ namespace Minecraft
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> ibo = IndexBuffer::Create(indices, RENDERER_INDICES_SIZE);
+		m_IBO = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
-		s_Data->Vao->SetIndexBuffer(ibo);
-		s_Data->Vao->Unbind();
+		glBindVertexArray(0);
+
 	}
 
 	void BatchRenderer2D::Begin()
 	{
-		s_Data->Vbo->Bind();
-		s_Data->Buffer = (VertexData*)(s_Data->Vbo->MapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		m_Buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	}
 
-	void BatchRenderer2D::Submit(const Ref<UIElement>& element)
+	void BatchRenderer2D::Submit(const UIElement* renderable)
 	{
-		const glm::vec3& pos = element->GetPosition();
-		const glm::vec2& size = element->GetSize();
-		const uint32_t color = element->GetColor();
-		const std::vector<glm::vec2>& uv = element->GetUV();
-		const GLuint tid = element->GetTID();
+		const glm::vec3& position = renderable->GetPosition();
+		const glm::vec2& size = renderable->GetSize();
+		const unsigned int color = renderable->GetColor();
+		const std::vector<glm::vec2>& uv = renderable->GetUV();
+		const GLuint tid = renderable->GetTID();
 
 		float ts = 0.0f;
 		if (tid > 0)
 		{
 			bool found = false;
-			for (int i = 0; i < s_Data->TextureSlots.size(); i++)
+			for (int i = 0; i < m_TextureSlots.size(); i++)
 			{
-				if (s_Data->TextureSlots[i] == tid)
+				if (m_TextureSlots[i] == tid)
 				{
 					ts = (float)(i + 1);
 					found = true;
@@ -104,71 +87,51 @@ namespace Minecraft
 
 			if (!found)
 			{
-				if (s_Data->TextureSlots.size() >= 32)
+				if (m_TextureSlots.size() >= 32)
 				{
 					End();
 					Flush();
 					Begin();
 				}
-				s_Data->TextureSlots.push_back(tid);
-				ts = (float)(s_Data->TextureSlots.size());
+				m_TextureSlots.push_back(tid);
+				ts = (float)(m_TextureSlots.size());
 			}
 		}
 
-		s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(pos, 1.0f);
-		s_Data->Buffer->uv = uv[0];
-		s_Data->Buffer->tid = ts;
-		s_Data->Buffer->color = color;
-		s_Data->Buffer++;
+		m_Buffer->vertex = position;
+		m_Buffer->uv = uv[0];
+		m_Buffer->tid = ts;
+		m_Buffer->color = color;
+		m_Buffer++;
 
-		s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(pos.x, pos.y + size.y, pos.z, 1.0f);
-		s_Data->Buffer->uv = uv[1];
-		s_Data->Buffer->tid = ts;
-		s_Data->Buffer->color = color;
-		s_Data->Buffer++;
+		m_Buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
+		m_Buffer->uv = uv[1];
+		m_Buffer->tid = ts;
+		m_Buffer->color = color;
+		m_Buffer++;
 
-		s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(pos.x + size.x, pos.y + size.y, pos.z, 1.0f);
-		s_Data->Buffer->uv = uv[2];
-		s_Data->Buffer->tid = ts;
-		s_Data->Buffer->color = color;
-		s_Data->Buffer++;
+		m_Buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
+		m_Buffer->uv = uv[2];
+		m_Buffer->tid = ts;
+		m_Buffer->color = color;
+		m_Buffer++;
 
-		s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(pos.x + size.x, pos.y, pos.z, 1.0f);
-		s_Data->Buffer->uv = uv[3];
-		s_Data->Buffer->tid = ts;
-		s_Data->Buffer->color = color;
-		s_Data->Buffer++;
+		m_Buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
+		m_Buffer->uv = uv[3];
+		m_Buffer->tid = ts;
+		m_Buffer->color = color;
+		m_Buffer++;
 
-		s_Data->IndexCount += 6;
+		m_IndexCount += 6;
 	}
 
-	void BatchRenderer2D::Push(const glm::mat4& matrix, bool override = false)
-	{
-		if (override)
-			s_Data->TransformationStack.push_back(matrix);
-		else
-			s_Data->TransformationStack.push_back(s_Data->TransformationStack.back() * matrix);
-
-		s_Data->TransformationBack = &(s_Data->TransformationStack.back());
-	}
-
-	void BatchRenderer2D::Pop()
-	{
-		if (s_Data->TransformationStack.size() > 1)
-		{
-			s_Data->TransformationStack.pop_back();
-		}
-
-		s_Data->TransformationBack = &(s_Data->TransformationStack.back());
-	}
-
-	void BatchRenderer2D::DrawString(const Ref<Font>& font, const std::string& text, const glm::vec3& position, uint32_t color)
+	void BatchRenderer2D::DrawString(const std::string& text, const glm::vec3& position, const Ref<Font>& font, unsigned int color)
 	{
 		float ts = 0.0f;
 		bool found = false;
-		for (int i = 0; i < s_Data->TextureSlots.size(); i++)
+		for (int i = 0; i < m_TextureSlots.size(); i++)
 		{
-			if (s_Data->TextureSlots[i] == font->GetId())
+			if (m_TextureSlots[i] == font->GetTexture()->GetID())
 			{
 				ts = (float)(i + 1);
 				found = true;
@@ -178,94 +141,101 @@ namespace Minecraft
 
 		if (!found)
 		{
-			if (s_Data->TextureSlots.size() >= 32)
+			if (m_TextureSlots.size() >= 32)
 			{
 				End();
 				Flush();
 				Begin();
 			}
-
-			s_Data->TextureSlots.push_back(font->GetId());
-			ts = (float)(s_Data->TextureSlots.size());
+			m_TextureSlots.push_back(font->GetTexture()->GetID());
+			ts = (float)(m_TextureSlots.size());
 		}
-		
+
+		float scaleX = 1280.0f / 32.0f;
+		float scaleY = 720.0f / 18.0f;
+
 		float x = position.x;
-		
-		ftgl::texture_font_t* ftFont = font->GetFTGLFont();
 
-		for (int i = 0; i < text.length(); i++)
+		texture_font_t* ftFont = font->GetFTGLFont();
+
+		for (uint32_t i = 0; i < text.length(); i++)
 		{
-			char c = text.at(i);
-			ftgl::texture_glyph_t* glyph = texture_font_get_glyph(ftFont, &c);
-
-			if (glyph != NULL)
+			char c = text[i];
+			texture_glyph_t* glyph = texture_font_get_glyph(ftFont, &c);
+		
+			if (glyph)
 			{
+
 				if (i > 0)
 				{
 					float kerning = texture_glyph_get_kerning(glyph, &text[i - 1]);
-					x += kerning;
+					x += kerning / scaleX;
 				}
 
-				float x0 = x + glyph->offset_x / 32.0f;
-				float y0 = position.y + glyph->offset_y / 32.0f;
-				float x1 = x0 + glyph->width / 32.0f;
-				float y1 = y0 - glyph->height / 32.0f;
+				float x0 = x + glyph->offset_x / scaleX;
+				float y0 = position.y + glyph->offset_y / scaleY;
+				float x1 = x0 + glyph->width / scaleX;
+				float y1 = y0 - glyph->height / scaleY;
 
 				float u0 = glyph->s0;
 				float v0 = glyph->t0;
 				float u1 = glyph->s1;
 				float v1 = glyph->t1;
 
-				s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(x0, y0, 0.0f, 1.0f);
-				s_Data->Buffer->uv = glm::vec2(u0, v0);
-				s_Data->Buffer->tid = ts;
-				s_Data->Buffer->color = color;
-				s_Data->Buffer++;
+				m_Buffer->vertex = glm::vec3(x0, y0, 0);
+				m_Buffer->uv = glm::vec2(u0, v0);
+				m_Buffer->tid = ts;
+				m_Buffer->color = color;
+				m_Buffer++;
 
-				s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(x0, y1, 0.0f, 1.0f);
-				s_Data->Buffer->uv = glm::vec2(u0, v1);
-				s_Data->Buffer->tid = ts;
-				s_Data->Buffer->color = color;
-				s_Data->Buffer++;
-				
-				s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(x1, y1, 0.0f, 1.0f);
-				s_Data->Buffer->uv = glm::vec2(u1, v1);
-				s_Data->Buffer->tid = ts;
-				s_Data->Buffer->color = color;
-				s_Data->Buffer++;
-				
-				s_Data->Buffer->vertex = *(s_Data->TransformationBack) * glm::vec4(x1, y0, 0.0f, 1.0f);
-				s_Data->Buffer->uv = glm::vec2(u1, v0);
-				s_Data->Buffer->tid = ts;
-				s_Data->Buffer->color = color;
-				s_Data->Buffer++;
+				m_Buffer->vertex = glm::vec3(x0, y1, 0);
+				m_Buffer->uv = glm::vec2(u0, v1);
+				m_Buffer->tid = ts;
+				m_Buffer->color = color;
+				m_Buffer++;
 
-				s_Data->IndexCount += 6;
+				m_Buffer->vertex = glm::vec3(x1, y1, 0);
+				m_Buffer->uv = glm::vec2(u1, v1);
+				m_Buffer->tid = ts;
+				m_Buffer->color = color;
+				m_Buffer++;
 
-				x += glyph->advance_x;
+				m_Buffer->vertex = glm::vec3(x1, y0, 0);
+				m_Buffer->uv = glm::vec2(u1, v0);
+				m_Buffer->tid = ts;
+				m_Buffer->color = color;
+				m_Buffer++;
+
+				m_IndexCount += 6;
+
+				x += glyph->advance_x / scaleX;
 			}
+
 		}
 	}
 
 	void BatchRenderer2D::End()
 	{
-		s_Data->Vbo->Unmap();
-		s_Data->Vbo->Unbind();
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void BatchRenderer2D::Flush()
 	{
-		for (int i = 0; i < s_Data->TextureSlots.size(); i++)
+		for (int i = 0; i < m_TextureSlots.size(); i++)
 		{
 			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, s_Data->TextureSlots[i]);
+			glBindTexture(GL_TEXTURE_2D, m_TextureSlots[i]);
 		}
 
-		s_Data->Vao->Bind();
+		glBindVertexArray(m_VAO);
+		m_IBO->Bind();
 
-		glDrawElements(GL_TRIANGLES, s_Data->IndexCount, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, NULL);
 
-		s_Data->Vao->Unbind();
-		s_Data->IndexCount = 0;
+		m_IBO->Unbind();
+		glBindVertexArray(0);
+
+		m_IndexCount = 0;
 	}
 }

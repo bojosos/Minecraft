@@ -1,20 +1,43 @@
 #pragma once
 
+#include <cstddef>
+
 #include "engine/ui/ui.h"
-#include <glm/glm.hpp>
+#include "engine/gl/ibo.h"
 
 namespace Minecraft
 {
+
+#define RENDERER_MAX_SPRITES	60000
+#define RENDERER_VERTEX_SIZE	sizeof(VertexData)
+#define RENDERER_SPRITE_SIZE	RENDERER_VERTEX_SIZE * 4
+#define RENDERER_BUFFER_SIZE	RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES
+#define RENDERER_INDICES_SIZE	RENDERER_MAX_SPRITES * 6
+
+#define SHADER_VERTEX_INDEX 0
+#define SHADER_UV_INDEX		1
+#define SHADER_TID_INDEX	2
+#define SHADER_COLOR_INDEX	3
+
 	class BatchRenderer2D
 	{
+	private:
+		GLuint m_VAO;
+		GLuint m_VBO;
+		IndexBuffer* m_IBO;
+		GLsizei m_IndexCount = 0;
+		VertexData* m_Buffer;
+
+		std::vector<GLuint> m_TextureSlots;
 	public:
-		static void Init();
-		static void Push(const glm::mat4& matrix, bool override);
-		static void Pop();
-		static void Submit(const Ref<UIElement>& element);
-		static void Begin();
-		static void End();
-		static void Flush();
-		static void DrawString(const Ref<Font>& font, const std::string& text, const glm::vec3& position, uint32_t color);
+		BatchRenderer2D();
+		~BatchRenderer2D();
+		void Begin();
+		void Submit(const UIElement* renderable);
+		void DrawString(const std::string& text, const glm::vec3& position, const Ref<Font>& font, unsigned int color);
+		void End();
+		void Flush();
+	private:
+		void Init();
 	};
 }

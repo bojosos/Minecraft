@@ -73,16 +73,16 @@ namespace Minecraft
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
 		
-		m_Renderer->begin();
+		m_Renderer->Begin();
 		m_Shader->Bind();
 		m_Shader->SetMat4("u_ViewMatrix", glm::mat4(1.0f));
 		m_Shader->SetMat4("u_ModelMatrix", glm::mat4(1.0f));//m_Camera->GetViewMatrix());
 		m_Shader->SetMat4("u_ProjectionMatrix", glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));//m_Camera->GetProjectionMatrix());
 		
-		m_Renderer->drawString("test", glm::vec3(0.0f, 0.0f, 0.0f), FontManager::Get("arial"), 0xff000000);
+		m_Renderer->DrawString("test", glm::vec3(0.0f, 0.0f, 0.0f), FontManager::Get("arial"), 0xffffffff);
 		
-		m_Renderer->end();
-		m_Renderer->flush();
+		m_Renderer->End();
+		m_Renderer->Flush();
 		//m_Camera->Update();
 		//m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());
 

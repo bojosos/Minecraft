@@ -56,7 +56,8 @@ project "Minecraft"
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
-		"%{prj.name}/vendor/sol/sol.hpp"
+		"%{prj.name}/vendor/sol/sol.hpp",
+		"%{prj.name}/res/**"
 	}
 
 	defines

@@ -9,14 +9,18 @@ namespace Minecraft
 		m_Atlas = ftgl::texture_atlas_new(512, 512, 1);
 		m_Font = ftgl::texture_font_new_from_file(m_Atlas, m_Size, m_Filepath.c_str());
 
-		m_Texture = Texture::Create(512, 512);
-		m_Atlas->id = m_Texture->GetID();
-		m_Texture->SetData(m_Atlas->data);
+		SwizzleChannel channels[4] = { SwizzleChannel::ONE, SwizzleChannel::ONE, SwizzleChannel::ONE, SwizzleChannel::RED };
+		TextureSwizzle swizzle = { SwizzleType::SWIZZLE_RGBA, channels};
+		TextureParameters params = { TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::REPEAT, swizzle};
+
+		m_Texture = Texture::Create(512, 512, params);
+		m_Texture->SetData(m_Atlas->data, TextureChannel::CHANNEL_RED);
 	}
 
 	Ref<Texture> Font::GetTexture()
 	{
-		m_Texture->SetData(m_Atlas->data);
+		//TODO: May not be necessary
+		m_Texture->SetData(m_Atlas->data, TextureChannel::CHANNEL_RED);
 		return m_Texture;
 	}
 
