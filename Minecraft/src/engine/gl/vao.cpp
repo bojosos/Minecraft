@@ -48,14 +48,16 @@ namespace Minecraft
 
 	void VertexArray::Bind() const
 	{
-		m_IndexBuffer->Bind();
 		glBindVertexArray(m_RendererID);
+		if(m_IndexBuffer)
+			m_IndexBuffer->Bind();
 	}
 
 	void VertexArray::Unbind() const
 	{
 		glBindVertexArray(0);
-		m_IndexBuffer->Unbind();
+		if(m_IndexBuffer)
+			m_IndexBuffer->Unbind();
 	}
 
 	void VertexArray::SetVertexBuffer(uint32_t index, const Ref<VertexBuffer>& vertexBuffer)

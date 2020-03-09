@@ -1,12 +1,29 @@
 #include "mcpch.h"
 #include "uilayer.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include "common/event/mouseevent.h"
+#include "game/infolog.h"
 
 namespace Minecraft
 {
 	UILayer::UILayer(const std::string& name) : Layer(name)
 	{
-
+		m_Shader = m_ShaderLibrary.Load("res/shaders/uishader.glsl");
+		m_Shader->Bind();
+		m_Shader->RetrieveLocations({ "u_ModelMatrix", "u_ViewMatrix", "u_ProjectionMatrix", "u_Textures" });
+		int vals[10] = { 1,2,3,4,5,6,7,8,9 };
+		m_Shader->SetIntV("u_Textures", 10, vals);
+		m_Renderer = new BatchRenderer2D();
+		FontManager::Add(CreateRef<Font>("roboto", "res/fonts/roboto-thin.ttf", 32));
+		m_Identity = glm::mat4(1.0f);
+		m_Orthographic = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f);
+		/*
+		for (int i = 0; i < 10; i++)
+		{
+			m_Labels.push_back(new Label("test", FontManager::Get("arial"), glm::vec3(20.0f, 720.0f - 32.f - 20.0f - i * 40, 0.0f)));
+		}
+		*/
+		m_Labels.push_back(new Label("0", FontManager::Get("roboto"), glm::vec3(10.0f, 10.0f, 0.0f)));
 	}
 
 	void UILayer::OnAttach()
@@ -27,6 +44,21 @@ namespace Minecraft
 
 	void UILayer::OnUpdate(Timestep time)
 	{
+		m_Renderer->Begin();
+		m_Shader->Bind();
 
+		m_Shader->SetMat4("u_ModelMatrix", m_Identity);
+		m_Shader->SetMat4("u_ViewMatrix", m_Identity);
+		m_Shader->SetMat4("u_ProjectionMatrix", m_Orthographic);
+
+		m_Labels.back()->SetText(std::to_string(InfoLog::GetFps()));
+
+		for (Label* label : m_Labels)
+		{
+			label->Submit(m_Renderer);
+		}
+
+		m_Renderer->End();
+		m_Renderer->Flush();
 	}
 }

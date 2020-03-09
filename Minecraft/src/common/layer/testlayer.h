@@ -26,9 +26,5 @@ namespace Minecraft
 		Ref<World> m_World;
 		Ref<Camera> m_Camera;
 		Ref<Shader> m_Shader;
-		Ref<VertexArray> m_VertexArray;
-		Ref<VertexArray> m_SquareVA;
-		std::vector<Ref<Texture>> m_Textures;
-		BatchRenderer2D* m_Renderer;
 	};
 }

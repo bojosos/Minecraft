@@ -1,7 +1,5 @@
 #include "mcpch.h"
 #include "blockloader.h"
-//#define SOL_ALL_SAFETIES_ON 1
-//#define SOL_PRINT_ERRORS 1
 #include <sol.hpp>
 
 namespace Minecraft
@@ -19,6 +17,14 @@ namespace Minecraft
 			samplers[i] = i;
 		}
 		shader->SetIntV("u_Textures", m_Textures.size(), samplers);
+	}
+
+	void BlockLoader::ISomething()
+	{
+		for (int i = 0; i < m_Textures.size(); i++)
+		{
+			m_Textures[i]->Bind(i);
+		}
 	}
 
 	uint8_t BlockLoader::IAddTexture(const std::string& filepath)

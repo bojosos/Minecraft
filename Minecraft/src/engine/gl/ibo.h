@@ -17,6 +17,7 @@ namespace Minecraft
 
 		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);
 	private:
+		IndexBuffer() = delete;
 		uint32_t m_RendererID, m_Count;
 
 	};

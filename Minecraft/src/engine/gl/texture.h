@@ -97,7 +97,7 @@ namespace Minecraft
 		TextureParameters()
 		{
 			Format = TextureFormat::RGBA;
-			Filter = TextureFilter::LINEAR;
+			Filter = TextureFilter::NEAREST;
 			Wrap = TextureWrap::REPEAT;
 		}
 

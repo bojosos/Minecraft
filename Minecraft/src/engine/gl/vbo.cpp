@@ -21,31 +21,24 @@ namespace Minecraft
 	VertexBuffer::VertexBuffer(float* verts, uint32_t size) : m_Count(size)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
+		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
 	}
 
 	void VertexBuffer::SetData(vertex* verts, uint32_t size)
-	{/*
-		//glBufferSubData(GL_ARRAY_BUFFER, 0, size, verts);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glUnmapNamedBuffer(m_RendererID);
-		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);*/
-		//glDeleteBuffers(1, &m_RendererID);
+	{
+		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
 	}
 
 	VertexBuffer::VertexBuffer(vertex* verts, uint32_t size) : m_Count(size)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
+		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
 	}
 
 	VertexBuffer::VertexBuffer(void* data, uint32_t size, bool dynamic) : m_Count(size)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		glNamedBufferData(m_RendererID, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	}
 
 	VertexBuffer::~VertexBuffer()

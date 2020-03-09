@@ -20,8 +20,9 @@ out DATA
 
 void main()
 {
-	gl_Position = u_ProjectionMatrix * a_Position;
-	vs_out.position = a_Position;
+	gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
+
+	vs_out.position = u_ModelMatrix * a_Position;
 	vs_out.uv = a_UV;
 	vs_out.tid = a_Tid;
 	vs_out.color = a_Color;

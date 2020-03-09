@@ -32,7 +32,6 @@ namespace Minecraft
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 #endif
-		//BatchRenderer2D::Init();
 	}
 
 	BufferLayout Renderer::m_Layout =
@@ -65,16 +64,5 @@ namespace Minecraft
 	void Renderer::Submit(const Ref<Chunk>& chunk)
 	{
 	
-	}
-
-	void Renderer::DrawString2D(const Ref<Font>& font, const std::string& text, const glm::vec3& position, const glm::vec4& color)
-	{
-		int r = color.x * 255.0f;
-		int g = color.y * 255.0f;
-		int b = color.z * 255.0f;
-		int a = color.w * 255.0f;
-
-		uint32_t col = a << 24 | b << 16 | g << 8 | r;
-		//BatchRenderer2D::DrawString(font, text, position, col);
 	}
 }

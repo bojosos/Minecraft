@@ -5,24 +5,24 @@ namespace Minecraft
 {
 	float Math::Intbound(float s, float ds)
 	{
-		if (ds < 0)
+		if (ds < 0.0f)
 		{
 			return Intbound(-s, -ds);
 		}
 		else
 		{
-			s = Mod(s, 1);
-			return(1 - s) / ds;
+			s = Mod(s, 1.0f);
+			return(1.0f - s) / (float)ds;
 		}
 	}
 
-	int Math::Signum(float x)
+	float Math::Signum(float x)
 	{
-		return x > 0 ? 1 : x < 0 ? -1 : 0;
+		return x > 0.0f ? 1.0f : x < 0.0f ? -1.0f : 0.0f;
 	}
 
 	float Math::Mod(float value, int modulus)
 	{
-		return fmod((float)fmod(value, modulus) + modulus, modulus);
+		return (float)fmod((float)fmod(value, modulus) + modulus, modulus);
 	}
 }

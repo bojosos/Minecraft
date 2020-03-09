@@ -1,8 +1,7 @@
 #pragma once
 
-#include <glad/glad.h>
 #include "buffer.h"
-#include "common/types.h"
+#include <glad/glad.h>
 
 namespace Minecraft
 {
@@ -32,6 +31,5 @@ namespace Minecraft
 	private:
 		uint32_t m_RendererID, m_Count;
 		BufferLayout m_Layout;
-	private:
 	};
 }

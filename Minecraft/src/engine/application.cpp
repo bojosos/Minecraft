@@ -5,9 +5,11 @@
 #include "common/common.h"
 #include "common/timestep.h"
 #include "engine/gl/renderer/renderer.h"
+#include "engine/ui/font.h"
 
 namespace Minecraft
 {
+
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
@@ -19,6 +21,7 @@ namespace Minecraft
 		Renderer::SetViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 
 		m_Window->SetEventCallback(MC_BIND_EVENT_FN(Application::OnEvent));
+		FontManager::Add(CreateRef<Font>(DEFAULT_FONT_PATH, 16));
 	}
 
 	Application::~Application()
@@ -54,6 +57,7 @@ namespace Minecraft
 
 	void Application::Run()
 	{
+		//Application::Get().GetWindow().SetVSync(false);
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();

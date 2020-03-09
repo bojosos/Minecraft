@@ -17,7 +17,7 @@ namespace Minecraft
 	float dirtBaseHeight = 20;
 	float dirtNoise = 0.04f;
 	float dirtNoiseHeight = 3;
-	int stoneHeight = floor(stoneBaseHeight);
+	int stoneHeight = (int)floor(stoneBaseHeight);
 
 	World* World::s_World;
 
@@ -51,19 +51,19 @@ namespace Minecraft
 							heights3[i][j] = glm::perlin(glm::vec2((x + i) * dirtNoise, (z + j) * dirtNoise)) * dirtNoiseHeight;
 
 					m_Chunks[x][y][z] = new Chunk(glm::vec3(x, y, z));
-					for (int xx = 0; xx < CHUNK_SIZE; xx++)
+					for (uint32_t xx = 0; xx < CHUNK_SIZE; xx++)
 					{
-						for (int zz = 0; zz < CHUNK_SIZE; zz++)
+						for (uint32_t zz = 0; zz < CHUNK_SIZE; zz++)
 						{
 							int cposy = CHUNK_SIZE * y;
-							for (int yy = 0; yy < CHUNK_SIZE; yy++)
+							for (uint32_t yy = 0; yy < CHUNK_SIZE; yy++)
 							{
-								int stoneHeight = stoneBaseHeight;
+								float stoneHeight = stoneBaseHeight;
 								stoneHeight += heights1[xx][zz];
 								if (stoneHeight < stoneMinHeight)
 									stoneHeight = stoneMinHeight;
 								stoneHeight += heights2[xx][zz];
-								int dirtHeight = stoneHeight + dirtBaseHeight;
+								float dirtHeight = stoneHeight + dirtBaseHeight;
 								dirtHeight += heights3[xx][zz];
 
 								if (cposy + yy <= stoneHeight)
@@ -78,24 +78,6 @@ namespace Minecraft
 								{
 									m_Chunks[x][y][z]->SetBlock(xx, yy, zz, 0);
 								}
-								/*
-								if (cposy + yy > heights[xx][zz])
-								{
-									m_Chunks[x][y][z]->SetBlock(xx, yy, zz, 0);
-								}
-								else
-								{
-
-									stoneHeight += GetNoise(heights[xx][zz] * stoneMountainFrequency, , floor(stoneMountainHeight));
-									if (stoneHeight < stoneMinHeight)
-										stoneHeight = floor(stoneMinHeight);
-									stoneHeight += GetNoise(x, 0, z, stoneBaseNoise, floor(stoneBaseNoiseHeight));
-									int dirtHeight = stoneHeight + floor(dirtBaseHeight);
-									dirtHeight += GetNoise(x, 100, z, dirtNoise, floor(dirtNoiseHeight));
-									if()
-									m_Chunks[x][y][z]->SetBlock(xx,yy,zz, BlockLoader::GetBlockId("grass"));
-									m_Chunks[x][y][z]->SetBlock(xx, yy, zz, BlockLoader::GetBlockId("stone"));
-								}*/
 							}
 						}
 					}
@@ -138,7 +120,7 @@ namespace Minecraft
 				for (int k = 0; k < m_Chunks[i][j].size(); k++) {
 					if (frustum->ChunkIsInFrustum(m_Chunks[i][j][k]->GetPosition()))
 					{
-						shader->SetMat4("u_Transform", m_Chunks[i][j][k]->GetTransformationMatrix());
+						shader->SetMat4("u_ModelMatrix", m_Chunks[i][j][k]->GetTransformationMatrix());
 						m_Chunks[i][j][k]->Render();
 					}
 				}
@@ -153,7 +135,7 @@ namespace Minecraft
 			return BlockLoader::GetBlock(0);
 		}
 
-		glm::vec3 pos = chunk->GetPosition();
+		glm::ivec3 pos = chunk->GetPosition();
 		return BlockLoader::GetBlock(m_Chunks[pos.x][pos.y][pos.z]->GetBlock(x, y, z));
 	}
 
@@ -184,7 +166,6 @@ namespace Minecraft
 
 	void World::SetBlock(int32_t x, int32_t y, int32_t z, uint32_t id)
 	{
-		MC_INFO("Wut2");
 		int32_t cX = x / CHUNK_SIZE;
 		int32_t cXx = abs(x % CHUNK_SIZE);
 		int32_t cY = y / CHUNK_SIZE;
@@ -192,11 +173,5 @@ namespace Minecraft
 		int32_t cZ = z / CHUNK_SIZE;
 		int32_t cZz = abs(z % CHUNK_SIZE);
 		m_Chunks[cX][cY][cZ]->SetBlock(cXx, cYy, cZz, id);
-		m_Chunks[cX][cY][cZ]->m_Changed = true;
-		m_Chunks[cX][cY][cZ]->m_Blocks[cXx][cYy][cZz] = id;
-		//vertex* test = new vertex[TOTAL_VERTICES];
-		//m_Chunks[cX][cY][cZ]->GetRenderData(test);
-		//m_Chunks[cX][cY][cZ]->Render();
-		//delete[] test;
 	}
 }

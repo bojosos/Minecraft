@@ -4,7 +4,7 @@
 namespace Minecraft
 {
 
-	Font::Font(const std::string& name, const std::string& filepath, uint32_t size) : m_Name(name), m_Filepath(filepath), m_Size(size)
+	Font::Font(const std::string& name, const std::string& filepath, float size) : m_Name(name), m_Filepath(filepath), m_Size(size)
 	{
 		m_Atlas = ftgl::texture_atlas_new(512, 512, 1);
 		m_Font = ftgl::texture_font_new_from_file(m_Atlas, m_Size, m_Filepath.c_str());
@@ -40,10 +40,11 @@ namespace Minecraft
 				return font;
 			}
 		}
-		MC_ASSERT(false, "Font " + name + " not found!");
+		MC_ERROR("Unrecognized font, using fallback font {0}!", s_Fonts[0]->GetName());
+		return s_Fonts[0];
 	}
 
-	Ref<Font> FontManager::Get(const std::string& name, uint32_t size)
+	Ref<Font> FontManager::Get(const std::string& name, float size)
 	{
 		for (Ref<Font>& font : s_Fonts)
 		{
@@ -60,7 +61,17 @@ namespace Minecraft
 				}
 			}
 		}
-		MC_ASSERT(false, "Font " + name + " not found!");
+		MC_ERROR("Unrecognized font, using fallback font {0}!", s_Fonts[0]->GetName());
+		if (s_Fonts[0]->GetSize() == size)
+		{
+			return s_Fonts[0];
+		}
+		else
+		{
+			s_Fonts.push_back(CreateRef<Font>(name, DEFAULT_FONT_PATH, size));
+		}
+
+		return s_Fonts[0];
 	}
 
 }

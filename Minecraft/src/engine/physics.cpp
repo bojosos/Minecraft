@@ -33,22 +33,22 @@ namespace Minecraft
 		length /= sqrt(dx * dx + dy * dy + dz * dz);
 
 		glm::vec3 face(0.0f);
-		MC_ASSERT(dx != 0 || dy != 0 || dz != 0, "Raycast has no direction!");
+		MC_ASSERT(dx != 0.0f || dy != 0.0f || dz != 0.0f, "Raycast has no direction!");
 
-		while ((stepX > 0 ? x < 160 : x >= 0) && (stepY > 0 ? y < 160 : y >= 0) && (stepZ > 0 ? z < 160 : z >= 0)) {
+		while ((stepX > 0.0f ? x < 160.0f : x >= 0.0f) && (stepY > 0.0f ? y < 160.0f : y >= 0.0f) && (stepZ > 0.0f ? z < 160.0f : z >= 0.0f)) {
 			
-			if (!(x < 0 || y < 0 || z < 0 || x >= 160 || y >= 160 || z >= 160))
-				if (World::GetOverworld().GetBlock(x, y, z).IsSolid()) 
+			if (!(x < 0.0f || y < 0.0f || z < 0.0f || x >= 160.0f || y >= 160.0f || z >= 160.0f))
+				if (World::GetOverworld().GetBlock((int)x, (int)y, (int)z).IsSolid())
 				{
 					if (button) {
-						MC_INFO("Breaking {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
-						World::GetOverworld().SetBlock(x, y, z, 0);
+						MC_INFO("Breaking {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock((int)x, (int)y, (int)z).m_Longname);
+						World::GetOverworld().SetBlock((int)x, (int)y, (int)z, 0);
 						break;
 					}
 					else
 					{
-						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock(x, y, z).m_Longname);
-						World::GetOverworld().SetBlock(x, y + 1, z, 2);
+						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock((int)x, (int)y, (int)z).m_Longname);
+						World::GetOverworld().SetBlock((int)x, (int)y + 1, (int)z, 2);
 					}
 					World::GetOverworld().DrawOutline((int)x, (int)y, (int)z, face, cam);
 					break;

@@ -56,7 +56,8 @@ namespace Minecraft
 			Get().m_Blocks[type].GetDownVertexData(res, x, y, z, i);
 		}
 
-		inline static int GetBlockCount() { return Get().m_Blocks.size(); }
+		inline static uint32_t GetBlockCount() { return Get().m_Blocks.size(); }
+		inline static void Something() { Get().ISomething(); }
 		static inline void AddBlock(Block& block)
 		{
 			Get().m_Blocks.push_back(block); 
@@ -80,6 +81,7 @@ namespace Minecraft
 		}
 
 		void ILoadDefaultBlocks(const std::string& filepath);
+		void ISomething();
 		void IInitTextures(const Ref<Shader>& shader);
 
 		void IGetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i);

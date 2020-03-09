@@ -16,6 +16,8 @@
 #include <unordered_set>
 
 #include "common/log.h"
+#include "common/types.h"
+#include "common/constants.h"
 
 #ifdef MC_PLATFORM_WINDOWS
 #include <Windows.h>

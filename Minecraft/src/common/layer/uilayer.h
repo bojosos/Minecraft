@@ -1,5 +1,7 @@
 #pragma once
 #include "layer.h"
+#include "engine/gl/renderer/batchrenderer2d.h"
+#include "engine/gl/shader.h"
 #include "engine/ui/ui.h"
 
 namespace Minecraft
@@ -17,17 +19,12 @@ namespace Minecraft
 		virtual void OnEvent(Event & e) override;
 
 	private:
-		Ref<UIElement> m_Root;
-
-		/*
+		std::vector<Label*> m_Labels;
 		ShaderLibrary m_ShaderLibrary;
-
-		Ref<ViewFrustum> m_Frustum;
-		Ref<World> m_World;
-		Ref<Camera> m_Camera;
+		glm::mat4 m_Orthographic;
+		glm::mat4 m_Identity;
 		Ref<Shader> m_Shader;
-		Ref<VertexArray> m_VertexArray;
-		Ref<VertexArray> m_SquareVA;
-		std::vector<Ref<Texture>> m_Textures;*/
+		Ref<UIElement> m_Root;
+		BatchRenderer2D* m_Renderer;
 	};
 }

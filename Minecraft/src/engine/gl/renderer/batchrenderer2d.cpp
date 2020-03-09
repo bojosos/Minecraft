@@ -57,6 +57,16 @@ namespace Minecraft
 
 	}
 
+	void BatchRenderer2D::SetClearColor(const glm::vec4& color)
+	{
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
+
+	void BatchRenderer2D::Clear()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
 	void BatchRenderer2D::Begin()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -125,7 +135,7 @@ namespace Minecraft
 		m_IndexCount += 6;
 	}
 
-	void BatchRenderer2D::DrawString(const std::string& text, const glm::vec3& position, const Ref<Font>& font, unsigned int color)
+	void BatchRenderer2D::DrawString(const std::string& text, const glm::vec3& position, const Ref<Font>& font, uint32_t color)
 	{
 		float ts = 0.0f;
 		bool found = false;
@@ -151,8 +161,8 @@ namespace Minecraft
 			ts = (float)(m_TextureSlots.size());
 		}
 
-		float scaleX = 1280.0f / 32.0f;
-		float scaleY = 720.0f / 18.0f;
+		float scaleX = 1; // 1280.0f / 32.0f;
+		float scaleY = 1; // 720.0f / 18.0f;
 
 		float x = position.x;
 

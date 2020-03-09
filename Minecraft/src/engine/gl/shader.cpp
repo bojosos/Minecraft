@@ -146,7 +146,7 @@ namespace Minecraft
 		UploadUniformInt(name, value);
 	}
 
-	void Shader::SetIntV(const std::string& name, int count, int* ptr)
+	void Shader::SetIntV(const std::string& name, uint32_t count, int* ptr)
 	{
 		UploadUniformIntV(name, count, ptr);
 	}
@@ -168,42 +168,55 @@ namespace Minecraft
 
 	void Shader::UploadUniformIntV(const std::string& name, int count, int* ptr)
 	{
-		glUniform1iv(m_UniformLocations[name], count, ptr);
+		glUniform1iv(GetUniformLocation(name), count, ptr);
 	}
 
 	void Shader::UploadUniformInt(const std::string& name, int value)
 	{
-		glUniform1i(m_UniformLocations[name], value);
+		glUniform1i(GetUniformLocation(name), value);
 	}
 
 	void Shader::UploadUniformFloat(const std::string& name, float value)
 	{
-		glUniform1f(m_UniformLocations[name], value);
+		glUniform1f(GetUniformLocation(name), value);
 	}
 
 	void Shader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
 	{
-		glUniform2f(m_UniformLocations[name], value.x, value.y);
+		glUniform2f(GetUniformLocation(name), value.x, value.y);
 	}
 
 	void Shader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
 	{
-		glUniform3f(m_UniformLocations[name], value.x, value.y, value.z);
+		glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
 	}
 
 	void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
 	{
-		glUniform4f(m_UniformLocations[name], value.x, value.y, value.z, value.w);
+		glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
 	void Shader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
-		glUniformMatrix3fv(m_UniformLocations[name], 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		glUniformMatrix4fv(m_UniformLocations[name], 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	uint32_t Shader::GetUniformLocation(const std::string& name)
+	{
+		if (m_UniformLocations.find(name) != m_UniformLocations.end())
+		{
+			return m_UniformLocations[name];
+		}
+		else
+		{
+			m_UniformLocations[name] = glGetUniformLocation(m_RendererID, name.c_str());
+			return m_UniformLocations[name];
+		}
 	}
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)

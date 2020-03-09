@@ -17,6 +17,8 @@ namespace Minecraft
 		case Minecraft::TextureChannel::CHANNEL_DEPTH_COMPONENT:    return GL_DEPTH_COMPONENT;
 		case Minecraft::TextureChannel::CHANNEL_STENCIL_INDEX:      return GL_STENCIL_INDEX;
 		}
+		MC_ASSERT(false, "Unknown TextureChannel!");
+		return GL_NONE;
 	}
 
 	static GLenum TextureFormatToOpenGLFormat(TextureFormat format)
@@ -26,6 +28,8 @@ namespace Minecraft
 		case Minecraft::TextureFormat::RGB:     return GL_RGB;
 		case Minecraft::TextureFormat::RGBA:    return GL_RGBA;
 		}
+		MC_ASSERT(false, "Unknown TextureFormat!");
+		return GL_NONE;
 	}
 
 	static GLenum TextureFormatToOpenGLInternalFormat(TextureFormat format)
@@ -35,6 +39,8 @@ namespace Minecraft
 		case Minecraft::TextureFormat::RGB:     return GL_RGB8;
 		case Minecraft::TextureFormat::RGBA:    return GL_RGBA8;
 		}
+		MC_ASSERT(false, "Unknown TextureFormat!");
+		return GL_NONE;
 	}
 
 	static GLenum TextureFilterToOpenGLFilter(TextureFilter filter)
@@ -44,6 +50,8 @@ namespace Minecraft
 		case Minecraft::TextureFilter::LINEAR:  return GL_LINEAR;
 		case Minecraft::TextureFilter::NEAREST: return GL_NEAREST;
 		}
+		MC_ASSERT(false, "Unknown TextureFilter!");
+		return GL_NONE;
 	}
 
 	static GLenum TextureWrapToOpenGLWrap(TextureWrap wrap)
@@ -55,6 +63,8 @@ namespace Minecraft
 		case Minecraft::TextureWrap::CLAMP_TO_EDGE:      return GL_CLAMP_TO_EDGE;
 		case Minecraft::TextureWrap::CLAMP_TO_BORDER:    return GL_CLAMP_TO_BORDER;
 		}
+		MC_ASSERT(false, "Unknown TextureWrap!");
+		return GL_NONE;
 	}
 
 	static GLenum TextureSwizzleToOpenGLSwizzle(SwizzleType swizzle)
@@ -67,6 +77,8 @@ namespace Minecraft
 		case Minecraft::SwizzleType::SWIZZLE_B:     return GL_TEXTURE_SWIZZLE_B;
 		case Minecraft::SwizzleType::SWIZZLE_A:     return GL_TEXTURE_SWIZZLE_A;
 		}
+		MC_ASSERT(false, "Unknown TextureSwizzle!");
+		return GL_NONE;
 	}
 
 	static GLint TextureSwizzleColorToOpenGLSwizzleColor(SwizzleChannel color)
@@ -80,6 +92,8 @@ namespace Minecraft
 		case Minecraft::SwizzleChannel::ONE:     return GL_ONE;
 		case Minecraft::SwizzleChannel::ZERO:    return GL_ZERO;
 		}
+		MC_ASSERT(false, "Unknown TextureSwizzleColor!");
+		return GL_NONE;
 	}
 
 	Ref<Texture> Texture::Create(uint32_t width, uint32_t height, const TextureParameters& parameters)
@@ -115,8 +129,7 @@ namespace Minecraft
 			}
 		}
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
-		glTexImage2D(GL_TEXTURE_2D, 0, TextureFormatToOpenGLInternalFormat(m_Parameters.Format), m_Width, m_Height, 0, TextureFormatToOpenGLInternalFormat(m_Parameters.Format), GL_UNSIGNED_BYTE, nullptr);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//glTexImage2D(GL_TEXTURE_2D, 0, TextureFormatToOpenGLInternalFormat(m_Parameters.Format), m_Width, m_Height, 0, TextureFormatToOpenGLInternalFormat(m_Parameters.Format), GL_UNSIGNED_BYTE, nullptr);
 	}
 
 	Ref<Texture> Texture::Create(const std::string& filepath, const TextureParameters& parameters)

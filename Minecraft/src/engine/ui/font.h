@@ -7,14 +7,14 @@ namespace Minecraft
 	class Font
 	{
 	public:
-		Font(const std::string& filepath, const std::string& name, uint32_t size);
+		Font(const std::string& filepath, const std::string& name, float size);
 
 		inline const std::string& GetName() const
 		{
 			return m_Name;
 		}
 
-		inline const uint32_t GetSize() const
+		inline const float GetSize() const
 		{
 			return m_Size;
 		}
@@ -44,7 +44,7 @@ namespace Minecraft
 	private:
 		ftgl::texture_atlas_t* m_Atlas;
 		ftgl::texture_font_t* m_Font;
-		uint32_t m_Size;
+		float m_Size;
 		std::string m_Name, m_Filepath;
 		Ref<Texture> m_Texture;
 	};
@@ -54,7 +54,7 @@ namespace Minecraft
 	public:
 		static void Add(const Ref<Font>& font);
 		static Ref<Font> Get(const std::string& name);
-		static Ref<Font> Get(const std::string& name, uint32_t size);
+		static Ref<Font> Get(const std::string& name, float size);
 
 	private:
 		static std::vector<Ref<Font>> s_Fonts;

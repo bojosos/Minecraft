@@ -23,7 +23,7 @@ namespace Minecraft
 
 		static Ref<VertexArray> Create();
 	private:
-		uint32_t m_RendererID, m_VertexBufferIndex=0;
+		uint32_t m_RendererID, m_VertexBufferIndex = 0;
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBuffer;
 	};

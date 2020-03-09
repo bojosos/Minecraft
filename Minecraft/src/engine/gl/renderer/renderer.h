@@ -18,7 +18,6 @@ namespace Minecraft
 		static void SetClearColor(const glm::vec4& color);
 
 		static void Submit(const Ref<Chunk>& chunk);
-		static void DrawString2D(const Ref<Font>& font, const std::string& text, const glm::vec3& position, const glm::vec4& color);
 
 	private:
 		static BufferLayout m_Layout;
