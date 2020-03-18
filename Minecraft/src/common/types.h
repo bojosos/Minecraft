@@ -2,9 +2,11 @@
 
 #include "common.h"
 #include <sol.hpp>
+#include <glm/glm.hpp>
 
 namespace Minecraft
 {
+
 	struct Vertex {
 		uint8_t x, y, z, u, v, tid;
 

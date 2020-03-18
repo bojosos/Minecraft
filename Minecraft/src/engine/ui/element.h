@@ -6,14 +6,6 @@
 
 namespace Minecraft
 {
-	struct VertexData
-	{
-		glm::vec3 vertex;
-		glm::vec2 uv;
-		float tid;
-		uint32_t color;
-	};
-
 	class BatchRenderer2D;
 
 	class UIElement
@@ -38,8 +30,6 @@ namespace Minecraft
 
 		virtual void OnMousePressed(Event& e) = 0;
 		virtual void Submit(BatchRenderer2D* renderer) = 0;
-
-		inline virtual const uint32_t GetTID() const { return m_Texture ? m_Texture->GetID() : 0; }
 
 	protected:
 		UIElement(const Rectangle& bounds, const Ref<Texture>& texture, uint32_t color);

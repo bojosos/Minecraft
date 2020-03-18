@@ -9,70 +9,48 @@
 
 namespace Minecraft
 {
-	Ref<VertexBuffer> VertexBuffer::Create(float* verts, uint32_t size)
+
+	static uint32_t BufferUsageToOpenGLBufferUsage(BufferUsage usage)
 	{
-		return CreateRef<VertexBuffer>(verts, size);
+		switch (usage)
+		{
+		case(BufferUsage::STATIC_DRAW): return GL_STATIC_DRAW;
+		case(BufferUsage::DYNAMIC_DRAW): return GL_DYNAMIC_DRAW;
+		}
+		MC_ASSERT(false, "Drawing mode not support");
+		return GL_NONE;
 	}
-
-	Ref<VertexBuffer> VertexBuffer::Create(Vertex* verts, uint32_t size) 
+	
+	Ref<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size, BufferUsage usage)
 	{
-		return CreateRef<VertexBuffer>(verts, size);
+		return CreateRef<VertexBuffer>(data, size, usage);
 	}
 
-	Ref<VertexBuffer> VertexBuffer::CreateDynamic(void* data, uint32_t size)
-	{
-		return CreateRef<VertexBuffer>(data, size, true);
-	}
-
-	VertexBuffer::VertexBuffer(float* verts, uint32_t size) : m_Count(size)
-	{
-#ifdef MC_WEB
-		glGenBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
-#else
-		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
-#endif
-	}
-
-	void VertexBuffer::SetData(Vertex* verts, uint32_t size)
-	{		
-#ifdef MC_WEB
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
-#else
-		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
-#endif
-	}
-
-	VertexBuffer::VertexBuffer(Vertex* verts, uint32_t size) : m_Count(size)
+	VertexBuffer::VertexBuffer(const void* data, uint32_t size, BufferUsage usage) : m_Size(size), m_Usage(usage)
 	{
 #ifdef MC_WEB
 		glGenBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, verts, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, BufferUsageToOpenGLBufferUsage(m_Usage));
 #else
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, verts, GL_STATIC_DRAW);
-#endif
-	}
-
-	VertexBuffer::VertexBuffer(void* data, uint32_t size, bool dynamic) : m_Count(size)
-	{
-#ifdef MC_WEB
-		glGenBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-#else
-		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		glNamedBufferData(m_RendererID, size, data, BufferUsageToOpenGLBufferUsage(m_Usage));
 #endif	
 	}
 
 	VertexBuffer::~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
+	}
+
+	void VertexBuffer::SetData(const void* verts, uint32_t size)
+	{
+#ifdef MC_WEB
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, verts, BufferUsageToOpenGLBufferUsage(m_Usage));
+#else
+		glNamedBufferData(m_RendererID, size, verts, BufferUsageToOpenGLBufferUsage(m_Usage));
+#endif
 	}
 
 	void VertexBuffer::Bind()
@@ -85,17 +63,18 @@ namespace Minecraft
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void* VertexBuffer::MapBuffer(uint32_t target, uint32_t type)
+	void* VertexBuffer::GetPointer(uint32_t size)
 	{
+		Bind();
 #ifndef MC_WEB
-		return glMapBuffer(target, type);
+		return glMapBufferRange(GL_ARRAY_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);                                                                            
+#else
+		return glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 #endif
 	}
 
-	void VertexBuffer::Unmap()
+	void VertexBuffer::FreePointer()
 	{
-#ifndef MC_WEB
 		glUnmapBuffer(GL_ARRAY_BUFFER);
-#endif
 	}
 }

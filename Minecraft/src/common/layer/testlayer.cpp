@@ -37,7 +37,7 @@ namespace Minecraft
 		m_Shader = m_ShaderLibrary.Load("shaders/chunkshader.glsl");
 #endif
 		m_Shader->Bind();
-		std::vector<std::string> locations = { "u_Texture_0", "u_Texture_1", "u_Texture_2", "u_Texture_3", "u_Texture_4", "u_Texture_5", "u_Texture_6", "u_Texture_7", "u_ViewMatrix", "u_ProjectionMatrix", "u_ChunkPosition", "u_Textures"};
+		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_ChunkPosition", "u_Textures"};
 		m_Shader->RetrieveLocations(locations);
 
 		BlockLoader::InitTextures(m_Shader);

@@ -29,9 +29,10 @@ namespace Minecraft
 
 	void Camera::Update(Timestep ts)
 	{
+#ifndef MC_WEB
 		glm::vec2 windowSize = Application::Get().GetWindowSize();
 		glm::vec2 windowCenter = glm::vec2((float)(int32_t)(windowSize.x / 2.0f), (float)(int32_t)(windowSize.y / 2.0f));
-
+#endif
 		if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
 		{
 			if (!Input::IsMouseGrabbed())
@@ -54,10 +55,11 @@ namespace Minecraft
 #endif
 			if (m_MouseWasGrabbed)
 			{
-				m_Rotation.y += mousePos.x * m_MouseSensitivity * m_RotationSpeed * (float)ts;
-				m_Rotation.x += mousePos.y * m_MouseSensitivity * m_RotationSpeed * (float)ts;
+				m_Rotation.y += mousePos.x * m_MouseSensitivity*60;// *m_RotationSpeed;// *(float)ts;
+				m_Rotation.x += mousePos.y * m_MouseSensitivity*60;// *m_RotationSpeed;// *(float)ts;
 			}
-			/*if (m_Rotation.x < -80.0f) {
+			/*
+			if (m_Rotation.x < -80.0f) {
 				m_Rotation.x = -79.9f;
 			}
 			else if (m_Rotation.x > 85.0f) {
@@ -72,7 +74,7 @@ namespace Minecraft
 			glm::vec3 forward = GetForwardDirection();
 			glm::vec3 right = GetRightDirection();
 			
-			float speed = (Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed) * (float)ts;
+			float speed = (Input::IsKeyPressed(KeyCode::LeftControl) ? m_SprintSpeed : m_Speed);// *(float)ts;
 
 			if (Input::IsKeyPressed(KeyCode::W))
 				m_Position += forward * speed;
@@ -102,7 +104,7 @@ namespace Minecraft
 			m_MouseWasGrabbed = false;
 		}
 
-		m_Frustum->Update(m_ViewMatrix * m_ProjectionMatrix);
+		m_Frustum->Update(m_ProjectionMatrix * m_ViewMatrix);
 	}
 
 };

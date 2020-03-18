@@ -13,5 +13,6 @@ namespace Minecraft
 		Panel(const Rectangle& bounds, const Ref<Texture>& texture);
 
 		virtual void Submit(BatchRenderer2D* renderer) override;
+		void OnMousePressed(Event& e) override;
 	};
 }

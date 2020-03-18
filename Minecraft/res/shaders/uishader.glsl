@@ -41,8 +41,8 @@ in DATA
 	vec4 color;
 } fs_in;
 
-//uniform sampler2D u_Textures[32];
-uniform sampler2D u_Texture;
+uniform sampler2D u_Textures[32];
+//uniform sampler2D u_Texture;
 
 void main(void) {
 
@@ -50,8 +50,8 @@ void main(void) {
 	if (fs_in.tid > 0.0)
 	{
 		int tid = int(fs_in.tid - 0.5);
-		//texColor = fs_in.color * texture(u_Textures[tid], fs_in.uv);
-		texColor = fs_in.color * texture(u_Texture, fs_in.uv);
+		texColor = fs_in.color * texture(u_Textures[tid], fs_in.uv);
+		//texColor = fs_in.color * texture(u_Texture, fs_in.uv);
 		//texColor = vec4(1.0, 1.0, 1.0, texture(u_Texture, fs_in.uv).r);
 	}
 

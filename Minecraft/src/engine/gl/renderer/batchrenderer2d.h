@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstddef>
-
 #include "engine/ui/ui.h"
-#include "engine/gl/ibo.h"
+#include "engine/gl/vao.h"
 
 #ifdef MC_WEB
 #include <glfw/glfw3.h>
@@ -13,12 +11,20 @@
 
 namespace Minecraft
 {
+	struct VertexData
+	{
+		glm::vec3 vertex;
+		glm::vec2 uv;
+		float tid;
+		uint32_t color;
+	};
+
 	class BatchRenderer2D
 	{
 	private:
-		GLuint m_VAO;
-		GLuint m_VBO;
-		Ref<IndexBuffer> m_IBO;
+		Ref<VertexArray> m_Vao;
+		Ref<VertexBuffer> m_Vbo;
+		Ref<IndexBuffer> m_Ibo;
 		GLsizei m_IndexCount = 0;
 		VertexData* m_Buffer;
 
@@ -33,7 +39,6 @@ namespace Minecraft
 		void Begin();
 
 		float FindTexture(const Ref<Texture>& texture);
-		void Submit(const UIElement* renderable);
 		
 		void FillRect(const Rectangle& bounds, uint32_t color);
 		void FillRect(const Rectangle& bounds, const Ref<Texture>& texture, uint32_t color);

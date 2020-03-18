@@ -18,4 +18,9 @@ namespace Minecraft
 	{
 		renderer->FillRect(m_Bounds, m_Color);
 	}
+
+	void Panel::OnMousePressed(Event& e)
+	{
+
+	}
 }

@@ -1,34 +1,36 @@
 #pragma once
 
 #include "buffer.h"
+#include "common/types.h"
 
 namespace Minecraft
 {
+	enum class BufferUsage
+	{
+		STATIC_DRAW,
+		DYNAMIC_DRAW
+	};
+
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(float* verts, uint32_t size);
-		VertexBuffer(Vertex* verts, uint32_t size);
-		VertexBuffer(void* data, uint32_t size, bool dynamic = false);
-
+		VertexBuffer(const void* data, uint32_t size, BufferUsage usage);
 		~VertexBuffer();
 
 		void Bind();
 		void Unbind();
-		void* MapBuffer(uint32_t target, uint32_t type);
-		void Unmap();
 
 		const BufferLayout& GetLayout() const { return m_Layout; };
 		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
-		void SetData(Vertex* verts, uint32_t size);
+		void SetData(const void* verts, uint32_t size);
 
-		inline int GetCount() { return m_Count; }
+		void* GetPointer(uint32_t size);
+		void FreePointer();
 
-		static Ref<VertexBuffer> Create(float* verts, uint32_t size);
-		static Ref<VertexBuffer> Create(Vertex* verts, uint32_t size);
-		static Ref<VertexBuffer> CreateDynamic(void* verts, uint32_t size);
+		static Ref<VertexBuffer> Create(const void* verts, uint32_t size, BufferUsage usage = BufferUsage::DYNAMIC_DRAW);
 	private:
-		uint32_t m_RendererID, m_Count;
+		BufferUsage m_Usage;
+		uint32_t m_RendererID, m_Size;
 		BufferLayout m_Layout;
 	};
 }

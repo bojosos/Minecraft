@@ -10,29 +10,19 @@ namespace Minecraft
 
 	BatchRenderer2D::~BatchRenderer2D()
 	{
-		glDeleteBuffers(1, &m_VBO);
+
 	}
 
 	void BatchRenderer2D::Init()
 	{
-		glGenVertexArrays(1, &m_VAO);
-		glGenBuffers(1, &m_VBO);
-
-		glBindVertexArray(m_VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
-
-		glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
-		glEnableVertexAttribArray(SHADER_UV_INDEX);
-		glEnableVertexAttribArray(SHADER_TID_INDEX);
-		glEnableVertexAttribArray(SHADER_COLOR_INDEX);
-
-		glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)0);
-		glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, uv)));
-		glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, tid)));
-		glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, color)));
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		m_Vao = VertexArray::Create();
+		m_Vbo = VertexBuffer::Create(nullptr, RENDERER_BUFFER_SIZE, BufferUsage::DYNAMIC_DRAW);
+		BufferLayout layout = { { ShaderDataType::Float3, "a_Coordinates" }, 
+								{ ShaderDataType::Float2, "a_Uvs" },
+								{ ShaderDataType::Float, "a_Tid"  }, 
+								{ ShaderDataType::UByte4, "a_Color" , true } };
+		m_Vbo->SetLayout(layout);
+		m_Vao->AddVertexBuffer(m_Vbo);
 
 		GLuint* indices = new GLuint[RENDERER_INDICES_SIZE];
 
@@ -50,9 +40,9 @@ namespace Minecraft
 			offset += 4;
 		}
 
-		m_IBO = IndexBuffer::Create(indices, RENDERER_INDICES_SIZE);
-
-		glBindVertexArray(0);
+		m_Ibo = IndexBuffer::Create(indices, RENDERER_INDICES_SIZE);
+		m_Vao->SetIndexBuffer(m_Ibo);
+		m_Vao->Unbind();
 	}
 
 	void BatchRenderer2D::SetClearColor(const glm::vec4& color)
@@ -67,12 +57,7 @@ namespace Minecraft
 
 	void BatchRenderer2D::Begin()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-#ifdef MC_WEB
-		m_Buffer = (VertexData*)glMapBufferRange(GL_ARRAY_BUFFER, 0, RENDERER_MAX_SPRITES * 4, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-#else
-		m_Buffer = (VertexData*)glMapBufferRange(GL_ARRAY_BUFFER, 0, RENDERER_MAX_SPRITES * 4, GL_MAP_WRITE_BIT);
-#endif
+		m_Buffer = (VertexData*)m_Vbo->GetPointer(RENDERER_MAX_SPRITES * 4);
 	}
 
 	float BatchRenderer2D::FindTexture(const Ref<Texture>& texture)
@@ -178,7 +163,6 @@ namespace Minecraft
 		
 			if (glyph)
 			{
-
 				if (i > 0)
 				{
 					float kerning = texture_glyph_get_kerning(glyph, &text[i - 1]);
@@ -223,13 +207,12 @@ namespace Minecraft
 
 				x += glyph->advance_x;
 			}
-
 		}
 	}
 
 	void BatchRenderer2D::End()
 	{
-		glUnmapBuffer(GL_ARRAY_BUFFER);
+		m_Vbo->FreePointer();
 	}
 
 	void BatchRenderer2D::Flush()
@@ -240,13 +223,11 @@ namespace Minecraft
 		}
 		m_TextureSlots.clear();
 
-		glBindVertexArray(m_VAO);
-		m_IBO->Bind();
+		m_Vao->Bind();
 
 		glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, nullptr);
 
-		m_IBO->Unbind();
-		glBindVertexArray(0);
+		m_Vao->Unbind();
 
 		m_IndexCount = 0;
 	}

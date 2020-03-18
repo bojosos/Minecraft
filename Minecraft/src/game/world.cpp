@@ -170,6 +170,7 @@ namespace Minecraft
 				}
 			}
 		}
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	Block& World::GetBlock(int8_t x, int8_t y, int8_t z, Chunk* chunk)

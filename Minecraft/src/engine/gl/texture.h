@@ -125,10 +125,13 @@ namespace Minecraft
 		void SetData(void* data, uint32_t size);
 		void SetData(void* data, TextureChannel channel = TextureChannel::CHANNEL_RGBA);
 
-		inline uint32_t GetID() { return m_RendererID; }
-
 		static Ref<Texture> Create(uint32_t width, uint32_t height, const TextureParameters& parameters = {});
 		static Ref<Texture> Create(const std::string& filepath, const TextureParameters& parameters = {});
+
+		bool operator==(const Ref<Texture>& other)
+		{
+			return (other->m_RendererID == m_RendererID);
+		}
 
 	private:
 		TextureParameters m_Parameters;

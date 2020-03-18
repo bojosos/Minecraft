@@ -91,27 +91,28 @@ namespace Minecraft
 				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
 
 				glDeleteShader(shader);
+
 				MC_ERROR("{0}", infoLog.data());
 				MC_ASSERT(false, "Shader compilation failure!");
 				break;
 			}
+
 			glAttachShader(program, shader);
 			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		m_RendererID = program;
+
 		glLinkProgram(program);
+
 		GLint isLinked = 0;
 		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
-
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
-
 			glDeleteProgram(program);
 
 			for (auto id : glShaderIDs)
