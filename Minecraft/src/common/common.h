@@ -6,6 +6,10 @@
 #define MC_ENABLE_ASSERTS
 #endif
 
+#ifndef MC_WINDOWS
+#define __debugbreak()
+#endif
+
 #ifdef MC_ENABLE_ASSERTS
 #define MC_ASSERT(x, ...) { if(!(x)) { MC_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else

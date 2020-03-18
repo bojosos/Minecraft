@@ -1,7 +1,11 @@
 #include "mcpch.h"
 #include "vao.h"
 
+#ifdef MC_WEB
+#include <GLES3/gl32.h>
+#else
 #include <glad/glad.h>
+#endif
 
 namespace Minecraft
 {

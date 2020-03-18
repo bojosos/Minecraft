@@ -5,33 +5,19 @@
 
 namespace Minecraft
 {
-	struct vertex {
+	struct Vertex {
 		uint8_t x, y, z, u, v, tid;
-		vertex() : x(0), y(0), z(0), u(0), v(0), tid(0) { }
-		vertex(uint8_t x, uint8_t y, uint8_t z, uint8_t u, uint8_t v, uint8_t tid) : x(x), y(y), z(z), u(u), v(v), tid(tid) { }
+
+		Vertex() : x(0), y(0), z(0), u(0), v(0), tid(0) { }
+		Vertex(uint8_t x, uint8_t y, uint8_t z, uint8_t u, uint8_t v, uint8_t tid) : x(x), y(y), z(z), u(u), v(v), tid(tid) { }
 	};
 
-	class changed
+	struct Rectangle
 	{
-	public:
-		changed(bool val) : m_Val(val) {}
-
-		operator bool() const
-		{
-			return m_Val;
-		}
-		void operator=(bool other) 
-		{
-			m_Val = other;
-			//if(true)
-				//MC_INFO("changed");
-		}
-		void operator=(changed other)
-		{
-			//MC_INFO("changed");
-		}
-		private:
-			bool m_Val;
+		float X, Y, Width, Height;
+		Rectangle() : X(0), Y(0), Width(0), Height(0) { }
+		Rectangle(float x, float y) : X(x), Y(y), Width(0), Height(0) { }
+		Rectangle(float x, float y, float width, float height) : X(x), Y(y), Width(width), Height(height) { }
 	};
 
 	struct TextureData

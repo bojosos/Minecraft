@@ -3,6 +3,12 @@
 #include "common/log.h"
 #include <fstream>
 
+#ifdef MC_WEB
+#include <GLFW/glfw3.h>
+#else
+#include <glad/glad.h>
+#endif
+
 namespace Minecraft
 {
 

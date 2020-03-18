@@ -1,11 +1,18 @@
 #include <mcpch.h>
 
 #include "renderer.h"
+
+#ifdef MC_WEB
+//#include <GLFW/glfw3.h>
+#include <GLES3/gl32.h>
+#else
 #include <glad/glad.h>
+#endif
 
 namespace Minecraft
 {
 
+#ifndef MC_WEB
 	void OpenGLMessageCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam)
 	{
 		switch (severity)
@@ -16,6 +23,7 @@ namespace Minecraft
 		case GL_DEBUG_SEVERITY_NOTIFICATION: MC_TRACE(message); return;
 		}
 	}
+#endif
 
 	void Renderer::Init()
 	{
@@ -27,10 +35,12 @@ namespace Minecraft
 		glDepthFunc(GL_LESS);
 
 #ifdef MC_DEBUG
+#ifndef MC_WEB
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+#endif
 #endif
 	}
 

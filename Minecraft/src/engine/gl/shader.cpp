@@ -2,6 +2,12 @@
 #include "shader.h"
 #include "common/file.h"
 
+#ifdef MC_WEB
+#include <GLES3/gl32.h>
+#else
+#include <glad/glad.h>
+#endif
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Minecraft
@@ -27,7 +33,7 @@ namespace Minecraft
 
 	void Shader::Load(const std::string& filepath)
 	{
-		std::string source = ReadFile(filepath);
+		std::string source = ReadFile(DIRECTORY_PREFIX + filepath);
 		auto shaderSources = ShaderPreProcess(source);
 		Compile(shaderSources);
 
@@ -214,8 +220,9 @@ namespace Minecraft
 		}
 		else
 		{
-			m_UniformLocations[name] = glGetUniformLocation(m_RendererID, name.c_str());
-			return m_UniformLocations[name];
+			uint32_t nn = glGetUniformLocation(m_RendererID, name.c_str());
+			MC_INFO(nn);
+			return nn;
 		}
 	}
 

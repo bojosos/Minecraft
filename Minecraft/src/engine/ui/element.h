@@ -32,9 +32,8 @@ namespace Minecraft
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		inline virtual const glm::vec3& GetPosition() const { return m_Position; }
-		inline virtual const glm::vec2& GetSize() const { return m_Size; }
-		inline virtual const unsigned int GetColor() const { return m_Color; }
+		inline virtual const Rectangle GetBounds() { return m_Bounds; }
+		inline virtual const uint32_t GetColor() const { return m_Color; }
 		inline virtual const std::vector<glm::vec2>& GetUV() const { return m_UV; }
 
 		virtual void OnMousePressed(Event& e) = 0;
@@ -43,14 +42,13 @@ namespace Minecraft
 		inline virtual const uint32_t GetTID() const { return m_Texture ? m_Texture->GetID() : 0; }
 
 	protected:
-		UIElement(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture>& texture, uint32_t color);
+		UIElement(const Rectangle& bounds, const Ref<Texture>& texture, uint32_t color);
 		UIElement() = delete;
 
 		uint32_t m_Color;
 		std::vector<glm::vec2> m_UV;
 		Ref<Texture> m_Texture;
-		glm::vec3 m_Position;
-		glm::vec2 m_Size;
+		Rectangle m_Bounds;
 
 		bool m_Canceling = false;
 		UIElement* m_Parent = nullptr;

@@ -56,6 +56,11 @@ namespace Minecraft
 		static Ref<Font> Get(const std::string& name);
 		static Ref<Font> Get(const std::string& name, float size);
 
+		static float GetWidth(const std::string& font, const std::string& text);
+		static float GetHeight(const std::string& font, const std::string& text);
+		static float GetWidth(const Ref<Font>& font, const std::string& text);
+		static float GetHeight(const Ref<Font>& font, const std::string& text);
+
 	private:
 		static std::vector<Ref<Font>> s_Fonts;
 		FontManager();

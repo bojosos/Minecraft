@@ -26,38 +26,38 @@ namespace Minecraft
 			return 0;
 		}
 
-		inline static void GetLeftVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetLeftVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetLeftVertexData(res, x, y, z, i);
 		}
 
-		inline static void GetRightVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetRightVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetRightVertexData(res, x, y, z, i);
 		}
 
-		inline static void GetFrontVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetFrontVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetFrontVertexData(res, x, y, z, i);
 		}
 
-		inline static void GetBackVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetBackVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetBackVertexData(res, x, y, z, i);
 		}
 
-		inline static void GetUpVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetUpVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetUpVertexData(res, x, y, z, i);
 		}
 
-		inline static void GetDownVertexData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
+		inline static void GetDownVertexData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i)
 		{
 			Get().m_Blocks[type].GetDownVertexData(res, x, y, z, i);
 		}
 
 		inline static uint32_t GetBlockCount() { return Get().m_Blocks.size(); }
-		inline static void Something() { Get().ISomething(); }
+		inline static void BindTextures() { Get().IBindTextures(); }
 		static inline void AddBlock(Block& block)
 		{
 			Get().m_Blocks.push_back(block); 
@@ -80,11 +80,10 @@ namespace Minecraft
 			return instance;
 		}
 
-		void ILoadDefaultBlocks(const std::string& filepath);
-		void ISomething();
+		void IBindTextures();
 		void IInitTextures(const Ref<Shader>& shader);
 
-		void IGetData(vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i);
+		void IGetData(Vertex* res, uint8_t x, uint8_t y, uint8_t z, uint16_t type, uint32_t& i);
 
 		uint8_t IAddTexture(const std::string& filepath);
 
@@ -92,6 +91,6 @@ namespace Minecraft
 		std::vector<Block> m_Blocks;
 		std::vector<Ref<Texture>> m_Textures;
 		uint8_t m_CurrentTexture = -1;
-		BlockLoader();
+		BlockLoader() = default;
 	};
 }

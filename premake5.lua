@@ -57,7 +57,8 @@ project "Minecraft"
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/sol/sol.hpp",
-		"%{prj.name}/res/**"
+		"%{prj.name}/res/**",
+		"%{prj.name}/lua/**"
 	}
 
 	defines
@@ -94,7 +95,8 @@ project "Minecraft"
 		defines
 		{
 			"MC_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE",
+			"MC_WINDOWS"
 		}
 
 	filter "configurations:Debug"
@@ -123,16 +125,3 @@ project "Minecraft"
 		"Minecraft/vendor",
 		"%{IncludeDir.glm}"
 	}
-
-	filter "system:windows"
-		systemversion "latest"
-		
-	filter "configurations:Debug"
-		defines "MC_DEBUG"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "MC_RELEASE"
-		runtime "Release"
-		optimize "on"

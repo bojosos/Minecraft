@@ -1,6 +1,7 @@
 # Binaries
 **/bin/
 !vendor/bin/premake/
+!Minecraft/vendor/emscripten
 bin-int/
 
 # Visual Studio files and folder

@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <random>
-
+#include <sol.hpp>
 
 #include <string>
 #include <sstream>

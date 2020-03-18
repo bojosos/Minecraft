@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <glad/glad.h>
 
 namespace Minecraft
 {
@@ -49,7 +48,7 @@ namespace Minecraft
 		std::string m_Filepath;
 		std::string m_Name;
 		uint32_t m_RendererID;
-		std::unordered_map<std::string, GLint> m_UniformLocations;
+		std::unordered_map<std::string, int32_t> m_UniformLocations;
 	};
 
 	class ShaderLibrary

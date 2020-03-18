@@ -5,19 +5,16 @@
 
 namespace Minecraft
 {
-	Label::Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos) : UIElement(pos, glm::vec2(0.0f), nullptr, 0xffffffff), m_Text(text), m_Font(font)
+	Label::Label(const std::string& text, const Ref<Font>& font, const Rectangle& bounds) : UIElement(bounds, nullptr, 0xffffffff), m_Text(text), m_Font(font)
 	{
-
+		m_Bounds.Width = FontManager::GetWidth(font, text);
+		m_Bounds.Height = FontManager::GetHeight(font, text);
 	}
 
-	Label::Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos, uint32_t color) : UIElement(pos, glm::vec2(0.0f), nullptr, color), m_Text(text), m_Font(font)
+	Label::Label(const std::string& text, const Ref<Font>& font, const Rectangle& bounds, uint32_t color) : UIElement(bounds, nullptr, color), m_Text(text), m_Font(font)
 	{
-
-	}
-
-	Label::Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos, const glm::vec3& size, uint32_t color) : UIElement(pos, size, nullptr, color), m_Text(text), m_Font(font)
-	{
-
+		m_Bounds.Width = FontManager::GetWidth(font, text);
+		m_Bounds.Height = FontManager::GetHeight(font, text);
 	}
 
 	void Label::OnMousePressed(Event& e)
@@ -27,7 +24,7 @@ namespace Minecraft
 
 	void Label::Submit(BatchRenderer2D* renderer)
 	{
-		renderer->DrawString(m_Text, m_Position, m_Font, m_Color);
+		renderer->DrawString(m_Text, m_Bounds.X, m_Bounds.Y, m_Font, m_Color);
 	}
 
 }

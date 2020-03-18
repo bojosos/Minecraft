@@ -7,9 +7,8 @@ namespace Minecraft
 	class Label : public UIElement
 	{
 	public:
-		Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos);
-		Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos, uint32_t color);
-		Label(const std::string& text, const Ref<Font>& font, const glm::vec3& pos, const glm::vec3& size, uint32_t color);
+		Label(const std::string& text, const Ref<Font>& font, const Rectangle& bounds);
+		Label(const std::string& text, const Ref<Font>& font, const Rectangle& bounds, uint32_t color);
 
 		virtual void OnMousePressed(Event& e) override;
 

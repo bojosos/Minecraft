@@ -4,23 +4,37 @@
 namespace Minecraft
 {
 
-	Font::Font(const std::string& name, const std::string& filepath, float size) : m_Name(name), m_Filepath(filepath), m_Size(size)
+	Font::Font(const std::string& name, const std::string& path, float size) : m_Name(name), m_Filepath(path), m_Size(size)
 	{
+		std::string filepath = DIRECTORY_PREFIX + path;
 		m_Atlas = ftgl::texture_atlas_new(512, 512, 1);
-		m_Font = ftgl::texture_font_new_from_file(m_Atlas, m_Size, m_Filepath.c_str());
+		m_Font = ftgl::texture_font_new_from_file(m_Atlas, m_Size, filepath.c_str());
 
-		SwizzleChannel channels[4] = { SwizzleChannel::ONE, SwizzleChannel::ONE, SwizzleChannel::ONE, SwizzleChannel::RED };
-		TextureSwizzle swizzle = { SwizzleType::SWIZZLE_RGBA, channels};
-		TextureParameters params = { TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::REPEAT, swizzle};
+		for (uint8_t c = 0; c < 128; c++)
+		{
+			char f = (char)c;
+			texture_font_load_glyph(m_Font, &f);
+		}
+
+		TextureParameters params = { TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::REPEAT };
 
 		m_Texture = Texture::Create(512, 512, params);
-		m_Texture->SetData(m_Atlas->data, TextureChannel::CHANNEL_RED);
+		
+		uint8_t* data = new uint8_t[512 * 512 * 4];
+		memset(data, 0xff, 512 * 512 * 4);
+
+		for (uint32_t i = 0; i < 512 * 512; i++)
+		{
+			data[i * 4 + 3] = m_Atlas->data[i];
+		}
+
+		m_Texture->SetData(data, TextureChannel::CHANNEL_RGBA);
+
+		delete[] data;
 	}
 
 	Ref<Texture> Font::GetTexture()
 	{
-		//TODO: May not be necessary
-		m_Texture->SetData(m_Atlas->data, TextureChannel::CHANNEL_RED);
 		return m_Texture;
 	}
 
@@ -72,6 +86,51 @@ namespace Minecraft
 		}
 
 		return s_Fonts[0];
+	}
+
+	float FontManager::GetWidth(const std::string& fontName, const std::string& text)
+	{
+		return GetWidth(Get(fontName), text);
+	}
+
+	float FontManager::GetWidth(const Ref<Font>& font, const std::string& text)
+	{
+		float width = 0.0f;
+
+		for (int i = 0; i < text.size(); i++)
+		{
+			ftgl::texture_glyph_t* glyph = texture_font_get_glyph(font->GetFTGLFont(), &text[i]);
+			if (i > 0)
+			{
+				float kerning = texture_glyph_get_kerning(glyph, &text[i - 1]);
+				width += kerning;
+			}
+			width += glyph->advance_x;
+		}
+
+		return width;
+	}
+
+	float FontManager::GetHeight(const std::string& fontName, const std::string& text)
+	{
+		return GetHeight(Get(fontName), text);
+	}
+
+	float FontManager::GetHeight(const Ref<Font>& font, const std::string& text)
+	{
+		float min = 0.0f;
+		float max = 0.0f;
+		for (int i = 0; i < text.size(); i++)
+		{
+			ftgl::texture_glyph_t* glyph = texture_font_get_glyph(font->GetFTGLFont(), &text[i]);
+			float height = glyph->height;
+			float offset = glyph->offset_y - height;
+			if (offset < min)
+				min = offset;
+			if (height > max)
+				max = height;
+		}
+		return abs(min) + abs(max);
 	}
 
 }

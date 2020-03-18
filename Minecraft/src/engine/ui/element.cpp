@@ -5,7 +5,7 @@
 namespace Minecraft
 {
 
-	UIElement::UIElement(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture>& texture, uint32_t color) : m_Position(pos), m_Color(color), m_Size(size), m_Texture(texture)
+	UIElement::UIElement(const Rectangle& bounds, const Ref<Texture>& texture, uint32_t color) : m_Bounds(bounds), m_Color(color), m_Texture(texture)
 	{
 
 	}

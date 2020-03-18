@@ -23,24 +23,28 @@ namespace Minecraft
 		Random::Init();
 		ScriptingEngine::Init();
 		LuaApi::LuaDataApiInit();
+#ifdef MC_WEB
+		ScriptingEngine::ExecuteFile("Minecraft/lua/world/blocks.lua"); // fix these when building
+#else
 		ScriptingEngine::ExecuteFile("lua/world/blocks.lua");
+#endif
 
-		m_Camera = CreateRef<Camera>(glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
-		m_Camera->SetSpeed(0.08f);
-		m_Camera->Focus();
-		
 		m_World = CreateRef<World>();
 
-		m_Shader = m_ShaderLibrary.Load("res/shaders/chunkshader.glsl");
-		
-		std::vector<std::string> locations = { "u_ViewMatrix", "u_ProjectionMatrix", "u_ModelMatrix", "u_Textures" };
+#ifdef MC_WEB
+		m_Shader = m_ShaderLibrary.Load("shaders/chunkshader-web.glsl");
+#else
+		m_Shader = m_ShaderLibrary.Load("shaders/chunkshader.glsl");
+#endif
+		m_Shader->Bind();
+		std::vector<std::string> locations = { "u_Texture_0", "u_Texture_1", "u_Texture_2", "u_Texture_3", "u_Texture_4", "u_Texture_5", "u_Texture_6", "u_Texture_7", "u_ViewMatrix", "u_ProjectionMatrix", "u_ChunkPosition", "u_Textures"};
 		m_Shader->RetrieveLocations(locations);
 
 		BlockLoader::InitTextures(m_Shader);
-	
-		m_Frustum = CreateRef<ViewFrustum>();
 
 		Renderer::Init();
+		m_Player = new Player({ 0.0f,0.0f,0.0f });
+		m_World->AddPlayer(m_Player);
 	}
 
 	void TestLayer::OnAttach()
@@ -63,25 +67,24 @@ namespace Minecraft
 		
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
-		
-		m_Camera->Update();
-		m_Frustum->Update(m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix());
-		BlockLoader::Something();
+
+		m_Player->OnUpdate(ts);
+		BlockLoader::BindTextures();
 		m_Shader->Bind();
 		
-		m_Shader->SetMat4("u_ViewMatrix", m_Camera->GetViewMatrix());
-		m_Shader->SetMat4("u_ProjectionMatrix", m_Camera->GetProjectionMatrix());
+		m_Shader->SetMat4("u_ViewMatrix", m_Player->GetViewMatrix());
+		m_Shader->SetMat4("u_ProjectionMatrix", m_Player->GetProjectionMatrix());
 		
 		if (Input::IsMouseButtonPressed(MouseCode::ButtonLeft))
 		{
-			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, true, m_Camera);
+			Physics::Raycast(m_Player->GetPosition(), m_Player->GetForwardDirection(), PLAYER_REACH, true); // callback or smth
 		}
 
 		if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
 		{
-			Physics::Raycast(m_Camera->GetPosition(), m_Camera->GetForwardDirection(m_Camera->GetRotation()), 4, false, m_Camera);
+			Physics::Raycast(m_Player->GetPosition(), m_Player->GetForwardDirection(), PLAYER_REACH, false); // callback or smth
 		}
-		m_World->Update(m_Shader, m_Frustum);
+		m_World->Update(m_Shader);
 
 	}
 

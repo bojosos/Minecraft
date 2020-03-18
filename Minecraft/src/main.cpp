@@ -2,6 +2,7 @@
 #include "common/layer/testlayer.h"
 #include "common/layer/uilayer.h"
 #include "engine.h"
+#include <iostream>
 
 class Test : public Minecraft::Application
 {
@@ -25,6 +26,7 @@ public:
 
 int main(int argc, char** argv)
 {
+	std::cout << "Is it working?" << std::endl;
 	Minecraft::Log::Init();
 
 	auto app = new Test(argc, argv);

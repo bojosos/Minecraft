@@ -4,7 +4,9 @@
 #include "common/event/mouseevent.h"
 #include "common/event/applicationevent.h"
 
+#ifndef MC_WEB
 #include <glad/glad.h>
+#endif
 
 namespace Minecraft
 {
@@ -29,8 +31,11 @@ namespace Minecraft
 	void Window::InitContext()
 	{
 		glfwMakeContextCurrent(m_Window);
+
+#ifndef MC_WEB
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		MC_ASSERT(status, "Faield to initalize Glad");
+#endif
 
 #ifdef MC_DEBUG
 		MC_WARN("OpenGL Info:");

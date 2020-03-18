@@ -1,7 +1,11 @@
 #include "mcpch.h"
 #include "ibo.h"
 
+#ifdef MC_WEB
+#include <GLES3/gl32.h>
+#else
 #include <glad/glad.h>
+#endif
 
 namespace Minecraft
 {
@@ -12,9 +16,14 @@ namespace Minecraft
 
 	IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count) : m_Count(count)
 	{
+#ifdef MC_WEB
+		glGenBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+#else
 		glCreateBuffers(1, &m_RendererID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glNamedBufferData(m_RendererID, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+#endif
 	}
 
 	IndexBuffer::~IndexBuffer()

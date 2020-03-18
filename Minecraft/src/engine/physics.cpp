@@ -2,11 +2,10 @@
 #include "physics.h"
 #include "common/math.h"
 #include "game/world.h"
-#include <glad/glad.h>
 
 namespace Minecraft
 {
-	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, float length, bool button, const Ref<Camera>& cam)
+	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, float length, bool button)
 	{
 		glm::vec3 direction = glm::normalize(dir);
 
@@ -50,7 +49,8 @@ namespace Minecraft
 						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock((int)x, (int)y, (int)z).m_Longname);
 						World::GetOverworld().SetBlock((int)x, (int)y + 1, (int)z, 2);
 					}
-					World::GetOverworld().DrawOutline((int)x, (int)y, (int)z, face, cam);
+
+					World::GetOverworld().DrawOutline((int)x, (int)y, (int)z, face);
 					break;
 				}
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common/common.h"
-#include <glad/glad.h>
 
 namespace Minecraft
 {
@@ -124,7 +123,7 @@ namespace Minecraft
 
 		void Bind(uint32_t slot) const;
 		void SetData(void* data, uint32_t size);
-		void SetData(void* data, TextureChannel channel);
+		void SetData(void* data, TextureChannel channel = TextureChannel::CHANNEL_RGBA);
 
 		inline uint32_t GetID() { return m_RendererID; }
 

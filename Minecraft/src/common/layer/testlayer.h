@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "game/world.h"
 #include "game/block.h"
-#include "engine/gl/renderer/batchrenderer2d.h"
+#include "game/player.h"
 
 namespace Minecraft
 {
@@ -24,7 +24,7 @@ namespace Minecraft
 
 		Ref<ViewFrustum> m_Frustum;
 		Ref<World> m_World;
-		Ref<Camera> m_Camera;
+		Player* m_Player;
 		Ref<Shader> m_Shader;
 	};
 }

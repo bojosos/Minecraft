@@ -33,7 +33,7 @@ namespace Minecraft
 
 	float Input::GetMouseXImpl()
 	{
-		glm::vec2& pos = GetMousePositionImpl();
+		glm::vec2 pos = GetMousePositionImpl();
 		return pos.x;
 	}
 

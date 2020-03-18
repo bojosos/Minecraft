@@ -8,7 +8,7 @@ namespace Minecraft
 	{
 	public:
 		static inline void Init() { Get().InitImpl(); }
-		static inline bool ExecuteString(const std::string& script) { Get().ExecuteStringImpl(script); }
+		static inline bool ExecuteString(const std::string& script) { return Get().ExecuteStringImpl(script); }
 		static inline bool ExecuteFile(const std::string& filepath) { return Get().ExecuteFileImpl(filepath); }
 		static inline void AddCallbackApi(const std::string& name, std::vector<sol::function>& callbacks) { Get().AddCallbackApiImpl(name, callbacks); }
 		static inline sol::function GetLuaFunction(const std::string& name) { return Get().GetLuaFunctionImpl(name); }
@@ -23,7 +23,7 @@ namespace Minecraft
 		static inline auto AddType(const std::string& name, Args&&... args) { return Get().AddTypeImpl(name, std::forward<Args>(args)...); }
 
 		template<typename F>
-		static auto AddFunction(const std::string& name, F function) { return Get().AddFunctionImpl(name, std::forward<Args>(args)...); }
+		static auto AddFunction(const std::string& name, F function) { return Get().AddFunctionImpl(name, function); }
 
 	private:
 		bool ValidateScriptRun(const sol::protected_function_result& res, const std::string& name);
@@ -68,7 +68,7 @@ namespace Minecraft
 	template<typename T, typename... Args>
 	auto ScriptingEngine::AddTypeImpl(const std::string& name, Args&&... args)
 	{
-		return lua.new_usertype<T>(name, std::forward(Args)(args)...);
+		return lua.new_usertype<T>(name, std::forward<Args>(args)...);
 	}
 
 	template<typename... Args>

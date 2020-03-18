@@ -4,7 +4,13 @@
 #include "chunk.h"
 #include "world.h"
 #include "game/blockloader.h"
+
+#ifdef MC_WEB
+#include <GLES3/gl32.h>
+#else
 #include <glad/glad.h>
+#endif
+
 #include <glm/gtc/noise.hpp>
 
 namespace Minecraft
@@ -12,24 +18,18 @@ namespace Minecraft
 
 	Chunk::Chunk(const glm::ivec3& position) : m_Position(position)
 	{
-		m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE));
 		m_Vao = VertexArray::Create();
 	}
 
-	void Chunk::Update(vertex* res)
+	void Chunk::Update(Vertex* res)
 	{
-		if (m_Changed == false)
+		if (!m_Changed || !m_Blocks)
 			return;
 		m_Changed = false;
 		GetRenderData(res);
 	}
 
-	void Chunk::BufferData(vertex* res)
-	{
-		GetRenderData(res);
-	}
-
-	vertex* Chunk::GetRenderData(vertex* res) 
+	Vertex* Chunk::GetRenderData(Vertex* res) 
 	{
 		uint32_t i = 0;
 		m_Elements = 0;
@@ -85,26 +85,32 @@ namespace Minecraft
 		}
 		m_Elements = i;
 
-		if (!m_Vbo)
+		if (m_Elements)
 		{
-			m_Vbo = VertexBuffer::Create(res, m_Elements * 6);
-			m_Vbo->SetLayout({
-							 {ShaderDataType::Byte3, "a_Coordinates"},
-							 {ShaderDataType::Byte2, "a_TexCoords"},
-							 {ShaderDataType::Byte, "a_Tid"}
-					 		 });
-			m_Vao->AddVertexBuffer(m_Vbo);
-		}
-		else
-		{
-			m_Vbo->SetData(res, m_Elements * 6);
+			if (!m_Vbo)
+			{
+				m_Vbo = VertexBuffer::Create(res, m_Elements * 6);
+				m_Vbo->SetLayout({
+								 {ShaderDataType::Byte3, "a_Coordinates"},
+								 {ShaderDataType::Byte2, "a_TexCoords"},
+								 {ShaderDataType::Byte, "a_Tid"}
+					});
+				m_Vao->AddVertexBuffer(m_Vbo);
+			}
+			else
+			{
+				m_Vbo->SetData(res, m_Elements * 6);
+			}
 		}
 		return nullptr;
 	}
 
 	void Chunk::Render()
 	{
-		m_Vao->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, m_Elements);
+		if (m_Elements)
+		{
+			m_Vao->Bind();
+			glDrawArrays(GL_TRIANGLES, 0, m_Elements);
+		}
 	}
 }
