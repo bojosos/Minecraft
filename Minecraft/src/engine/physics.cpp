@@ -7,15 +7,13 @@ namespace Minecraft
 {
 	void Physics::Raycast(const glm::vec3& location, const glm::vec3& dir, float length, bool button)
 	{
-		glm::vec3 direction = glm::normalize(dir);
-
 		float x = floor(location.x);
 		float y = floor(location.y);
 		float z = floor(location.z);
 
-		float dx = direction.x;
-		float dy = direction.y;
-		float dz = direction.z;
+		float dx = dir.x;
+		float dy = dir.y;
+		float dz = dir.z;
 
 		float stepX = Math::Signum(dx);
 		float stepY = Math::Signum(dy);
@@ -40,14 +38,12 @@ namespace Minecraft
 				if (World::GetOverworld().GetBlock((int)x, (int)y, (int)z).IsSolid())
 				{
 					if (button) {
-						MC_INFO("Breaking {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock((int)x, (int)y, (int)z).m_Longname);
 						World::GetOverworld().SetBlock((int)x, (int)y, (int)z, 0);
 						break;
 					}
 					else
 					{
-						MC_INFO("Placing over {0} at {1}, {2}, {3}", x, y, z, World::GetOverworld().GetBlock((int)x, (int)y, (int)z).m_Longname);
-						World::GetOverworld().SetBlock((int)x, (int)y + 1, (int)z, 2);
+						World::GetOverworld().SetBlock((int)x + face.x, (int)y + face.y, (int)z + face.z, 2);
 					}
 
 					World::GetOverworld().DrawOutline((int)x, (int)y, (int)z, face);
@@ -69,7 +65,7 @@ namespace Minecraft
 				else
 				{
 					if (tMaxZ > length) break;
-					x += stepZ;
+					z += stepZ;
 					tMaxZ += tDeltaZ;
 
 					face.x = 0;
