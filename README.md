@@ -1,3 +1,3 @@
 # Minecraft
 
-A Hazel Engine inspired Minecraft replica
+A really tiny Minecraft clone
